@@ -1,0 +1,366 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap
+        PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+        "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="Resources">
+    <typeAlias alias="Resources" type="net.jqsoft.base.system.domain.Resources"/>
+    <resultMap id="ResourcesMap1" class="Resources">
+        <result property="id" column="ID"/>
+        <result property="code" column="CODE"/>
+        <result property="display" column="DISPLAY"/>
+        <result property="description" column="DESCRIPTION"/>
+        <result property="parentCode" column="PARENT_CODE"/>
+        <result property="url" column="URL"/>
+        <result property="status" column="STATUS"/>
+        <result property="sortby" column="SORTBY"/>
+        <result property="icon" column="ICON"/>
+        <result property="type" column="TYPE"/>
+    </resultMap>
+    <resultMap id="ResourcesMap" class="Resources">
+        <result property="id" column="ID"/>
+        <result property="code" column="CODE"/>
+        <result property="display" column="DISPLAY"/>
+        <result property="description" column="DESCRIPTION"/>
+        <result property="parentCode" column="PARENT_CODE"/>
+        <result property="parentName" column="PARENT_NAME"/>
+        <result property="url" column="URL"/>
+        <result property="status" column="STATUS"/>
+        <result property="sortby" column="SORTBY"/>
+        <result property="icon" column="ICON"/>
+        <result property="type" column="TYPE"/>
+    </resultMap>
+    
+    <resultMap id="ResourcesMap11" class="Resources">
+        <result property="id" column="ID"/>
+        <result property="code" column="CODE"/>
+        <result property="display" column="DISPLAY"/>
+        <result property="description" column="DESCRIPTION"/>
+        <result property="parentCode" column="PARENT_CODE"/>
+        <result property="url" column="URL"/>
+        <result property="status" column="STATUS"/>
+        <result property="sortby" column="SORTBY"/>
+        <result property="icon" column="ICON"/>
+        <result property="type" column="TYPE"/>
+
+        <result property="parentName" column="PARENT_NAME"/>
+        <result property="isHavaChild" column="isHavaChild"/>
+    </resultMap>
+
+    <resultMap id="ResourcesMapByRole" class="Resources">
+        <result property="id" column="ID"/>
+        <result property="code" column="CODE"/>
+        <result property="display" column="DISPLAY"/>
+        <result property="description" column="DESCRIPTION"/>
+        <result property="parentCode" column="PARENT_CODE"/>
+        <result property="url" column="URL"/>
+        <result property="status" column="STATUS"/>
+        <result property="sortby" column="SORTBY"/>
+        <result property="icon" column="ICON"/>
+        <result property="type" column="TYPE"/>
+        <result property="isCheck" column="ISCHECK"/>
+    </resultMap>
+    
+    <resultMap id="ResourcesMapByRole2" class="Resources">
+        <result property="id" column="ID"/>
+        <result property="code" column="CODE"/>
+        <result property="display" column="DISPLAY"/>
+        <result property="description" column="DESCRIPTION"/>
+        <result property="parentCode" column="PARENT_CODE"/>
+        <result property="url" column="URL"/>
+        <result property="status" column="STATUS"/>
+        <result property="sortby" column="SORTBY"/>
+        <result property="icon" column="ICON"/>
+        <result property="type" column="TYPE"/>
+        <result property="isCheck" column="ISCHECK"/>
+        <result property="isHavaChild" column="isHavaChild"/>
+    </resultMap>
+
+    <resultMap id="ResourcesMapForZTree" class="Resources">
+        <result property="id" column="ID"/>
+        <result property="code" column="CODE"/>
+        <result property="display" column="DISPLAY"/>
+        <result property="description" column="DESCRIPTION"/>
+        <result property="parentCode" column="PARENT_CODE"/>
+        <result property="url" column="URL"/>
+        <result property="status" column="STATUS"/>
+        <result property="sortby" column="SORTBY"/>
+        <result property="icon" column="ICON"/>
+        <result property="type" column="TYPE"/>
+
+        <result property="rootId" column="ROOT_ID"/>
+        <result property="rootName" column="ROOT_NAME"/>
+    </resultMap>
+
+    <select id="count" resultClass="int" parameterClass="java.util.HashMap">
+        SELECT COUNT(*) FROM SYS_RESOURCES SR
+        WHERE 1 = 1
+        <isNotEmpty property="displayName" prepend=" and">
+            DISPLAY like '%' || #displayName# || '%'
+        </isNotEmpty>
+        <isNotEmpty property="resourceType" prepend=" and">
+            type=#resourceType#
+        </isNotEmpty>
+
+        <isEmpty property="ztResourceId" prepend=" AND ">
+            SR.PARENT_CODE IS NULL
+        </isEmpty>
+        <isNotEmpty property="ztResourceId" prepend=" AND ">
+            SR.PARENT_CODE = #ztResourceId#
+        </isNotEmpty>
+    </select>
+    <select id="select" resultMap="ResourcesMap11" parameterClass="java.util.HashMap">
+        SELECT SR.*,(select count(*) from SYS_RESOURCES s where s.PARENT_CODE=SR.ID) isHavaChild,
+        (SELECT DISPLAY FROM SYS_RESOURCES WHERE SR.PARENT_CODE = ID) PARENT_NAME
+        FROM SYS_RESOURCES SR  
+        <isNotEmpty property="roleId">
+            inner JOIN SYS_PERMISSION SA ON SR.ID = SA.RESOURCES_ID 
+        </isNotEmpty>
+        WHERE 1 = 1
+
+        <isEmpty property="ztResourceId" prepend=" AND ">
+            SR.PARENT_CODE IS NULL
+        </isEmpty>
+        <isNotEmpty property="ztResourceId" prepend=" AND ">
+            SR.PARENT_CODE = #ztResourceId#
+        </isNotEmpty>
+
+        <isNotEmpty property="displayName" prepend=" and">
+            SR.DISPLAY like '%' || #displayName# || '%'
+        </isNotEmpty>
+        <isNotEmpty property="resourceType" prepend=" and">
+            SR.type=#resourceType#
+        </isNotEmpty>
+        <isNotEmpty property="roleId" prepend=" and">
+            SA.ROLE_ID in ($roleId$)
+        </isNotEmpty>
+        ORDER BY SR.SORTBY ASC
+    </select>
+    
+    <select id="queryAll" resultMap="ResourcesMap" parameterClass="java.util.HashMap">
+        SELECT distinct SR.*,SR1.DISPLAY PARENT_NAME FROM SYS_RESOURCES SR LEFT JOIN SYS_RESOURCES SR1 ON SR.PARENT_CODE=SR1.ID 
+        <isNotEmpty property="roleId">
+            inner JOIN SYS_PERMISSION SA ON SR.ID = SA.RESOURCES_ID 
+        </isNotEmpty>
+        where SR.STATUS='0' 
+        <isNotEmpty property="displayName" prepend=" and">
+            SR.DISPLAY like '%' || #displayName# || '%'
+        </isNotEmpty>
+        <isNotEmpty property="resourceType" prepend=" and">
+            SR.type=#resourceType#
+        </isNotEmpty>
+        <isNotEmpty property="roleId" prepend=" and">
+            SA.ROLE_ID in ($roleId$)
+        </isNotEmpty>
+        order by SR.sortby
+         <!-- START WITH SR.parent_CODE IS NULL CONNECT BY PRIOR SR.ID=SR.PARENT_CODE -->
+    </select>
+    
+    <select id="get" parameterClass="String" resultMap="ResourcesMap">
+        SELECT R1.*,R2.DISPLAY PARENT_NAME FROM SYS_RESOURCES R1 LEFT JOIN SYS_RESOURCES R2 ON R1.PARENT_CODE=R2.ID
+        WHERE R1.ID = #id#
+    </select>
+
+    <select id="getResourcesByRole" resultMap="ResourcesMapByRole2" parameterClass="String">
+        <![CDATA[
+        SELECT SR.*,
+        (select count(*) from SYS_RESOURCES sr2 where sr2.parent_Code=SR.id) isHavaChild,
+        (CASE WHEN ROLE_ID IS NULL THEN 0 ELSE 1 END) ISCHECK
+        FROM
+        SYS_RESOURCES SR
+        LEFT JOIN SYS_PERMISSION SA ON SR.ID = SA.RESOURCES_ID
+        AND SA.ROLE_ID=#rid:String#
+        AND SR.STATUS='0'
+         ]]>
+    </select>
+
+    <insert id="insert" parameterClass="Resources">
+        <![CDATA[
+        INSERT INTO SYS_RESOURCES(
+        ID,
+        CODE,
+        DISPLAY,
+        DESCRIPTION,
+        PARENT_CODE,
+        type,
+        URL,
+        STATUS,
+        sortby,
+        ICON
+        ) values(
+                #id#,
+                #code#,
+                #display#,
+                #description#,
+                #parentCode#,
+                #type#,
+                #url#,
+                #status#,
+                #sortby#,
+                #icon#
+             )
+		]]>
+    </insert>
+    <update id="update" parameterClass="Resources">
+        <![CDATA[
+			UPDATE SYS_RESOURCES ]]>
+        <dynamic prepend="SET">
+
+            <isNotEmpty property="code" prepend=",">
+                <![CDATA[
+					CODE = #code:String#
+				]]>
+            </isNotEmpty>
+
+            <isNotEmpty property="display" prepend=",">
+                <![CDATA[
+					DISPLAY = #display:String#
+				]]>
+            </isNotEmpty>
+
+            <isNotEmpty property="description" prepend=",">
+                <![CDATA[
+					DESCRIPTION = #description:String#
+				]]>
+            </isNotEmpty>
+
+            <isNotEmpty property="parentCode" prepend=",">
+                <![CDATA[
+					PARENT_CODE = #parentCode:String#
+				]]>
+            </isNotEmpty>
+
+            <isNotEmpty property="type" prepend=",">
+                <![CDATA[
+					TYPE = #type#
+				]]>
+            </isNotEmpty>
+
+            <isNotEmpty property="url" prepend=",">
+                <![CDATA[
+					URL = #url:String#
+				]]>
+            </isNotEmpty>
+
+            <isNotEmpty property="status" prepend=",">
+                <![CDATA[
+					STATUS = #status:String#
+				]]>
+            </isNotEmpty>
+
+            <isNotEmpty property="sortby" prepend=",">
+                <![CDATA[
+					SORTBY = #sortby:Integer#
+				]]>
+            </isNotEmpty>
+            
+            <isNotEmpty property="icon" prepend=",">
+                <![CDATA[
+					ICON = #icon#
+				]]>
+            </isNotEmpty>
+        </dynamic>
+        <dynamic prepend="WHERE">
+            <![CDATA[
+					id = #id:String#
+				]]>
+        </dynamic>
+    </update>
+    <delete id="deleteById" parameterClass="String">
+        <![CDATA[
+        DELETE FROM SYS_RESOURCES where ID = #id:String#
+     ]]>
+    </delete>
+    
+    <!--插入权限-->
+    <insert id="insertAuth" parameterClass="java.util.HashMap">
+        <![CDATA[
+                INSERT INTO SYS_PERMISSION(ROLE_ID,RESOURCES_ID) VALUES(#roleId#,#resourceId#)
+         ]]>
+    </insert>
+
+    <!--删除权限-->
+    <delete id="deleteAuth" parameterClass="String">
+        <![CDATA[
+                 DELETE FROM SYS_PERMISSION WHERE ROLE_ID=#roleId:String#
+            ]]>
+    </delete>
+    
+    <!--删除资源关系-->
+    <delete id="deleteAuthByResourceId" parameterClass="String">
+        <![CDATA[
+                 DELETE FROM SYS_PERMISSION WHERE RESOURCES_ID=#id:String#
+            ]]>
+    </delete>
+    <!--获取菜单-->
+    <select id="getMenu" resultMap="ResourcesMapByRole" parameterClass="java.util.HashMap">
+        <![CDATA[
+        select DISTINCT SR.*,'1' ISCHECK from SYS_RESOURCES SR,SYS_PERMISSION SA,SYS_USER SU,SYS_AUTH SUR
+        WHERE SR."ID"=SA.RESOURCES_ID
+        AND SA.ROLE_ID=SUR.ROLE_ID
+        AND SU."ID"=SUR.USER_ID
+        AND SU.USER_NAME=#user#
+        AND SR.TYPE='1'
+        AND SR.STATUS='0'
+        ORDER BY SR.SORTBY ASC
+           ]]>
+    </select>
+
+	<!--根据资源编码获取菜单-->
+    <select id="getResourcesByCode" resultMap="ResourcesMap1" parameterClass="java.util.HashMap">
+        <![CDATA[
+        select SR.* from SYS_RESOURCES SR where SR.CODE = #code#
+           ]]>
+        <isNotEmpty property="id" prepend=" and ">
+            SR.ID != #id#
+        </isNotEmpty>
+    </select>
+	<!--下年度模块维护使用-->
+    <select id="getLastResorces" resultMap="ResourcesMap1" parameterClass="java.util.HashMap">
+        <![CDATA[
+        select * from sys_resources t where t.parent_code is not null
+        ]]>
+    </select>
+    
+    <!--根据父id获取子菜单-->
+    <select id="queryResourceByPid" resultMap="ResourcesMap11" parameterClass="java.util.HashMap">
+        <![CDATA[
+        select t.*,(select count(*) from SYS_RESOURCES s where s.PARENT_CODE=t.ID) isHavaChild 
+        from sys_resources t where t.parent_code = #pid#
+        ]]>
+    </select>
+
+    <!-- 根据父级资源查询子资源集合 -->
+    <select id="getResourceListByParentCode" resultMap="ResourcesMapForZTree" parameterClass="java.util.HashMap">
+        SELECT
+        <dynamic>
+            <isNotEmpty property="resourceName"><![CDATA[ DISTINCT ]]></isNotEmpty>
+        </dynamic>
+        <dynamic>
+            <isEmpty property="parentCode">
+                RES.ID ROOT_ID,
+                RES.DISPLAY ROOT_NAME,
+            </isEmpty>
+            <isNotEmpty property="parentCode">
+                'none' ROOT_ID,
+                'none' ROOT_NAME,
+            </isNotEmpty>
+        </dynamic>
+        RES.* FROM SYS_RESOURCES RES WHERE RES.STATUS = '0'
+        <dynamic>
+            <isEmpty property="parentCode" prepend=" AND ">
+                <![CDATA[ RES.PARENT_CODE IS NULL ]]>
+            </isEmpty>
+            <isNotEmpty property="parentCode" prepend=" AND ">
+                <![CDATA[ RES.PARENT_CODE = #parentCode# ]]>
+            </isNotEmpty>
+            <isNotEmpty property="resourceName">
+                <![CDATA[
+                   START WITH RES.DISPLAY LIKE '%' || #resourceName# || '%' AND RES.STATUS = '0'
+                  CONNECT BY PRIOR RES.PARENT_CODE = RES.ID
+                ]]>
+            </isNotEmpty>
+        </dynamic>
+        ORDER BY RES.SORTBY ASC
+    </select>
+</sqlMap>

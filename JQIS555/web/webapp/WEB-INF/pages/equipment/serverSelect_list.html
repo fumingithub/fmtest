@@ -1,0 +1,190 @@
+
+<#include "../common/_public.html"/>
+<div class="bjui-pageHeader">
+    <form id="pagerForm" data-toggle="ajaxsearch"  action=""method="post">
+        <div class="office">
+            <ul class="offbtn">                <!--20170809 CODE统一处理更换   孙磊-->
+                <@auth name ="SERVER_ADD">
+                <#if hasPermission>
+                    <li>
+                        <a onclick="saveServerSelect(this,_d('#bjui-moreParams').val());" ><span class="iconbg02"><i class="fa fa-hdd-o font24"></i></span>保存</a>
+                    </li>
+                </#if>
+            </@auth>
+            <!--                 <li> <a  data-url="${ctx}/standard/dataelementcode!delete.do?code={#bjui-selected}" data-toggle="doajax" data-xternal="true" data-confirm-msg="确定要删除选中项吗？"><span class="iconbg03"><i class="fa fa-trash font24"></i></span>删除</a> </li> -->
+            <li><span class="ttt"></span></li>
+            <li><a id="refresh" data-toggle="reloadsearch"
+                   data-target="#bjui-pageContent" data-icon="search"><span class="iconbg02">
+				<i class="fa fa-refresh font24"></i></span>刷新</a>
+            </li>
+            <li> <a onclick="closeserverSelectDialog(this);" class="a-close closecutab"><span class="iconbg03"><i class="fa fa-remove  font24"></i></span>关闭</a> </li>
+            </ul>
+        </div>
+
+        <div class="bjui-searchBar">
+            <input type="hidden" name="limit" value="${limit}">
+            <input type="hidden" name="start" value="${start}">
+            <input type="hidden"  id="projectid" value="${filter.parameters.id!}">
+            <input type="hidden"  id="loginId" value="${filter.parameters.loginId!}">
+            <input type="hidden"  id="serverImportSelected" value="${serverImportSelected!}">
+            <input type="hidden"  id="selectRealName" value="${selectRealName!}">
+            <label>&nbsp;&nbsp;服务器名：</label>
+            <input  id="serverIdName" name="serverName" class="form-control" size="15" type="text" value="${filter.parameters.serverName!}" />
+            <label>&nbsp;&nbsp;服务器类型：</label>
+            <select id="serverType" name="type" data-toggle="selectpicker" data-width="150">
+                <option selected="selected" value="">--请选择--</option>
+                <option value="01"
+                <#if (filter.parameters.type!)=='01'> selected="selected"</#if>
+                >应用服务器</option>
+                <option value="02"
+                <#if (filter.parameters.type!)=='02'> selected="selected"</#if>
+                >前置机服务器</option>
+                <option value="03"
+                <#if (filter.parameters.type!)=='03'> selected="selected"</#if>
+                >数据中心服务器</option>
+            </select>
+            <label>&nbsp;&nbsp;服务器IP：</label>
+            <input id="serverIdP" name="serverIp" class="form-control" size="15" type="text" value="${filter.parameters.serverIp!}" />
+            <br>
+            <label>&nbsp;&nbsp;是否删除：</label>
+            <select id="isDel" name="isDel" data-toggle="selectpicker" data-width="150">
+                <option selected="selected" value="">--请选择--</option>
+                <option value="1"
+                <#if (filter.parameters.isDel!)=='1'> selected="selected"</#if>
+                >是</option>
+                <option value="0"
+                <#if (filter.parameters.isDel!)=='0'> selected="selected"</#if>
+                >否</option>
+            </select>
+            <!--             <button type="button" class="showMoreSearch" data-toggle="moresearch" data-name="custom" title="更多查询条件"> -->
+            <!--             	<i class="fa fa-angle-double-down"></i> -->
+            <!--             </button>    -->
+            &nbsp;
+            <button id="serverSearch"type="submit" class="btn-default"  data-toggle="ajaxsearch" data-icon="search">查询</button>
+            &nbsp;
+            <a id="white_reloadPersonChangeForm" class="btn btn-orange" href="javascript:;" onclick="serverUndoForm();" data-icon="undo">重置</a></div>
+        <!--         <div class="bjui-moreSearch"> -->
+
+        <!--         </div> -->
+    </form>
+</div>
+<div class="bjui-pageContent" style="top: 102px; bottom: 28px; margin-top: 0px;"  style="overflow:scroll;">
+    <table style="table-layout:fixed;min-width:1800px;" data-width="100%" data-nowrap="true" data-selected-multi="false"
+           class="table table-bordered table-hover table-striped table-top">
+        <thead>
+        <tr>
+            <th width="12"></th>
+            <th width="12">NO.</th>
+            <th  style="text-align:center" title="服务器名称" width="180">服务器名称</th>
+            <th  style="text-align:center" title="服务器类型" width="100">服务器类型</th>
+            <th  style="text-align:center" title="服务器用户名" width="80">服务器用户名</th>
+            <th  style="text-align:center" title="服务器密码" width="80">服务器密码 </th>
+            <!--                  <th  style="text-align:center" width="20%" title="版本号">版本号 </th> -->
+            <th  style="text-align:center" title="服务器IP" width="100">服务器远程地址</th>
+            <th  style="text-align:center" title="服务器MAC" width="100">服务器MAC</th>
+            <th  style="text-align:center" title="服务器内网IP" width="100">服务器内网IP</th>
+            <th  style="text-align:center" title="服务器外网IP" width="100">服务器外网IP</th>
+        </tr>
+        </thead>
+        <tbody id="dataelementcodeTb11">
+
+        <#list entitys as entity>
+            <tr >
+                <!--                 <td><input type="checkbox" value="${entity.id}" name="ids" -->
+                <!-- 					data-toggle="icheck"> -->
+                <!-- 				</td>	 -->
+                <td><input type="checkbox"  value="${entity.id}" name="id" data-toggle="icheck" icheck-values="recordMoreParams('${entity.id!}',this)"> </td>
+                <td>${entity_index+1+(start-1)*limit}</td>
+                <!-- 				        <td class="center" title="${entity.serverName!}">${entity.serverName!}</td>	                         -->
+                <td nowrap="nowrap">
+                    <a  data-toggle="dialog" data-width="900" data-height="450"  data-mask="true"
+                        data-title='查看服务器信息' data-id="equipment_view"
+                        data-url="${ctx}/project/equipmentinfor!edit.do?id=${entity.id!}&types=view"
+                        data-xternal="true" class="list-a" title="${entity.serverName!}">${entity.serverName!}</a>
+                </td>
+                <td class="center">
+                    <#if entity.type=="01"><div title="应用服务器">应用服务器</div></#if>
+                    <#if entity.type=="02"><div title="前置机服务器">前置机服务器</div></#if>
+                    <#if entity.type=="03"><div title="数据中心服务器">数据中心服务器</div></#if>
+                </td>
+                <td class="center" title="${entity.serverUsername!}">${entity.serverUsername!}</td>
+                <td class="center" title="${entity.serverUsername!}">${entity.serverPassword!}</td>
+                <td class="left" title="${entity.serverUsername!}">${entity.serverIp!}</td>
+                <td class="center" title="${entity.serverUsername!}">${entity.serverMac!}</td>
+                <td class="left" title="${entity.serverUsername!}">${entity.serverInsideIp!}</td>
+                <td class="left" title="${entity.serverUsername!}">${entity.serverOutsideIp!}</td>
+                <!--                         <td class="left"><a data-toggle="dialog" data-width="1300" data-title="明细管理" data-height="500" title="${entity.name!}" data-mask="true"
+                                            data-id="news_view" data-url="" class="list-a" onclick="detailManager(this,'${entity.name!}','${ctx}/standard/dataelementvalue.do?id=${entity.code!}')">${entity.name!}</a></td>
+                                        <td class="center" title="${entity.version!}">${entity.version!}</td>
+                                        <td class="center">
+                                            <#if entity.source??>
+                                                <#if entity.source=="01"><div title="国际行业标准">国际行业标准</div></#if>
+                                                   <#if entity.source=="02"><div title="国家标准">国家标准</div></#if>
+                                                   <#if entity.source=="03"><div title="卫生部标准">卫生部标准</div></#if>
+                                                   <#if entity.source=="04"><div title="地方扩展标准">地方扩展标准</div></#if>
+                                                   <#if entity.source=="99"><div title="自定义标准">自定义标准</div></#if>
+                                               </#if>
+                                        </td> -->
+            </tr>
+        </#list>
+        </tbody>
+    </table>
+</div>
+<div id='batchloading' style='display:none;width:100%;height:120%;text-align:center;top: 0px; position: absolute;alpha(opacity=45); opacity:0.45;background-color:#FFFFFF;z-index:1000;'>
+
+</div>
+<div id='batchload' style='display:none;width:100%;height:120%;text-align:center;top:0px;padding-top:20%; position: absolute;alpha(opacity=45);z-index:1000;'>
+    <h3><img style="height: 50px;width:50px;text-align:center;"src="${ctx}/BJUI/themes/css/img/load.gif" ></h3>
+    状态变更中...
+</div>
+<script language="javascript" type="text/javascript">
+    $(function () {
+        debugger;
+        var url = "${ctx}/project/equipmentinfor!serList.do?serverImportSelected=${serverImportSelected!}&selectRealName=";
+        var value = encodeURI(encodeURI($("#selectRealName").val()));
+        url += value;
+        _d("#pagerForm").attr("action",url);
+    })
+    /**
+     * 关闭当前窗口
+     * @author wangtao
+     * @createTime 2018-03-20
+     */
+    function closeserverSelectDialog(obj) {
+        $(obj).dialog("close", $.CurrentDialog);
+    }
+    function serverUndoForm() {
+        _d("#serverIdc").val("");
+        _d("#serverIdName").val("");
+        _d("#serverIdP").val("");
+        _d("#isDel").val("");
+        _d("#serverType").val("");
+        _d("#serverSearch").submit();
+    }
+    function servercloseDialogAndRefresh() {
+        //$(this).dialog("close", "combinationmembers_addMembers");
+        $("#project_search").click();
+    }
+
+    //服务器选择
+    function saveServerSelect(obj,val){
+        debugger;
+        $.ajax({
+            type: "POST",
+            url: "${ctx}/project/equipmentinfor!getById.do?id="+val,
+            success: function(data){
+                $("#serverName").val(data.serverName);
+                $("#type").val(data.type);
+                $('#serverUsername').val(data.serverUsername);
+                $('#serverPassword').val(data.serverPassword);
+                $('#serverIp').val(data.serverIp);
+                $('#serverMac').val(data.serverMac);
+                $('#serverInsideIp').val(data.serverInsideIp);
+                $('#serverOutsideIp').val(data.serverOutsideIp);
+                $('#remarks').val(data.remark);
+            }
+        });
+        closeserverSelectDialog(obj);
+    }
+</script>
+<#include "../common/_page.html"/>

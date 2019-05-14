@@ -1,0 +1,53 @@
+<#include "../../../common/_public.html"/>
+<#include "user_role_js.html"/>
+<div class="bjui-pageContent">
+		<form action=""
+			data-callback="te" method="post" id="entrust_dialog"
+			data-toggle="validate" data-alertmsg="false">
+	<input type="hidden" name="entity.id" value="${entity.id!}">
+	<input type="hidden" name="entity.userName" value="${entity.userName!}"/>
+	<input type="hidden" id="roleIds" name="roleIds" value="${roleIds!}">
+	<table data-width="100%" data-nowrap="true" data-selected-multi="true"
+           class="table table-bordered table-hover table-striped table-top">
+        <thead>
+        <tr>
+            <th width="20"></th>
+            <th width="30">NO.</th>
+            <th width="180" style="text-align:center">
+                <div class="list-col-VerifyNo">角色名称</div>
+            </th>
+            <th class="list-col-HouseholdAddress" style="text-align:center">
+                <div class="list-col-HouseholdAddress">角色描述</div>
+            </th>
+        </tr>
+        </thead>
+        <tbody id="userRoleTable">
+        <#list roleList as role>
+        <tr>
+            <td>
+            <input type="checkbox" name="ids" data-toggle="icheck" value="${role.id}"
+             <#if role.isCheck == "1">checked="checked"</#if>/>
+            </td>
+            <td class="center">${role_index+1+(start-1)*limit}</td>
+            <td class="left">
+                <div title='${role.name!}'>${role.name!}</div>
+            </td>
+            <td class="left">
+                <div title="${role.remark!}"> ${role.remark!}</div>
+            </td>
+        </tr>
+        </#list>
+        </tbody>
+    </table>
+		</form>
+	</div>
+	<div class="bjui-pageFooter">
+		<ul>
+			<li>
+				<button type="button" class="btn-close closecutab" data-icon="close">关闭</button>
+			</li>
+			<li>
+				<button onClick="saveRoleList()" class="btn-default" data-icon="save">保存</button>
+			</li>
+		</ul>
+	</div>

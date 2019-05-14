@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<config>
+	<bean class="org.snaker.engine.access.dialect.OracleDialect"/>
+	<bean class="org.snaker.engine.impl.LogInterceptor"/>
+	<bean class="org.snaker.engine.spring.SpelExpression"/>
+	<bean class="org.snaker.engine.impl.SurrogateInterceptor"/>
+    <!--自定义用户角色部门扩展-->
+	<bean class="org.zcframework.workflow.web.CustomAccessStrategy"/>
+
+</config>

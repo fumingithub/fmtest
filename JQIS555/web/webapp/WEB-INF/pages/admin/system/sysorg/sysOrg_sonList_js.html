@@ -1,0 +1,224 @@
+﻿<script language="javascript" type="text/javascript">
+
+    /**
+     * 跳转到机构编辑页面
+     * @param editType
+     * @param title
+     * @param id
+     */
+    function toEditOrgPage(editType, title, id, types) {
+
+        if (!id) {id="";}
+        if (!types) {types="";}
+
+        var parentId = $("#parentId").val(); // 父级机构编码
+        var url = ""; // 请求地址
+
+        if (editType == 4 && "edit" == types) { // 编辑
+            if ($("#sysOrgListTbl input:checked").length > 0) {
+                id = $("#sysOrgListTbl input:checked").val();
+            } else {
+                $(this).alertmsg('warn', "请选中一条数据！");
+                return;
+            }
+        }
+        if (editType == 1) { // 新增
+            url ="${ctx}/admin/system/sysorg!edit.do?editType=" + editType;
+        } else {
+            url ="${ctx}/admin/system/sysorg!edit.do?id=" + id + "&parentId="
+                    + parentId + "&editType=" + editType + "&types=" + types;
+        }
+
+        var dialog_options = {
+            id: 'sysOrg_edit',
+            title: title,
+            url: url,
+            width: 500,
+            height: 400,
+            fresh: true,
+            mask: true
+        };
+        $(this).dialog(dialog_options);
+    }
+
+    /**
+     * 异步保存数据并刷新zTree
+     */
+    function refreshSysOrgTree(formId){
+        var editType = $("#editType").val();
+        var dataForms = $("#" + formId);
+        var $formFlag = dataForms.isValid();
+        if ($formFlag) {
+            $.ajax({
+                type: "post",
+                data: $("#" + formId).serialize(),
+                url: "${ctx}/admin/system/sysorg!save.do",
+                success: function(data){
+                    var dataJson = eval('(' + data + ')');
+                    if (dataJson.statusCode == 300) {
+                        $(this).alertmsg('warn', dataJson.message);
+                    } else if (dataJson.statusCode == 200) {
+                        $(this).alertmsg('correct', dataJson.message);
+                        $(this).dialog("close", $.CurrentDialog);
+                        if (editType == 1 || editType == 2 || editType == 3) {
+                            $('#refresh').click();
+                        }
+                        if (editType == 4) {
+                            drefresh();
+                        }
+                    }
+                }
+            });
+        }
+    }
+
+    /**
+     * 异步改变启用/禁用状态
+     */
+    function doSetStatus() {
+        if ($("#sysOrgListTbl input:checked").length > 0) {
+            var id = $("#sysOrgListTbl input:checked").val();
+            var status = $("#sysOrgListTbl input:checked").attr("status");
+            var msg = "";
+
+            if (status == "1") {
+                msg = "解锁成功！"
+            } else {
+                msg = "锁定成功！"
+            }
+            $.ajax({
+                type: "POST",
+                url: "${ctx}/admin/system/sysorg!setStatus.do?id=" + id + "&statusTemp=" + status,
+                success: function(data){
+                    var dataJson = eval('(' + data + ')');
+                    if (dataJson.statusCode == 300) {
+                        $(this).alertmsg('warn', dataJson.message);
+                    } else {
+                        $(this).alertmsg('correct', msg);
+                        $('#refresh').click();
+//                        drefresh();
+                    }
+                }
+            });
+        } else {
+            $(this).alertmsg('warn', "请选中一条数据！");
+            return;
+        }
+    }
+
+    /**
+     * 异步删除
+     */
+    function delSysOrg(obj) {
+        if ($("#sysOrgListTbl input:checked").length > 0) {
+            var id = $("#sysOrgListTbl input:checked").val();
+
+            $(obj).alertmsg("confirm", "确定要删除选中项吗？", {
+                okCall: function() {
+                    $.ajax({
+                        type: "POST",
+                        url: "${ctx}/admin/system/sysorg!delete.do?id=" + id,
+                        async: false,
+                        success: function (data) {
+                            var dataJson = eval('(' + data + ')');
+                            if (dataJson.statusCode == 300) {
+                                $(this).alertmsg('warn', dataJson.message);
+                            } else {
+                                $(this).alertmsg('correct', "删除成功！");
+                                $('#refresh').click();
+//                                drefresh();
+                            }
+                        }
+                    });
+                }
+            });
+        } else {
+            $(this).alertmsg('warn', "请选中一条数据！");
+            return;
+        }
+    }
+
+    /**
+     * 右侧列表刷新
+     */
+    function drefresh(){
+        $("#org_name").val("");
+        $("#code").val("");
+        $("#status").val("");
+        $("#sysOrgSubmit").submit();
+    }
+
+    /**
+     * 跳转到机构调动页面
+     * @param title
+     */
+    function toOrgTransferPage(title) {
+        if ($("#sysOrgListTbl input:checked").length > 0) {
+            var id = $("#sysOrgListTbl input:checked").val();
+            var url = "${ctx}/admin/system/sysorg!orgTransfer.do?transferSysOrgId=" + id;
+            var dialog_options = {
+                id: 'sysOrg_transfer',
+                title: title,
+                url: url,
+                width: 400,
+                height: 500,
+                fresh: true,
+                mask: true
+            }
+
+            $(this).dialog(dialog_options);
+        } else {
+            $(this).alertmsg('warn', "请选中一条数据！");
+            return;
+        }
+    }
+
+    /**组织机构授权，给该组织机构授权可维护具体村行政区划（农合行政区划）数据的权限*/
+    function toGrantAuth(title){
+    	if ($("#sysOrgListTbl input:checked").length > 0) {
+            var id = $("#sysOrgListTbl input:checked").val();
+            var url = "${ctx}/admin/system/sysorg!grantAuth.do?transferSysOrgId=" + id;
+            var dialog_options = {
+                id: 'sysOrg_grantauth',
+                title: title,
+                url: url,
+                width: 400,
+                height: 500,
+                fresh: true,
+                mask: true
+            }
+
+            $(this).dialog(dialog_options);
+        } else {
+            $(this).alertmsg('warn', "请选中一条数据！");
+            return;
+        }
+    }
+    /**
+     * 删除左右两端的空格
+     */
+    function doTrim(selObj){
+        var selected = $(selObj).find("option:selected");
+        selected.html($.trim(selected.text()));
+    }
+
+    function changeEnabledButt(id,isEnabled){
+        var disabledCSS = "<i class='fa fa-minus font24 iconbg01'></i>锁定";
+        var enabledCSS = "<i class='fa fa-check font24 iconbg02'></i>解锁";
+        if(isEnabled == "0"){
+            $("#"+id).html(disabledCSS);
+        }else if(isEnabled == "1"){
+            $("#"+id).html(enabledCSS);
+        }else{
+            $("#"+id).html(enabledCSS);
+        }
+    }
+
+    /**
+     * 页面加载初始化
+     */
+    $(function () {
+        var pName = $("#sonPName").val(); // 上级机构名称
+        $("#pName").val(pName);
+    });
+</script>

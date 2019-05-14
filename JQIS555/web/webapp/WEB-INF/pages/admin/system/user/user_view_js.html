@@ -1,0 +1,161 @@
+<script type="text/javascript">
+    var TOP_CODE = "230600"; // 顶级行政区划：大庆市
+    var registerAddress = "";  //居住地址
+    //行政区划
+    var setting = {
+        async: {
+            autoParam: ["id"],
+            enable: true,
+            dataType: "text",
+            url: "${ctx}/standard/areadict!ajaxQueryAreasForZTree.do",
+            dataFilter: filter,
+            type: "post"
+        },
+        callback: {
+            beforeClick: beforeClick,
+            onAsyncError: onAsyncError,
+            onAsyncSuccess: onAsyncSuccess,
+            onClick: onClick,
+            onCheck: onCheck
+        },
+        check: {
+            enable: true,
+            chkStyle: "radio",
+            radioType: "all"
+        },
+        data: {
+            simpleData: {
+                enable: true,
+                idKey: "id",
+                pIdKey: "pid",
+                rootPId: TOP_CODE
+            }
+        },
+        view: {
+            showIcon: false
+        }
+    }
+
+    /**
+     * 对返回数据进行预格式化处理
+     * @param treeId
+     * @param parentNode
+     * @param responseData
+     * @returns {Array}
+     */
+    function filter(treeId, parentNode, responseData){
+        var arr = [];
+        if (responseData) {
+            if ("default_area_tree" == treeId) {
+                for(var i = 0; i < responseData.length; i++) {
+                    var flag = true;
+                    if ("6" == responseData[i].areaLevel) {
+                        flag = false;
+                    }
+                    arr[i] = {
+                        id: responseData[i].code,
+                        pid: responseData[i].pCode,
+                        name: responseData[i].name,
+                        areaLevel: responseData[i].areaLevel,
+                        isParent: flag
+                    }
+                }
+            }
+        }
+        return arr;
+    }
+
+    /**
+     * 点击前预处理函数
+     * @param treeId
+     * @param treeNode
+     * @param clickFlag
+     * @returns {boolean}
+     */
+    function beforeClick(treeId, treeNode, clickFlag){
+        var zTree = $.fn.zTree.getZTreeObj(treeId);
+        zTree.checkNode(treeNode, !treeNode.checked, true);
+        return true;
+    }
+
+    /**
+     * 节点点击时的回调函数
+     * @param event
+     * @param treeId
+     * @param treeNode
+     * @param clickFlag
+     */
+    function onClick(event, treeId, treeNode, clickFlag){
+        setVal(treeId, treeNode);
+    }
+
+    /**
+     * 节点选中时的回调函数
+     * @param event
+     * @param treeId
+     * @param treeNode
+     * @param clickFlag
+     */
+    function onCheck(event, treeId, treeNode, clickFlag){
+        setVal(treeId, treeNode);
+    }
+
+    /**
+     * 赋值
+     * @param treeId
+     * @param treeNode
+     */
+    function setVal (treeId, treeNode) {
+        if (treeNode.checked) {
+            $("#default_area_code").val(treeNode.id);
+            if (treeNode.getParentNode()) {
+                $("#default_area_name").val(treeNode.getParentNode().name + "/" + treeNode.name);
+            } else {
+                $("#default_area_name").val(treeNode.name);
+            }
+        } else {
+            $("#default_area_code, #default_area_name").val("");
+        }
+    }
+
+    /**
+     * 异步失败时的回调函数
+     * @param event
+     * @param treeId
+     * @param treeNode
+     * @param XMLHttpRequest
+     * @param textStatus
+     * @param errorThrown
+     */
+    function onAsyncError(event, treeId, treeNode, XMLHttpRequest, textStatus, errorThrown){
+
+    }
+
+    /**
+     * 异步成功时的回调函数
+     * @param event
+     * @param treeId
+     * @param treeNode
+     * @param msg
+     */
+    function onAsyncSuccess(event, treeId, treeNode, msg){
+
+    }
+
+    /**
+     * 初始化加载
+     */
+    $(document).ready(function() {
+        // 初始化行政区划树
+//        $.fn.zTree.init($("#default_area_tree"), setting);
+
+        // 默认展开的到第二级
+//        setTimeout(function () {
+//            var zTreeObj = $.fn.zTree.getZTreeObj("default_area_tree");
+//            var node = zTreeObj.getNodeByParam("id", TOP_CODE, null);
+//            zTreeObj.expandNode(node);
+//        }, 300);
+
+    });
+
+</script>

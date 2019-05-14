@@ -1,0 +1,74 @@
+<#include "../../../common/_public.html"/>
+<div class="bjui-pageHeader">
+    <form id="pagerForm" data-toggle="ajaxsearch" method="post" action="${ctx}/admin/workflow/process!list.do">
+    <div class="office">
+        <ul class="offbtn">
+            <li> <a  data-toggle="navtab" data-id="applyforedit_add" data-external="true"
+                     data-url="${ctx}/admin/workflow/process!deploy.do" data-title="流程部署"><span class="iconbg03"><i class="fa fa-database font24"></i></span>部署</a> </li>
+            <li> <a data-external="true" data-toggle="navtab"  data-url="${ctx}/admin/workflow/process!designer.do" data-id="demo-edit"> <span class="iconbg04"><i class="fa fa-photo  font24"></i></span>设计</a> </li>
+            <li> <a data-toggle="doajax" id="refresh"  data-toggle="reloadsearch" data-target="#bjui-pageContent"data-icon="search" ><span class="iconbg02"><i class="fa fa-refresh font24"></i></span>刷新</a> </li>
+      		 <li> <a  class="closecutab"><span class="iconbg03"><i class="fa fa-remove  font24"></i></span>关闭</a> </li> 
+        </ul>
+    </div>
+
+        <div class="bjui-searchBar">
+
+            <lable>名称：</lable>
+            <input name="displayName" class="form-control" size="15" type="text" value="" />
+            <button type="submit" class="btn-default"  data-toggle="ajaxsearch" data-icon="search">查询</button>&nbsp;
+            <a class="btn btn-orange" href="javascript:;" onclick="$(this).navtab('reloadForm', true);" data-icon="undo">清空</a>
+
+        </div>
+    </form>
+</div>
+<div class="bjui-pageContent">
+    <table data-width="100%" data-nowrap="true" data-selected-multi="false"  class="table table-bordered table-hover table-striped table-top" data-toggle="tablefixed">
+        <thead>
+        <tr>
+            <th width="20"></th>
+            <th width="30">NO.</th>
+            <th align=center width=15%>名称</th>
+            <th align=center width=35%>流程显示名称</th>
+            <th align=center width=10%>状态</th>
+            <th align=center width=10%>版本号</th>
+            <th align=center width=20%>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        <#list page.result as process>
+            <tr>
+                <td><input type="checkbox"  value="${process.id!}" name="ids" data-toggle="icheck"> </td>
+                <td>${process_index+1+(start-1)*limit}</td>
+                <td class="td_list_2" align=left nowrap>
+                    ${process.name}&nbsp;
+                </td>
+                <td class="td_list_2" align=left nowrap>
+                    ${process.displayName}&nbsp;
+                </td>
+                <td class="td_list_2" align=center>
+                    <#if process.state==1>
+                        <span class="label label-success">正常</span>
+                    <#else>
+                        <span class="label label-danger">禁用</span>
+                    </#if>
+                </td>
+                <td class="td_list_2" align=center>
+                    <span class="label label-primary">V:${process.version}.0版&nbsp;</span>
+                </td>
+                <td class="td_list_2" align=center nowrap>
+                    <!--<div class="btn-group" data-toggle="buttons-checkbox">-->
+                    <a data-toggle="navtab" data-id="workflow_start" href="${ctx}/admin/workflow/flow!all.do?processId=${process.id }&processName=${process.name}" class="btn btn-green" title="启动流程">启动</a>
+                    <a data-toggle="navtab" data-id="workflow_edit" href="${ctx}/admin/workflow/process!processEdit.do?processId=${process.id}" class="btn btn-blue" title="编辑工作流">编辑</a>
+                    <a data-toggle="navtab" data-id="workflow_designer" data-external="true" href="${ctx}/admin/workflow/process!designer.do?processId=${process.id}" class="btn btn-orange" title="设计工作流">设计</a>
+                    <#if process.state==1>
+                    <a data-toggle="doajax" href="${ctx}/admin/workflow/process!delete.do?processId=${process.id}" class="btn btn-red" title="删除" data-isrefsh="true" data-confirm-msg="确定要禁用选中工作流吗？">禁用</a>
+                    </#if>
+                    <!--</div>-->
+                </td>
+            </tr>
+        </#list>
+        </tbody>
+    </table>
+</div>
+<#include "../../../common/_page.html"/>

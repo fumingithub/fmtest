@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap
+        PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+        "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="Elevator">
+    <typeAlias alias="Elevator" type="net.jqsoft.base.elevatorfm.domain.Elevator"/>
+
+    <resultMap id="ElevatorMap" class="Elevator">
+        <result property="id" column="ID"/>
+        <result property="elevatorCode" column="ELEVATOR_CODE"/>
+        <result property="villageName" column="VILLAGE_NAME"/>
+        <result property="floor" column="FLOOR"/>
+        <result property="elevatorNumber" column="ELEVATOR_NUMBER"/>
+        <result property="brand" column="BRAND"/>
+        <result property="principalor" column="PRINCIPALOR"/>
+        <result property="principalorName" column="PRINCIPALOR_NAME"/>
+        <result property="principalorTel" column="PRINCIPALOR_TEL"/>
+        <result property="status" column="STATUS"/>
+        <result property="reference" column="REFERENCE"/>
+        <result property="creator" column="CREATOR"/>
+        <result property="creatorName" column="CREATOR_NAME"/>
+        <result property="creatorTime" column="CREATOR_TIME"/>
+        <result property="updator" column="UPDATOR"/>
+        <result property="updatorName" column="UPDATOR_NAME"/>
+        <result property="updatorTime" column="UPDATOR_TIME"/>
+        <result property="deleter" column="DELETER"/>
+        <result property="deleterName" column="DELETER_NAME"/>
+        <result property="deleterTime" column="DELETER_TIME"/>
+        <result property="isDel" column="IS_DEL"/>
+    </resultMap>
+
+    <select id="getAllElevator" resultMap="ElevatorMap">
+        select * from ELEVATOR_FM
+    </select>
+
+    <!--编辑、查看时，根据id获得数据-->
+    <select id="get" parameterClass="String" resultMap="ElevatorMap">
+        <![CDATA[
+        SELECT * FROM ELEVATOR_FM WHERE ID = #id:String#
+        ]]>
+    </select>
+
+    <!--查询时，模糊查询-->
+    <sql id="selectByConditions">
+        <dynamic>
+            <isNotEmpty prepend="AND" property="villageName">
+                ELEVATOR_FM.VILLAGE_NAME LIKE '%' || #villageName# || '%'
+            </isNotEmpty>
+            <isNotEmpty prepend="AND" property="floor">
+                ELEVATOR_FM.FLOOR LIKE  #floor#
+            </isNotEmpty>
+            <isNotEmpty prepend="AND" property="principalorName">
+                ELEVATOR_FM.PRINCIPALOR_NAME LIKE '%' || #principalorName# || '%'
+            </isNotEmpty>
+            <isNotEmpty prepend="AND" property="status">
+                ELEVATOR_FM.STATUS LIKE '%' || #status# || '%'
+            </isNotEmpty>
+            <isNotEmpty prepend="">
+                <![CDATA[
+             ORDER BY ELEVATOR_FM.ELEVATOR_CODE ASC  ]]>
+            </isNotEmpty>
+        </dynamic>
+    </sql>
+
+    <!--分页和数据列表显示-->
+    <select id="select" resultMap="ElevatorMap" parameterClass="java.util.HashMap">
+        SELECT * FROM ELEVATOR_FM WHERE IS_DEL = 0
+        <isNotEmpty property="">
+            <![CDATA[
+              AND (order by ELEVATOR_FM.ELEVATOR_CODE ASC )
+            ]]>
+        </isNotEmpty>
+        <include refid="selectByConditions"/>
+
+    </select>
+    <select id="count" resultClass="int">
+        SELECT COUNT(*) FROM ELEVATOR_FM WHERE IS_DEL = 0
+        <include refid="selectByConditions"/>
+    </select>
+
+    <!--电梯管理新增-->
+    <insert id="insert" parameterClass="Elevator">
+        <![CDATA[
+        INSERT INTO ELEVATOR_FM (
+         ID,
+         ELEVATOR_CODE,
+         VILLAGE_NAME,
+         FLOOR,
+         ELEVATOR_NUMBER,
+         BRAND,
+         PRINCIPALOR_NAME,
+         PRINCIPALOR_TEL,
+         STATUS,
+         REFERENCE,
+         IS_DEL,
+         CREATOR,
+         CREATOR_NAME,
+         CREATOR_TIME,
+         UPDATOR,
+         UPDATOR_NAME,
+         UPDATOR_TIME,
+         DELETER,
+         DELETER_NAME,
+         DELETER_TIME
+        ) VALUES(
+                #id#,
+                #elevatorCode#,
+                #villageName#,
+                #floor#,
+                #elevatorNumber#,
+                #brand#,
+                #principalorName#,
+                #principalorTel#,
+                #status#,
+                #reference#,
+                #isDel#,
+                #creator#,
+                #creatorName#,
+                #creatorTime#,
+                #updator#,
+                #updatorName#,
+                #updatorTime#,
+                #deleter#,
+                #deleterName#,
+                #deleterTime#
+        )
+        ]]>
+    </insert>
+
+    <!--电梯管理编辑-->
+    <update id="update" parameterClass="Elevator">
+        <![CDATA[
+            UPDATE ELEVATOR_FM
+        ]]>
+        <dynamic prepend="SET">
+            <isNotEmpty property="elevatorCode" prepend=",">
+                <![CDATA[
+                    ELEVATOR_CODE = #elevatorCode:String#]]>
+            </isNotEmpty>
+            <isNotEmpty property="villageName" prepend=",">
+                <![CDATA[
+                    VILLAGE_NAME = #villageName:String#]]>
+            </isNotEmpty>
+            <isNotEmpty property="floor" prepend=",">
+                <![CDATA[
+                    FLOOR = #floor:String#]]>
+            </isNotEmpty>
+            <isNotEmpty property="elevatorNumber" prepend=",">
+                <![CDATA[
+                    ELEVATOR_NUMBER = #elevatorNumber:String#]]>
+            </isNotEmpty>
+            <isNotNull property="brand" prepend=",">
+                <![CDATA[
+                    BRAND = #brand:String#]]>
+            </isNotNull>
+            <isNotEmpty property="principalor" prepend=",">
+                <![CDATA[
+                    PRINCIPALOR = #principalor:String#]]>
+            </isNotEmpty>
+            <isNotEmpty property="principalorName" prepend=",">
+                <![CDATA[
+                    PRINCIPALOR_NAME = #principalorName:String#]]>
+            </isNotEmpty>
+            <isNotEmpty property="principalorTel" prepend=",">
+                <![CDATA[
+                    PRINCIPALOR_TEL = #principalorTel:String#]]>
+            </isNotEmpty>
+            <isNotEmpty property="status" prepend=",">
+                <![CDATA[
+                    STATUS = #status:String#]]>
+            </isNotEmpty>
+            <isNotNull property="reference" prepend=",">
+                <![CDATA[
+                    REFERENCE = #reference:String#]]>
+            </isNotNull>
+            <isNotEmpty property="updator" prepend=",">
+                <![CDATA[
+                    UPDATOR = #updator:String#]]>
+            </isNotEmpty>
+            <isNotEmpty property="updatorName" prepend=",">
+                <![CDATA[
+                    UPDATOR_NAME = #updatorName:String#]]>
+            </isNotEmpty>
+            <isNotEmpty property="updatorTime" prepend=",">
+                <![CDATA[
+                    UPDATOR_TIME = #updatorTime:String#]]>
+            </isNotEmpty>
+
+        </dynamic>
+        <dynamic prepend="WHERE">
+            <![CDATA[
+                ID = #id:String#
+            ]]>
+        </dynamic>
+    </update>
+
+    <!--逻辑删除电梯信息-->
+    <update id="logicalDeleteElevator" parameterClass="Elevator">
+        <![CDATA[ UPDATE ELEVATOR_FM]]>
+        <dynamic prepend="SET">
+            <isNotEmpty property="deleter" prepend=",">
+                <![CDATA[ DELETER = #deleter# ]]>
+            </isNotEmpty>
+            <isNotEmpty property="deleterName" prepend=",">
+                <![CDATA[ DELETER_NAME = #deleterName# ]]>
+            </isNotEmpty>
+            <isNotEmpty property="deleterTime" prepend=",">
+                <![CDATA[ DELETER_TIME = #deleterTime# ]]>
+            </isNotEmpty>
+            <isNotEmpty property="isDel" prepend=",">
+                <![CDATA[ IS_DEL = #isDel# ]]>
+            </isNotEmpty>
+        </dynamic>
+        <dynamic prepend="WHERE"><![CDATA[ ID = #id# ]]></dynamic>
+    </update>
+
+
+    <!--电梯code唯一性验证-->
+    <select id="getInfoByCode" resultClass="int" parameterClass="java.util.HashMap">
+        SELECT COUNT(*) FROM ELEVATOR_FM WHERE IS_DEL = '0' AND ELEVATOR_CODE = #elevatorCode#
+    </select>
+    <select id="getInfoById" resultMap="ElevatorMap" parameterClass="java.util.HashMap">
+        SELECT * FROM ELEVATOR_FM WHERE ID = #id#
+    </select>
+
+    <!--获得故障状态为维保中、待确认的数据数量-->
+    <select id="getTroubleStatus" resultClass="int" parameterClass="java.util.HashMap">
+        SELECT COUNT(*) FROM TROUBLE_DECLARE_FM WHERE TROUBLE_STATUS IN (2,3) AND IS_DEL = '0' AND ELEVATOR_ID = #id#
+    </select>
+    <!--获得维保状态为维保中的数据数量-->
+    <select id="getMaintenanceStatus" resultClass="int" parameterClass="java.util.HashMap">
+        SELECT COUNT(*) FROM ELEVATOR_MAINTENANCE_FM WHERE MAINTENANCE_STATUS = '1' AND IS_DEL = '0' AND ELEVATOR_ID = #id#
+    </select>
+
+    <!--获得在特定地方，存在特定电梯号的电梯的数量-->
+    <select id="getInfoByArea" resultClass="int" parameterClass="java.util.HashMap">
+        SELECT COUNT(*) FROM ELEVATOR_FM
+        <dynamic prepend="WHERE">
+            <isNotEmpty property="villageName" prepend="AND">
+                <![CDATA[ VILLAGE_NAME = #villageName:String# ]]>
+            </isNotEmpty>
+            <isNotEmpty property="floor" prepend="AND">
+                <![CDATA[ FLOOR = #floor:String# ]]>
+            </isNotEmpty>
+            <isNotEmpty property="elevatorNumber" prepend="AND">
+                <![CDATA[ ELEVATOR_NUMBER = #elevatorNumber:String# ]]>
+            </isNotEmpty>
+        </dynamic>
+        <![CDATA[ AND IS_DEL = '0' ]]>
+    </select>
+</sqlMap>

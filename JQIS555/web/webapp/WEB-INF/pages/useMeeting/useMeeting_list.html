@@ -1,0 +1,87 @@
+<#include "../common/_public.html"/>
+<div class="bjui-pageHeader">
+    <form id="pagerForm" data-toggle="ajaxsearch" action="${ctx}/meetingroom/meeting/usemeeting!view.do" method="post">
+        <div class="office">
+            <ul class="offbtn">
+                <@auth name="MEETING_USE">
+                <#if hasPermission>
+                    <li><a data-url="${ctx}/meetingroom/meeting/usemeeting!useMeeting.do?entity.id={#bjui-selected}" data-toggle="doajax"
+                           data-external="false" data-isrefsh="true" data-confirm-msg="确定要借用此会议室吗？"><span class="iconbg03"><i class="fa fa-trash font24"></i></span>借用</a></li>
+                </#if>
+                </@auth>
+                <@auth name="MEETING_RETURN">
+                <#if hasPermission>
+                    <li><a data-url="${ctx}/meetingroom/meeting/usemeeting!returnMeeting.do?entity.id={#bjui-selected}" data-toggle="doajax"
+                           data-external="false" data-isrefsh="true" data-confirm-msg="确定要归还此会议室吗？"><span class="iconbg03"><i class="fa fa-trash font24"></i></span>归还</a></li>
+                    <!--<li><a data-toggle="navtab" data-id="expert-edit"-->
+                           <!--data-url="${ctx}/meetingroom/meeting/usemeeting!returnMeeting.do?entity.id={#bjui-selected}" data-external="false"-->
+                           <!--data-title="归还" data-isrefsh="true"> <span class="iconbg01">-->
+				<!--<i class="fa fa-file-text-o font24"></i></span>归还</a>-->
+                </#if>
+                </@auth>
+                <li><span class="ttt"></span></li>
+                <li><a id="refresh" data-toggle="reloadsearch"
+                    data-target="#bjui-pageContent" data-icon="search"><span
+                    class="iconbg02"><i class="fa fa-refresh font24"></i></span>刷新</a></li>
+                <li><a class="closecutab"><span class="iconbg03"><i
+                    class="fa fa-remove  font24"></i></span>关闭</a></li>
+            </ul>
+        </div>
+        <div class="bjui-searchBar">
+            <input type="hidden" name="limit" value="${limit}">
+            <input type="hidden" name="start" value="${start}">
+            &nbsp;&nbsp;
+            <lable>会议室名称:</lable>
+            <input name="name" class="form-control" value="${filter.parameters.name!}" size="15" type="text"/>
+            &nbsp;&nbsp;
+            <lable>是否可使用：</lable>
+            <select id="inUse" name="inUse" data-toggle="selectpicker" data-width="150">
+                <option selected="selected" value="" >全部</option>
+                <option value="1"
+                <#if '${filter.parameters.inUse!}' == "1"> selected="selected"</#if>
+                >是</option>
+                <option value="0"
+                <#if '${filter.parameters.inUse!}' == "0"> selected="selected"</#if>
+                >否</option>
+            </select>
+            <button type="submit" class="btn-default"  data-toggle="ajaxsearch" data-icon="search" id="hciSearchBtn">查询</button>&nbsp;
+            <a class="btn btn-orange" href="javascript:;" onclick="$(this).navtab('reloadForm', true);" data-icon="undo">清空</a>
+        </div>
+    </form>
+</div>
+<div class="bjui-pageContent">
+    <table data-width="100%" data-toggle="tablefixed" data-nowrap="true" data-selected-multi="false"
+           class="table table-bordered table-hover table-striped table-top min-width">
+        <thead>
+        <tr>
+            <th></th>
+            <th>NO.</th>
+            <th  style="text-align:center" title="会议室名称">会议室名称</th>
+            <th  style="text-align:center" title="使用者姓名">使用者</th>
+            <th  style="text-align:center" title="使用日期">使用日期</th>
+            <th  style="text-align:center" title="使用状态">使用状态</th>
+        </tr>
+        </thead>
+        <tbody>
+        <#list entitys as entity>
+            <tr>
+                <td><input type="checkbox" value="${entity.id}" name="ids"
+                           data-toggle="icheck">
+                </td>
+                <td style="text-align:center">${entity_index+1+(start-1)*limit}</td>
+                <td style="text-align:center" title="${entity.name!}">${entity.name!}</td>
+                <td style="text-align:center" title="${entity.userName!}">${entity.userName!}</td>
+                <td style="text-align:center" title="${entity.useDate!}">${entity.useDate!}</td>
+                </td>
+                <td style="text-align:center" title="${entity.inUse!}">
+                    <a href="#" title="${entity.inUse!}" >
+                        <#if entity.inUse=="1"><div title="可使用" class="label label-success">可使用</div></#if>
+                        <#if entity.inUse=="0"><div title="归还" class="label label-danger">归&nbsp&nbsp还</div></#if>
+                    </a>
+                </td>
+            </tr>
+        </#list>
+        </tbody>
+    </table>
+</div>
+<#include "../common/_page.html"/>

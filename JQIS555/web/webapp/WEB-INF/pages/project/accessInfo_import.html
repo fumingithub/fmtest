@@ -1,0 +1,122 @@
+<#include "../common/_public.html"/>
+<div class="bjui-pageContent">
+    <form action="" id="lis_clinical_lab_form"  data-alertmsg="true" data-isrefsh="false">
+        <div style="margin:15px auto 0;">
+            <fieldset>
+                <legend>
+                    <h3 class="listtitle">接入方信息导入</h3>
+                </legend>
+            <!--<div style="padding-left: 8%;">
+            	<a class="list-a" onclick="doExportHrdata(this)">人力资源相关下拉框数据下载</a>
+            </div>-->
+            <div class="table table-condensed" width="100%" style="margin-top:20px;padding-left: 8%;">
+                <#if hrInsType??>
+                    <#if hrInsType == '999'>
+                        <span class="left"><a href="${ctx}/hr/personBaseInfoImportAndExport!doHrExport.do?types=public" class="list-a" data-toggle="ajaxdownload">公立医疗卫生机构模板下载</a></span>&nbsp;&nbsp;&nbsp;
+                        <span class="left"><a href="${ctx}/hr/personBaseInfoImportAndExport!doHrExport.do?types=private" class="list-a" data-toggle="ajaxdownload">民营医疗机构模板下载</a></span> &nbsp;&nbsp;&nbsp;
+                        <span class="left"><a href="${ctx}/hr/personBaseInfoImportAndExport!doHrExport.do?types=country" class="list-a" data-toggle="ajaxdownload">村卫生室模板下载</a></span> &nbsp;
+                    </#if>
+                    <#if hrInsType == '01'>
+                        <span class="left"><a href="${ctx}/hr/personBaseInfoImportAndExport!doHrExport.do?types=public" class="list-a" data-toggle="ajaxdownload">公立医疗卫生机构模板下载</a></span>&nbsp;&nbsp;&nbsp;
+                    </#if>
+                    <#if hrInsType == '02'>
+                        <span class="left"><a href="${ctx}/hr/personBaseInfoImportAndExport!doHrExport.do?types=private" class="list-a" data-toggle="ajaxdownload">民营医疗机构模板下载</a></span> &nbsp;&nbsp;&nbsp;
+                    </#if>
+                    <#if hrInsType == '03'>
+                        <span class="left"><a href="${ctx}/hr/personBaseInfoImportAndExport!doHrExport.do?types=country" class="list-a" data-toggle="ajaxdownload">村卫生室模板下载</a></span> &nbsp;
+                    </#if>
+                </#if>
+			</div>
+             <table  class="table table-condensed" width="100%" style="margin-top:20px;">
+<!-- 	          <tr> -->
+<!-- 	          	 <td class="right" style="width: 80px;line-height: 3;">所属机构</td> -->
+<!-- 	          	 <td class="left"> -->
+<!-- 	          	 	<input type="hidden" name="organizationId" value="${organizationId!}"/> -->
+<!-- 					<input readonly type="text" name="organName"  value="${organName!}" size="34"/> -->
+<!-- 	          	 </td> -->
+<!-- 	          </tr> -->
+	          
+	          <tr>
+	          	 <td class="right" style="width: 80px;line-height: 3;">上传文件</td>
+	          	 <td class="left">
+	          	 	<div id="xls_up" data-toggle="upload" style="display: inline-block;"
+	                         data-uploader="${ctx}/admin/system/upload!uploadFile.do?filePathType=77"
+	                         data-file-size-limit="1024000000"
+	                         data-file-type-exts="*.xls;*.xlsx"
+	                         data-auto="true"
+	                         data-button-text="上传"
+	                         data-width="55"
+	                         data-on-upload-success="xlsSuccess"
+	                         data-on-upload-error=function(){$(this).alertmsg('error',"上传失败！");}
+	                         data-ctx="${ctx}"
+	                         data-icon="cloud-upload"	>
+	                    </div>
+                     <div style="display: inline-block;"><span id="excel_dame"></span></div>
+	          	 </td>
+	          </tr>
+			 </table>
+            </fieldset>
+        </div>
+        <input type="hidden" id="hrInsTypeid" value="${hrInsType!}" />
+        <input type="hidden" id="fileId" name="attachmentId" value="">
+    </form>
+</div>
+<div id='batchloading' style='display:none;width:100%;height:120%;text-align:center;top: 0px; position: absolute;alpha(opacity=45); opacity:0.45;background-color:#FFFFFF;z-index:1000;'>
+</div>
+<div id='batchload' style='display:none;width:100%;height:120%;text-align:center;top:0px;padding-top:20%; position: absolute;alpha(opacity=45);z-index:1000;'>
+    <h3><img style="height: 100px;width:100px;text-align:center;"src="${ctx}/BJUI/themes/css/img/load.gif" ></h3>
+</div>
+<div class="bjui-pageFooter">
+    <ul>
+        <li>
+            <button type="button" class="btn-close closecutab" data-icon="close">关闭</button>
+        </li>
+        <li>
+            <button type="button" onclick="saveExcel()" class="btn-default" data-icon="save">保存</button>
+        </li>
+    </ul>
+</div>
+
+<script type="text/javascript">
+    function xlsSuccess (file,data) {
+    	debugger;
+        eval("var json = " + data);
+        var s = json.attachmentId;
+        _d("#excel_dame").html(file.name);
+        _d("#fileId").val(s);
+    }
+
+    function saveExcel () {
+        var excel_dame = _d("#excel_dame").text();
+        var hrInsType = _d("#hrInsTypeid").val();
+        var fileId = _d("#fileId").val();
+        if (isEmpty(excel_dame)) {
+            $(this).alertmsg("warn", "您未上传接入方附件。");
+            return;
+        }
+//         var orgId = _d("input[name='organizationId']").val();
+        // 显示遮罩
+        _d("#batchloading").show();
+        _d("#batchload").show();
+        $.ajax({
+            url : '${ctx}/admin/system/upload!saveExcelInfo.do',
+            data : {
+//                     hrInsType : hrInsType,
+                    excelName : excel_dame,
+                    attachmentId : fileId },
+
+            type : "POST",
+            success : function (data) {
+                _d("#batchloading").hide();
+                _d("#batchload").hide();
+                    $(this).alertmsg("correct", "接入方信息保存成功。");
+                    $(this).dialog("closeCurrent");
+                    $("#project_search").click();
+            },
+            error : function() {
+                _d("#batchloading").hide();
+                _d("#batchload").hide();
+            }
+        });
+    }
+</script>

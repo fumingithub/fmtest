@@ -1,0 +1,63 @@
+﻿<#include "../../common/_public.html"/>
+
+<div class="bjui-pageContent">
+	<form action="" id="pageform"  data-alertmsg="true" data-isrefsh="false">
+		<div style="margin:15px auto 0; width:800px;">
+			<fieldset>
+				<legend>
+					<h3 class="listtitle">LoginLog信息</h3>
+					<input type="hidden" name="id" value="${entity.id!}"/>
+				</legend>
+				<table class="table table-condensed" width="100%">
+					<tbody>
+					<tr>
+						<td class="right" style="width: 130px">登录用户ID</td>
+						<td class="left" colspan="3">
+							<input name="entity.userId" type="text" data-rule="required" value="${entity.userId!}" size="20" />
+						</td>
+					</tr>
+					<tr>
+						<td class="right" style="width: 130px">用户名</td>
+						<td class="left" colspan="3">
+							<input name="entity.userName" type="text" data-rule="required" value="${entity.userName!}" size="20" />
+						</td>
+					</tr>
+					<tr>
+						<td class="right" style="width: 130px">真实姓名</td>
+						<td class="left" colspan="3">
+							<input name="entity.realName" type="text" data-rule="required" value="${entity.realName!}" size="20" />
+						</td>
+					</tr>
+					<tr>
+						<td class="right" style="width: 130px">登录IP</td>
+						<td class="left" colspan="3">
+							<input name="entity.loginIp" type="text" data-rule="required" value="${entity.loginIp!}" size="20" />
+						</td>
+					</tr>
+					<tr>
+						<td class="right" style="width: 130px">登录时间</td>
+						<td class="left" colspan="3">
+							<input name="entity.loginTime" type="text" data-rule="required" value="${entity.loginTime!}" size="20" />
+						</td>
+					</tr>
+					<tr>
+						<td class="right" style="width: 130px">类型</td>
+						<td class="left" colspan="3">
+							<input name="entity.type" type="text" data-rule="required" value="${entity.type!}" size="20" />
+						</td>
+					</tr>
+				</table>
+			</fieldset>
+		</div>
+	</form>
+</div>
+<div class="bjui-pageFooter">
+    <ul>
+        <li>
+            <button type="button" class="btn-close closecutab" data-icon="close">关闭</button>
+        </li>
+        <li>
+            <button onclick="saveForm(this,'${ctx}/system/loginlog!save.do','pageform')" class="btn-default" data-icon="save">保存</button>
+        </li>
+    </ul>
+</div>

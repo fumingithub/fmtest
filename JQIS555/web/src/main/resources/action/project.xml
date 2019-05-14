@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+        "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+    <!-- 项目管理-->
+    <package name="project" namespace="/project" extends="ncms-default">
+        <!-- 项目管理-->
+        <action name="project" class="net.jqsoft.base.system.view.ProjectAction">
+            <result name="success" type="freemarker">/WEB-INF/pages/project/project_list.html</result>
+            <result name="input" type="freemarker">/WEB-INF/pages/project/project_edit.html</result>
+            <result name="excel" type="stream">
+                <param name="contentType">application/oknd.ms-excel,charset=ISO8859-1</param>
+                <!-- 下载文件的名字 -->
+                <param name="contentDisposition">attachment;filename="${fileName}"</param>
+                 <!-- 下载文件的大小 10485760=10M -->
+			    <param name="bufferSize">4096</param>
+                <param name="inputName">excelFile</param>
+            </result>
+            <result name="accessImport" type="freemarker">/WEB-INF/pages/project/accessInfo_import.html</result>
+        </action>
+        
+        <!-- 权限管理 -->
+        <action name="Authority" class="net.jqsoft.base.system.view.AuthorityAction">
+            <result name="success" type="freemarker">/WEB-INF/pages/admin/system/role/Authority_UserList.html</result>
+            <result name="assign" type="freemarker">/WEB-INF/pages/project/proAndServer_assign.html</result>
+            <result name="authorityList" type="freemarker">/WEB-INF/pages/project/authority_List.html</result>
+<!--         	<result name="input" type="freemarker">/WEB-INF/pages/admin/system/role/role_add.html</result> -->
+<!--         	<result name="users" type="freemarker">/WEB-INF/pages/admin/system/role/role_users.html</result> -->
+<!--         	<result name="roleAddUsers" type="freemarker">/WEB-INF/pages/admin/system/role/role_addUsers.html</result> -->
+        </action>
+                
+        <action name="equipmentinfor" class="net.jqsoft.base.system.view.EquipmentInforAction">
+            <result name="success" type="freemarker">/WEB-INF/pages/equipment/servermanagement_list.html</result>
+            <result name="input" type="freemarker">/WEB-INF/pages/equipment/servermanagement_edit.html</result>
+            <result name="serverSelectList" type="freemarker">/WEB-INF/pages/equipment/serverSelect_list.html</result>
+            <result name="serverremote" type="freemarker">/WEB-INF/pages/equipment/serverremote_view.html</result>
+<!--            <result name="view" type="freemarker">/WEB-INF/pages/equipment/servermanagement_view.html</result>             -->
+            <result name="equipmentInfor" type="json">
+                <param name="root">equipmentInfor</param>
+            </result>
+        </action>
+        
+        <action name="databaseinfomanagement" class="net.jqsoft.base.system.view.DatabaseInfoManagementAction">
+            <result name="success" type="freemarker">/WEB-INF/pages/system/databaseinfomanagement/databaseinfomanagement_list.html</result>
+            <result name="input" type="freemarker">/WEB-INF/pages/system/databaseinfomanagement/databaseinfomanagement_view.html</result>
+        </action>
+        <action name="domain" class="net.jqsoft.base.system.view.AreaManagementAction">
+            <result name="success" type="freemarker">/WEB-INF/pages/system/areamanagement/AreaManagement_list.html</result>
+            <result name="input" type="freemarker">/WEB-INF/pages/system/areamanagement/areaManagement_view.html</result>
+        </action>
+        <action name="application" class="net.jqsoft.base.system.view.ApplicationAction">
+            <result name="success" type="freemarker">/WEB-INF/pages/system/application/application_list.html</result>
+            <result name="input" type="freemarker">/WEB-INF/pages/system/application/application_view.html</result>
+        </action>
+        <action name="etlmanagement" class="net.jqsoft.base.system.view.EtlManagementAction">
+            <result name="success" type="freemarker">/WEB-INF/pages/system/etlmanagement/etlManagement_list.html</result>
+            <result name="input" type="freemarker">/WEB-INF/pages/system/etlmanagement/etlManagement_view.html</result>
+        </action>
+        <action name="usemeeting" class="net.jqsoft.meeting.view.UseMeetingAction">
+            <result name="success" type="freemarker">/WEB-INF/pages/useMeeting/useMeeting_list.html</result>
+            <result name="return" type="freemarker">/WEB-INF/pages/useMeeting/useMeeting_return.html</result>
+        </action>
+    </package>
+</struts>

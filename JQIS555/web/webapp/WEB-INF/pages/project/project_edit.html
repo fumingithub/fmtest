@@ -1,0 +1,260 @@
+<#include "../common/_public.html"/>
+<!-- <div class="bjui-pageHeader" style="background:#FFF;"> -->
+<!-- 	<div class="row" style="height:70px"> -->
+<!-- 		<div class="col-md-12"> -->
+<!-- 			<div class="office"> -->
+<!-- 				<ul class="offbtn"> -->
+<!-- 					<li><a id="lbtnSave" class="submit"><span class="iconbg04"><i -->
+<!-- 								class="fa fa-save font24"></i> -->
+<!-- 						</span>保存</a> -->
+<!-- 					</li> -->
+<!-- 					<li><a class="closecutab"><span class="iconbg03"><i -->
+<!-- 								class="fa fa-remove  font24"></i> -->
+<!-- 						</span>关闭</a> -->
+<!-- 					</li> -->
+<!-- 				</ul> -->
+<!-- 			</div> -->
+<!-- 		</div> -->
+<!-- 	</div> -->
+<!-- </div> -->
+<div class="bjui-pageContent">
+	<form id="form" action="">
+	<div style="margin:15px auto 0;width:850px; ">
+		<fieldset>
+			<legend>
+				<h3 class="listtitle" id="unitTitle">项目信息</h3>
+				<input type="hidden" name="id" value="${entity.id!}" />
+				<input type="hidden" id="types" value="${types!}">
+			</legend>
+			<table class="table table-condensed" width="100%">
+				<tbody>
+					
+					<tr>
+						<td class="right"><span style="color:red;">*</span>地区</td>
+						<td class="left"><input name="entity.area" id="areaname" 
+							type="text" data-rule="required;length[~50]"  value="${entity.area!}" size="23"/>
+						</td>	
+						<td class="right"><span style="color:red;">*</span>项目名称</td>
+						<td class="left"><input id="projectName"
+							name="entity.projectName" type="text" data-rule="required;length[~50]"  onkeyup="getText(this)"
+							value="${entity.projectName!}" size="23" />
+						</td>
+					</tr>
+					<tr>
+                             <td class="right" style="width: 130px"><span style="color:red;">*</span>项目地址</td>
+						<td colspan="3">
+							<input name="entity.projectAddr" type="text" onblur="installcheckSystemIp(this)" data-rule="required;length[~100]" data-rule="required;length[~100]" value="${entity.projectAddr!}" size="64">
+						</td>
+					</tr>
+					<tr>
+						<td class="right" style="width: 130px"><span style="color:red;">*</span>接口地址</td>
+						<td colspan="3">
+							<input name="entity.apiAddress" type="text"   data-rule="required;length[~100]" value="${entity.apiAddress!}" size="64">
+						</td>
+					</tr>
+					<tr>
+						<td class="right"><span style="color:red;">*</span>用户名</td>
+						<td class="left"><input name="entity.userName" id="projectUserName"
+							type="text" onblur="installPlatUserName(this)" data-rule="required;length[~50]"  value="${entity.userName!}" size="23"/>
+						</td>	
+						<td class="right"><span style="color:red;">*</span>密码</td>
+						<td class="left"><input id="projectPassword"
+							name="entity.passWord" type="text" onblur="installPlatPassWord(this)" data-rule="required;length[~50]"  onkeyup="getText(this)"
+							value="${entity.passWord!}" size="23" />
+						</td>
+					</tr>
+					
+					<tr>	
+<!-- 						<td class="right">平台地址</td> -->
+<!-- 						<td class="left"><input id="platformAddr" -->
+<!-- 							name="entity.platformAddr" type="text"  data-rule="length[~100]"  onkeyup="getText(this)" -->
+<!-- 							value="${entity.platformAddr!}" size="23" /></td> -->
+                        <td class="right" style="width: 120px">平台地址</td>
+						<td colspan="3">
+							<input name="entity.platformAddr" type="text" data-rule="length[~100]" value="${entity.platformAddr!}" size="64">
+						</td>
+                           
+					</tr>
+					<tr>
+						<td class="right"><span style="color:red;">*</span>平台用户名</td>
+						<td class="left"><input name="entity.platformUserName" id="platformUserName" 
+							type="text" data-rule="required;length[~50]"  value="${entity.platformUserName!}" size="23"/>
+						</td>	
+						<td class="right"><span style="color:red;">*</span>平台密码</td>
+						<td class="left"><input id="platformPassword"
+							name="entity.platformPassword" type="text" data-rule="required;length[~50]"  onkeyup="getText(this)"
+							value="${entity.platformPassword!}" size="23" />
+						</td>
+					</tr>
+					<tr>
+					    <td class="right" style="width: 120px">检验系统地址</td>
+						<td colspan="3">
+							<input name="entity.checkSysAddr" type="text" data-rule="length[~100]" value="${entity.checkSysAddr!}" size="64">
+						</td>
+<!-- 					<td class="right">检验系统地址</td> -->
+<!-- 						<td class="left"><input id="checkSysAddr" -->
+						
+<!-- 							name="entity.checkSysAddr" type="text"  data-rule="length[~100]" onkeyup="getText(this)" -->
+<!-- 							value="${entity.checkSysAddr!}" size="23" /></td> -->
+					</tr>	
+					<tr>
+					   <td class="right" style="width: 150px" ><span style="color:red">*</span>平台类型</td>
+                       <td id="type" class="left" >
+                         <#if types??>
+						    <#if types=="view">
+						      <#if entity.platformType== '1'><div title=".NET" class="label label-success">.NET</div></#if>
+                    		  <#if entity.platformType== '2'><div title="Java" class="label label-danger">Java</div></#if>
+                    	 <#else>	 
+						<select name="entity.platformType"  data-toggle="selectpicker" data-rule="required" data-width="230">
+				             <option selected="selected" value="">--请选择--</option>
+				             <option value="1"
+				             <#if (entity.platformType!)=='1'> selected="selected"</#if>
+				             >.NET</option>
+				             <option value="2"
+				             <#if (entity.platformType!)=='2'> selected="selected"</#if>
+				             >Java</option>
+				     </select>
+				        </#if>
+				     </#if>
+				     </td>
+						<td class="right" style="width: 130px"><span style="color:red">*</span>校验系统类型</td>
+                        <td id="type" class="left" >
+                        <#if types??>
+						   <#if types=="view">
+						     <#if entity.checkSysType== '1'><div title=".NET" class="label label-success">.NET</div></#if>
+                    		 <#if entity.checkSysType== '2'><div title="Java" class="label label-danger">Java</div></#if>
+                    	<#else>
+						  <select name="entity.checkSysType"  data-toggle="selectpicker"  data-rule="required" data-width="230">
+				             <option selected="selected" value="">--请选择--</option>
+				             <option value="1"
+				             <#if (entity.checkSysType!)=='1'> selected="selected"</#if>
+				             >.NET</option>
+				             <option value="2"
+				             <#if (entity.checkSysType!)=='2'> selected="selected"</#if>
+				             >Java</option>
+				         </select>
+				      </#if>
+				      </#if>
+				     </td>		
+					</tr>
+					<tr>
+						<td class="right">项目负责人</td>
+						<td class="left"><input name="entity.projectLeader" id="projectLeader"
+												type="text"  value="${entity.projectLeader!}" size="23"/>
+						</td>
+						<td class="right">联系电话</td>
+						<td class="left"><input id="phone"
+												name="entity.phone" type="text"  data-rule="phone" onkeyup="getText(this)"
+												value="${entity.phone!}" size="23" />
+						</td>
+					</tr>
+					<tr>
+						<td class="right">QQ</td>
+						<td class="left"><input name="entity.qq" id="qq"
+												type="text"  data-rule="qq" value="${entity.qq!}" size="23"/>
+						</td>
+						<td class="right">Email</td>
+						<td class="left"><input id="email"
+												name="entity.email" type="text"  onkeyup="getText(this)"
+												data-rule="email" value="${entity.email!}" size="23" />
+						</td>
+					</tr>
+					<td class="right" style="width: 130px"><span style="color:red">*</span>维护人</td>
+					<td class="left" colspan="3">
+						<select id ="userNameSelect" data-live-search="true" data-none-results-text="没有找到匹配项" data-width="230"
+								name="entity.Guardian" data-toggle="selectpicker" data-rule="required">
+							<option selected="selected" value="">--请选择--</option>
+							<#list userSelectlist as list>
+								<option value="${list.realName!}"
+								<#if "${(list.realName)!}" == "${(entity.guardian)!}">
+									selected =selected
+								</#if>
+								>${list.realName!}</option>
+							</#list>
+						</select>
+					</td>
+					<tr>
+                        <td class="right" style="width: 130px">备注</td>
+                        <td class="left" colspan="6">
+                            <textarea style="width:200px; height:140px" id="remarks" name="entity.remarks" data-rule="length[~100]" size="61.5">${entity.remarks!}</textarea>
+                        </td>
+                    </tr>
+				</tbody>
+			</table>
+		</fieldset>
+	</div>
+</form>
+</div>
+<div class="bjui-pageFooter">
+    <ul>
+        <li>
+            <button onclick="serverViewcloseDialogAndRefresh();" type="button" class="btn-close closecutab" data-icon="close">关闭</button>
+        </li>
+        <li <#if types??><#if types == "view">hidden="true"</#if></#if>>
+            <button onclick="saveForm(this,'${ctx}/project/project!save.do','form')" class="btn-default" data-icon="save">保存</button>
+        </li>
+    </ul>
+</div>
+<script type="text/javascript">
+    
+    function saveForm(obj, url, formId) {
+        var dataForms = $("#" + formId);
+        var $formFlag = dataForms.isValid();
+        if ($formFlag) {
+            $.ajax({
+                type : "POST",
+                url : url,
+                data : $("#" + formId).serialize(),
+                success : function(data) {
+                    var dataJson = eval('(' + data + ')');
+                    if (dataJson.statusCode == 300) {
+                        $(this).alertmsg('warn', dataJson.message);
+                    } else if (dataJson.statusCode == 200) {
+                        $(this).alertmsg('correct', dataJson.message);
+                        $("#refresh").click();
+                        $(this).dialog("close", $.CurrentDialog);
+                        /* $(this).dialog("close", $.CurrentDialog);
+                        $("#userSearch").submit(); */
+                        
+                        
+                    }
+                }
+            })
+        }
+    };
+	function setDataStatus(flag,param){
+    	if(flag){
+        	$("#"+param).val("1");//启用
+   	 	}else{
+        	$("#"+param).val("0");//禁用
+   	 	}
+	}
+
+	function installcheckSystemIp (obj) {
+		_d("input[name='entity.platformAddr']").val($(obj).val());
+		_d("input[name='entity.checkSysAddr']").val($(obj).val());
+	}
+	function installPlatUserName (obj) {
+		_d("input[name='entity.platformUserName']").val($(obj).val());
+	}
+	function installPlatPassWord (obj) {
+		_d("input[name='entity.platformPassword']").val($(obj).val());
+	}
+	
+	$(function(){
+		var _id = $("#types").val();
+		if(_id!=null && _id!=""){
+			if (_id == "view") {
+				_d("#form").find("input,textarea,select").
+				attr("readonly","readonly").attr("disabled","disabled");
+				_d("#saveDisBtn").hide();
+			}
+		}
+		
+	})
+	function serverViewcloseDialogAndRefresh() {
+		//$(this).dialog("close", "combinationmembers_addMembers");
+		$("#refresh").click();
+	}
+	
+</script>

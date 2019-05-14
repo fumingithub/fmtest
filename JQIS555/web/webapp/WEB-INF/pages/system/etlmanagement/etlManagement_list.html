@@ -1,0 +1,68 @@
+﻿<#include "../../common/_public.html"/>
+<div class="bjui-pageHeader">
+    <form id="pagerForm" data-toggle="ajaxsearch" method="post" action="${ctx}/project/etlmanagement.do">
+        <div class="office">
+            <ul class="offbtn">
+                <li> <a  data-toggle="dialog" data-width="500" data-height="450"  data-id="etlmanagement_add"  data-url="${ctx}/project/etlmanagement!edit.do?etlId=${filter.parameters.id!}" data-xternal="true" data-title="Etl新增"> <span class="fa fa-file-text-o font24 iconbg01"></span>新增</a> </li>
+                <li> <a  data-toggle="dialog" data-width="500" data-height="450"  data-id="etlmanagement_edit" data-url="${ctx}/project/etlmanagement!edit.do?id={#bjui-selected}" data-title="Etl编辑" data-xternal="true"> <span class="fa fa-edit  font24 iconbg02"></span>编辑</a> </li>
+                <li> <a  data-url="${ctx}/project/etlmanagement!delete.do?id={#bjui-selected}" data-toggle="doajax" data-xternal="true" data-isrefsh="true" data-confirm-msg="确定要删除选中项吗？"><span class="fa fa-trash font24 iconbg03"></span>删除</a> </li>
+                <li><span class="ttt"></span></li>
+                <li> <a id="refresh" data-toggle="reloadsearch" data-target="#bjui-pageContent"data-icon="search" ><span class="fa fa-refresh font24 iconbg02"></span>刷新</a> </li>
+            	<li> <a  class="a-close closecutab"><span class="iconbg03"><i class="fa fa-remove  font24"></i></span>关闭</a> </li>             	
+            </ul>
+        </div>
+        <div class="bjui-searchBar">
+            <input type="hidden" name="limit" value="${limit}">
+            <input type="hidden" name="start" value="${start}">
+            <input type="hidden" name="id" id="etlId" value="${filter.parameters.id!}">  
+            <lable>etl</lable>
+            <input id="etlIde" name="XXX" class="form-control" size="15" type="text" value="${filter.parameters.name!}" />
+            <button id="etlSearch" type="submit" class="btn-default"  data-toggle="ajaxsearch" data-icon="search">查询</button>&nbsp;
+            <a id="etl_reloadPersonChangeForm" class="btn btn-orange" href="javascript:;" onclick="etlUndoForm();" data-icon="undo">重置</a></div>
+        </div>
+    </form>
+   </div>
+<div class="bjui-pageContent">
+    <table data-width="100%" data-nowrap="true" data-selected-multi="false"  class="table table-bordered table-hover table-striped table-top" >
+        <thead>
+        <tr>
+            <th width="20"></th>
+            <th width="30">NO.</th>
+                 <th style="text-align:center"></th>
+                 <th style="text-align:center"></th>
+                 <th style="text-align:center"></th>
+                 <th style="text-align:center"></th>
+                 <th style="text-align:center"></th>
+                 <th style="text-align:center"></th>
+                 <th style="text-align:center"></th>
+                 <th style="text-align:center"></th>
+                 <th style="text-align:center"></th>
+        </tr>
+        </thead>
+        <tbody>
+
+        <#list entitys as entity>
+            <tr >
+                <td><input type="checkbox"  value="${entity.id}" name="ids" data-toggle="icheck"> </td>
+                <td>${entity_index+1+(start-1)*limit}</td>
+                        <td>${entity.equipmentId}</td>
+                        <td>${entity.isornotUpdate}</td>
+                        <td>${entity.creator}</td>
+                        <td>${entity.createName}</td>
+                        <td>${entity.createTime}</td>
+                        <td>${entity.updator}</td>
+                        <td>${entity.updatorName}</td>
+                        <td>${entity.updateTime}</td>
+                        <td>${entity.remarks}</td>
+            </tr>
+        </#list>
+        </tbody>
+    </table>
+</div>
+<script type="text/javascript">  
+    function etlUndoForm() {
+        _d("#etlIde").val("");
+        _d("#etlSearch").submit();  
+    }
+    </script>
+<#include "../../common/_page.html"/>

@@ -1,0 +1,46 @@
+
+1、exec Maven Plugin插件？
+      工程的classpath并不需要手动指定，它将由exec自动计算得出。
+
+   exec：exec和exec：java的区别：
+      exec：exec总是比exec：java强大灵活。当工程启动非常简单，不需要设置jvm参数、系统属性、命令行参数，那么就用java，你需要指定mainClass。
+            exec（总启动新线程，只剩下守护线程后会关闭应用程序）
+            java（所有非守护线程结束时，程序不关闭）
+
+2、应用程序中jvm参数、系统属性、命令行属性分别是什么？
+     http://www.techug.com/post/5-jvm-command-flag.html
+     https://my.oschina.net/u/161458/blog/364722
+
+
+3、tomcat7-maven-plugin插件
+     实现将Apache Tomcat Servlet容器整合进WAR项目，可以通过maven运行war项目无需部署war文件到ApacheTomcat的实例。
+
+
+4、dubbo.registry.address是？
+    
+5、kaptcha配置
+   kaptcha是一个开源的验证码工具包，是一个非常实用的验证码生成工具。
+   kaptcha工作的原理是调用 com.google.code.kaptcha.servlet.KaptchaServlet，生成一个图片。同时将生成的验证码字符串放到 HttpSession中。
+
+jsp/upload_json.jsp
+ 
+uploadJson               : BJUI.PLUGINPATH +'kindeditor_4.1.10/jsp/upload_json.jsp',
+                fileManagerJson          : BJUI.PLUGINPATH +'kindeditor_4.1.10/jsp/file_manager_json.jsp',
+
+	
+		<!-- kindeditor的三个jar -->
+		<dependency>
+		  <groupId>commons-fileupload</groupId>
+		  <artifactId>commons-fileupload</artifactId>
+		  <version>1.2.1</version>
+		</dependency>
+		<dependency>
+		  <groupId>commons-io</groupId>
+		  <artifactId>commons-io</artifactId>
+		  <version>1.4</version>
+		</dependency>
+		<dependency>
+		  <groupId>org</groupId>
+		  <artifactId>json_simple</artifactId>
+		  <version>1.1</version>
+		</dependency>

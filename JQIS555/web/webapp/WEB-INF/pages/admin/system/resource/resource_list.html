@@ -1,0 +1,92 @@
+<#include "../../../common/_public.html"/>
+<#include "resource_list_js.html"/>
+
+<!--<div class="bjui-pageHeader">-->
+
+<!--</div>-->
+<div class="bjui-pageContent" id="resourceDiv">
+    <div class="clearfix">
+        <div id="resourceLeftDiv" style="height: 530px; overflow: auto; float:left; margin-top: 5px;
+            padding-right: 20px; border: 0px solid;">
+            <div style="margin-top: 5px; margin-left: 5px;">
+                <input type="text" id="resourceName" size="15" placeholder="资源过滤" />
+                <button id="resourceSearchBtn" class="btn-default" style="padding-left: 4px;padding-right: 4px" data-icon="search"></button>
+            </div>
+            <ul id="resourceTree" class="ztree"></ul>
+        </div>
+        <div style="overflow:hidden; border-left: 1px #c3ced5 solid;">
+            <div style="border-bottom: 0px #c3ced5 solid;">
+                <input type="hidden" id="resource_parentId" value="" />
+                <input type="hidden" id="resource_sonPName" value="" />
+                <form id="pagerForm" data-toggle="ajaxsearch" method="post" action="${ctx}/admin/system/resource.do">
+                    <div class="office">
+                        <ul class="offbtn">
+                            <#--<@auth name="SYS_RESOURCE_ADD">
+                                <#if hasPermission>
+                                    <li><a onclick="addResource(this,'${ctx}/admin/system/resource!edit.do')" title="添加资源" id="resource_add">
+                                        <span class="iconbg03"><i class="fa fa-plus-square font24"></i></span>添加资源</a></li>
+                                </#if>
+                            </@auth>
+
+                            <@auth name="SYS_RESOURCE_ADD_SON">
+                                <#if hasPermission>
+                                    <li><a onclick="addResource(this,'${ctx}/admin/system/resource!edit.do?parentId={#bjui-selected}')" title="添加子资源" id="resource_add_sub">
+                                        <span class="iconbg04"><i class="fa fa-plus-square font24"></i></span>添加子资源</a></li>
+                                </#if>
+                            </@auth>-->
+
+                            <@auth name="SYS_RESOURCE_ADD_SON">
+                                <#if hasPermission>
+                                    <li><a onclick="addResource(this, 1)" title="新增" id="resource_add_sub">
+                                        <span class="iconbg04"><i class="fa fa-plus-square font24"></i></span>新增</a></li>
+                                </#if>
+                            </@auth>
+
+                            <@auth name="SYS_RESOURCE_EDIT">
+                                <#if hasPermission>
+                                    <li><a onclick="addResource(this, 2)" title="编辑" id="resource_edit">
+                                        <span class="iconbg02"><i class="fa fa-edit  font24"></i></span>编辑</a></li>
+                                </#if>
+                            </@auth>
+
+                            <@auth name="SYS_RESOURCE_DELETE">
+                                <#if hasPermission>
+                                    <li><a data-url="${ctx}/admin/system/resource!deleteresource.do?id={#bjui-selected}" data-toggle="doajax" data-external="false" data-isrefsh="true" data-confirm-msg="确定要删除选中项吗？">
+                                        <span class="iconbg03"><i class="fa fa-trash font24"></i></span>删除</a></li>
+            
+                                </#if>
+                            </@auth>
+                
+                            <#--<@auth name="SYS_RESOURCE_REFRESH_VIEW">
+                                <#if hasPermission>
+                                    <li>
+                                        <a data-url="${ctx}/healtharchive/healthcardinfo!refreshMaterializedView.do?mode=c" data-toggle="doajax"
+                                           data-confirm-msg="确定要刷新物化视图吗？" data-loadingmask="true" data-icon="search">
+                                            <span class="iconbg01"><i class="fa fa-refresh font24"></i></span>刷新物化视图</a>
+                                    </li>
+                                </#if>
+                            </@auth>-->
+
+                            <li><span class="ttt"></span></li>
+            
+                            <li><a id="refresh" data-toggle="reloadsearch"
+                                   data-target="#bjui-pageContent" data-icon="search"><span class="iconbg02">
+                					<i class="fa fa-refresh font24"></i></span>刷新</a>
+                            </li>
+                            <li> <a  class="closecutab"><span class="iconbg03">
+             					<i class="fa fa-remove  font24"></i></span>关闭</a> 
+             				</li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+            <div id="resourceRightDiv" style="height:460px;overflow:hidden; padding-bottom: 0px;">
+                <!--<fieldset style="height:100%; border-left: 0px; padding-bottom: 0px;">-->
+                    <legend id="title" style="font-size:16px; display: none;"></legend>
+                    <div class="bjui-layout" id="sonResourceList" style="height:100%; overflow:hidden; margin: auto 0px;">
+                    </div>
+                <!--</fieldset>-->
+            </div>
+        </div>
+    </div>
+</div>

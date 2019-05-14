@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap
+        PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+        "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="SysProPermission">
+    <typeAlias alias="SysProPermission" type="net.jqsoft.base.system.domain.SysProPermission" />
+
+    <resultMap id="SysProPermissionMap" class="SysProPermission">
+
+          <result property="id" column="id"/>
+                <result property="projectId" column="PROJECT_ID"/>
+                <result property="userId" column="USER_ID"/>
+                <result property="serverId" column="SERVER_ID"/>
+
+    </resultMap>
+
+    <select id="getAll" resultMap="SysProPermissionMap">
+        SELECT * FROM SYS_PRO_PERMISSION
+    </select>
+    <select id="get" parameterClass="String" resultMap="SysProPermissionMap">
+        <![CDATA[
+           	   SELECT * FROM SYS_PRO_PERMISSION WHERE  id=#id:String#
+         ]]>
+    </select>
+    <insert id="insert" parameterClass="SysProPermission">
+        <![CDATA[
+        INSERT INTO SYS_PRO_PERMISSION(
+        ID,
+        USER_ID,
+        SERVER_ID
+        ) values(
+                #id#,
+                #userId#,
+                #serverId#
+             )
+		]]>
+    </insert>
+    <update id="update" parameterClass="SysProPermission">
+        <![CDATA[
+			UPDATE SYS_PRO_PERMISSION ]]>
+			<dynamic prepend="SET">
+
+            <isNotEmpty  property="projectId" prepend=",">
+                <![CDATA[
+					PROJECT_ID = #projectId:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="userId" prepend=",">
+                <![CDATA[
+					USER_ID = #userId:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="serverId" prepend=",">
+                <![CDATA[
+					SERVER_ID = #serverId:String#
+				]]>
+            </isNotEmpty >
+        </dynamic>
+        <dynamic prepend="WHERE">
+            <![CDATA[
+					id = #id:int#
+				]]>
+        </dynamic>
+    </update>
+    <delete id="deleteById" parameterClass="String">
+        <![CDATA[
+        DELETE FROM demo where id = #id:String#
+     ]]>
+    </delete>
+    <select id="count" resultClass="int">
+        SELECT COUNT(*) FROM SYS_PRO_PERMISSION
+    </select>
+    <select id="select" resultMap="SysProPermissionMap"  parameterClass="java.util.HashMap">
+        SELECT * FROM SYS_PRO_PERMISSION
+    </select>
+
+</sqlMap>

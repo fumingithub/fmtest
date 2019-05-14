@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap
+        PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+        "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="Meeting">
+	<typeAlias alias="Meeting" type="net.jqsoft.meeting.domain.Meeting" />
+
+	<resultMap id="MeetingMap" class="Meeting">
+		<result property="id" column="ID" />
+		<result property="name" column="NAME" />
+		<result property="userName" column="USER_NAME" />
+		<result property="location" column="LOCATION" />
+		<result property="meetingSize" column="MEETING_SIZE" />
+		<result property="haveMicrophone" column="HAVE_MICROPHONE" />
+		<result property="haveProjector" column="HAVE_PROJECTOR" />
+		<result property="haveWifi" column="HAVE_WIFI" />
+		<result property="haveComputer" column="HAVE_COMPUTER" />
+		<result property="type" column="TYPE" />
+		<result property="updator" column="UPDATOR" />
+		<result property="updatorName" column="UPDATOR_NAME" />
+		<result property="updateTime" column="UPDATE_TIME" />
+		<result property="creator" column="CREATOR" />
+		<result property="creatorName" column="CREATOR_NAME" />
+		<result property="createTime" column="CREATE_TIME" />
+		<result property="remark" column="REMARK" />
+		<result property="inUse" column="IN_USE" />
+		<result property="status" column="STATUS" />
+		<result property="userName" column="USER_NAME" />
+	</resultMap>
+	
+	<resultMap id="MeetingNameAndLocationMap" class="Meeting">
+		<result property="id" column="ID" />
+		<result property="name" column="NAME" />
+		<result property="location" column="LOCATION" />
+	</resultMap>
+
+	<select id="getAll" resultMap="MeetingMap">
+		SELECT 
+		 ID,
+        NAME,
+        LOCATION,
+        MEETING_SIZE,
+        HAVE_MICROPHONE,
+        HAVE_PROJECTOR,
+        HAVE_WIFI,
+        HAVE_COMPUTER,
+        TYPE,
+        UPDATOR,
+        UPDATOR_NAME,
+        UPDATE_TIME,
+        CREATOR,
+        CREATOR_NAME,
+        CREATE_TIME,
+        REMARK,
+        IN_USE,
+        STATUS,
+        USER_NAME
+         FROM MEETING_ROOM
+	</select>
+	<select id="get" parameterClass="String" resultMap="MeetingMap">
+        <![CDATA[
+           	   SELECT 
+           	   ID,
+        NAME,
+        LOCATION,
+        MEETING_SIZE,
+        HAVE_MICROPHONE,
+        HAVE_PROJECTOR,
+        HAVE_WIFI,
+        HAVE_COMPUTER,
+        TYPE,
+        UPDATOR,
+        UPDATOR_NAME,
+        UPDATE_TIME,
+        CREATOR,
+        CREATOR_NAME,
+        CREATE_TIME,
+        REMARK,
+        IN_USE,
+        STATUS,
+        USER_NAME
+         FROM MEETING_ROOM 
+         WHERE ID=#id:String#
+         ]]>
+	</select>
+	<insert id="insert" parameterClass="Meeting">
+        <![CDATA[
+        INSERT INTO MEETING_ROOM(
+        ID,
+        NAME,
+        LOCATION,
+        MEETING_SIZE,
+        HAVE_MICROPHONE,
+        HAVE_PROJECTOR,
+        HAVE_WIFI,
+        HAVE_COMPUTER,
+        TYPE,
+        UPDATOR,
+        UPDATOR_NAME,
+        UPDATE_TIME,
+        CREATOR,
+        CREATOR_NAME,
+        CREATE_TIME,
+        REMARK,
+        IN_USE,
+        STATUS,
+        USER_NAME
+        ) values(
+                #id#,
+                #name#,
+                #location#,
+                #meetingSize#,
+                #haveMicrophone#,
+                #haveProjector#,
+                #haveWifi#,
+                #haveComputer#,
+                #type#,
+                #updator#,
+                #updatorName#,
+                #updateTime#,
+                #creator#,
+                #creatorName#,
+                #createTime#,
+                #remark#,
+                #inUse#,
+                #status#,
+                #userName#
+             )
+		]]>
+	</insert>
+	<update id="update" parameterClass="Meeting">
+        <![CDATA[
+			UPDATE MEETING_ROOM ]]>
+		<dynamic prepend="SET">
+			<isNotEmpty property="name" prepend=",">
+                <![CDATA[
+					NAME = #name:String#
+				]]>
+			</isNotEmpty>
+
+			<isNotEmpty property="location" prepend=",">
+                <![CDATA[
+					LOCATION = #location:String#
+				]]>
+			</isNotEmpty>
+
+			<isNotEmpty property="meetingSize" prepend=",">
+                <![CDATA[
+					MEETING_SIZE = #meetingSize:String#
+				]]>
+			</isNotEmpty>
+
+			<isNotEmpty property="haveMicrophone" prepend=",">
+                <![CDATA[
+					HAVE_MICROPHONE = #haveMicrophone:String#
+				]]>
+			</isNotEmpty>
+
+			<isNotEmpty property="haveProjector" prepend=",">
+                <![CDATA[
+					HAVE_PROJECTOR = #haveProjector:String#
+				]]>
+			</isNotEmpty>
+
+			<isNotEmpty property="haveWifi" prepend=",">
+                <![CDATA[
+					HAVE_WIFI = #haveWifi:String#
+				]]>
+			</isNotEmpty>
+
+			<isNotEmpty property="haveComputer" prepend=",">
+                <![CDATA[
+					HAVE_COMPUTER = #haveComputer:String#
+				]]>
+			</isNotEmpty>
+
+			<isNotEmpty property="type" prepend=",">
+                <![CDATA[
+					TYPE = #type:String#
+				]]>
+			</isNotEmpty>
+
+			<isNotEmpty property="updator" prepend=",">
+                <![CDATA[
+					UPDATOR = #updator:String#
+				]]>
+			</isNotEmpty>
+
+			<isNotEmpty property="updatorName" prepend=",">
+                <![CDATA[
+					UPDATOR_NAME = #updatorName:String#
+				]]>
+			</isNotEmpty>
+
+			<isNotEmpty property="updateTime" prepend=",">
+                <![CDATA[
+					UPDATE_TIME = #updateTime:DateTime#
+				]]>
+			</isNotEmpty>
+
+			<isNotEmpty property="creator" prepend=",">
+                <![CDATA[
+					CREATOR = #creator:String#
+				]]>
+			</isNotEmpty>
+
+			<isNotEmpty property="creatorName" prepend=",">
+                <![CDATA[
+					CREATOR_NAME = #creatorName:String#
+				]]>
+			</isNotEmpty>
+
+			<isNotEmpty property="createTime" prepend=",">
+                <![CDATA[
+					CREATE_TIME = #createTime:DateTime#
+				]]>
+			</isNotEmpty>
+
+			<isNotEmpty property="remark" prepend=",">
+                    <![CDATA[
+					REMARK = #remark:String#
+				]]>
+			</isNotEmpty>
+
+			<isNotEmpty property="inUse" prepend=",">
+                    <![CDATA[
+					IN_USE = #inUse:String#
+				]]>
+			</isNotEmpty>
+
+			<isNotEmpty property="status" prepend=",">
+                    <![CDATA[
+					STATUS = #status:String#
+				]]>
+			</isNotEmpty>
+			<isNotEmpty property="userName" prepend=",">
+				<![CDATA[
+					USER_NAME = #userName:String#
+				]]>
+			</isNotEmpty>
+		</dynamic>
+		<dynamic prepend="WHERE">
+            <![CDATA[
+					id = #id:String#
+				]]>
+		</dynamic>
+	</update>
+	
+	<delete id="deleteById" parameterClass="String">
+        <![CDATA[
+        DELETE FROM MEETING_ROOM where id = #id:String#
+     ]]>
+	</delete>
+	
+	<sql id="meetSearch">
+		<dynamic>
+			<isNotEmpty prepend=" AND " property="name">name
+				like '%' || #name# || '%' </isNotEmpty>
+			<isNotEmpty prepend=" AND " property="inUse">inUse
+				like '%' || #inUse# || '%' </isNotEmpty>
+			<isNotEmpty prepend=" AND " property="status">status
+				like '%' || #status# || '%' </isNotEmpty>
+		</dynamic>
+	</sql>
+	
+	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM MEETING_ROOM
+	</select>
+	
+	<select id="select" resultMap="MeetingMap" parameterClass="java.util.HashMap">
+		SELECT * FROM MEETING_ROOM WHERE 1=1
+		<include refid="meetSearch"/>
+	</select>
+	
+	<select id="getNameAndLocation" parameterClass="java.util.HashMap" resultClass="int">
+	       SELECT count(1) FROM MEETING_ROOM WHERE (NAME = #name:String# or LOCATION = #location:String#)
+	       <isNotEmpty prepend=" AND " property="id">
+	            ID != #id:String#
+	       </isNotEmpty>
+	</select>
+</sqlMap>

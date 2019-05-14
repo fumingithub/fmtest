@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="RepositoryHot" >
+	<typeAlias alias="RepositoryHot" type="net.jqsoft.repository.domain.RepositoryBaseHots" />
+	
+   <resultMap class="RepositoryHot" id="RepositoryHotMap">
+   <result property="id" column="ID"/>
+   <result property="userId" column="USERID"/>
+   <result property="kindId" column="KINDID"/>
+   <result property="hotsPv" column="HOTSPV"/>
+   <result property="title" column="TITLE"/>
+   
+   </resultMap>
+   
+  
+    <insert id="insert" parameterClass="RepositoryHot">
+        <![CDATA[
+        INSERT INTO REPOSITORY_BASE_HOTS(
+        ID,
+        USERID,
+        KINDID,
+        HOTSPV,
+        TITLE
+      
+        ) values(
+                #id#,
+                #userId#,
+                #kindId#,
+                #hotsPv#,
+                #title#
+             )
+		]]>
+    </insert>
+    <select id="findOne" parameterClass="String" resultMap="RepositoryHotMap">
+    select * from REPOSITORY_BASE_HOTS where USERID=#userId:String#
+    
+    </select>
+</sqlMap>

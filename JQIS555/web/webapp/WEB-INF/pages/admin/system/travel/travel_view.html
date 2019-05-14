@@ -1,0 +1,91 @@
+<#include "../../../common/_public.html"/>
+
+<div class="bjui-pageContent">
+    <form action="${ctx}/admin/system/travel!save.do" id="pageform" data-isrefsh="true">
+        <input type="hidden" id="editType" name="types" value="${types!}">
+        <div style="margin:15px auto 0;">
+            <fieldset>
+                <legend>
+                    <h3 class="listtitle">景点信息</h3>
+                    <input type="hidden" id="iId" name="id" value="${entity.id!}"/>
+                    <input type="hidden" id="types" value="${types!}">
+                </legend>
+                <table class="table table-condensed" width="100%">
+                    <tbody>
+                    <tr>
+                        <td class="right" style="width: 130px"><span style="color:red">*</span>景点名称：</td>
+                        <td class="left" colspan="3">
+                            <input id="entity_name" name="entity.name" type="text" data-rule="required;length[~100]"
+                                   value="${entity.name!}" title="${entity.name!}" size="22" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="right" style="width: 130px"><span style="color:red">*</span>景点编码：</td>
+                        <td class="left" colspan="3">
+                            <input id="entity_code" name="entity.code" type="text" data-rule="required;length[~50]"
+                                   value="${entity.code!}" title="${entity.code!}" size="22" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="right" style="width: 130px">所属省份:</td>
+                        <td class="left" colspan="3">
+                            <input id="entity_provinceName" name="entity.provinceName" type="text"
+                                   value="${entity.provinceName!}" title="${entity.provinceName!}" size="22" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="right" style="width: 130px">景点等级：</td>
+                        <td class="left" colspan="3">
+                            <input name="entity.level" type="text"  value="${entity.level!}" size="22" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="right" style="width: 130px"><span style="color:red">*</span>是否收费:</td>
+                        <td class="left" colspan="3" >
+                            <select data-clear="" name="entity.status" id="status" data-rule="required" data-toggle="selectpicker" size="22">
+                                <option value="" selected>--请选择--</option>
+                                <option value= 0 <#if (entity.status!3)?number == 0 >selected="selected"</#if> >免费</option>
+                                <option value= 1 <#if (entity.status!3)?number == 1 >selected="selected"</#if>>收费</option>
+                        </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="right" style="width: 130px">添加时间：</td>
+                        <td class="left">
+                            <input <#if types != "view">
+                                       data-toggle="datepicker"
+                                   </#if>
+                                   id="localTime" type="text" size="12"
+                                   name="entity.localTime" data-max-date="${.now?date}" readonly
+                                   value="${((entity.localTime)?string('yyyy-MM-dd'))!}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="right" style="width: 130px">景点简介：</td>
+                        <td class="left" colspan="3">
+                            <!--<input name="entity.describe" type="text" value="${entity.describe!}" size="22" /></input>-->
+                            <textarea name="entity.describe" type="text" size="22">${entity.describe!}</textarea>
+                        </td>
+                    </tr>
+                </table>
+            </fieldset>
+        </div>
+    </form>
+</div>
+<div class="bjui-pageFooter">
+    <ul>
+        <li>
+            <button type="button" class="btn-close closecutab" data-icon="close">关闭</button>
+        </li>
+        <li <#if types??>
+                <#if types == "view">
+                     hidden="true"
+                </#if>
+            </#if>>
+            <button type="button" class="btn-default" data-icon="save"
+                    onclick="refreshTravelTree('pageform');">保存</button>
+        </li>
+    </ul>
+</div>
+
+<#include "travel_view_js.html" />

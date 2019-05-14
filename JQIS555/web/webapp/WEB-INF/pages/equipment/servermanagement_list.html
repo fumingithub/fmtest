@@ -1,0 +1,355 @@
+
+<#include "../common/_public.html"/>
+<div class="bjui-pageHeader">
+    <form id="pagerForm" data-toggle="ajaxsearch" method="post" action="${ctx}/project/equipmentinfor.do?id=${filter.parameters.id!}&loginId=${filter.parameters.loginId!}" method="post">
+        <div class="office">
+            <ul class="offbtn">
+                <!--20170809 CODE统一处理更换   孙磊-->
+                <@auth name ="SERVER_ADD">
+                <#if hasPermission>
+                    <li>
+                        <a  data-toggle="dialog" data-width="900" data-height="450"  data-id="dialog-add"
+                            data-url="${ctx}/project/equipmentinfor!edit.do?projectid=${filter.parameters.id!}" data-mask="true" data-xternal="true" data-title="新增"> <span class="iconbg01"><i class="fa fa-file-text-o font24"></i></span>新增</a>
+                    </li>
+                </#if>
+            </@auth>
+            <@auth name ="SERVER_EDIT">
+            <#if hasPermission>
+                <li>
+                    <a  data-toggle="dialog" data-width="900" data-height="450" data-mask="true" data-id="dialog-edit"
+                        data-url="${ctx}/project/equipmentinfor!edit.do?id={#bjui-selected}&types=edit" data-title="编辑" data-xternal="true"> <span class="iconbg02"><i class="fa fa-edit  font24"></i></span>编辑</a>
+                </li>
+            </#if>
+        </@auth>
+        <@auth name ="SERVER_VIEW">
+        <#if hasPermission>
+            <li>
+                <a data-toggle="dialog" data-width="900" data-height="450"  data-mask="true" data-title="查看" data-id="dialog_view"
+                   data-url="${ctx}/project/equipmentinfor!edit.do?id={#bjui-selected}&types=view"><span class="iconbg04"><i class="fa fa-search font24"></i></span>查看</a>
+            </li>
+        </#if>
+    </@auth>
+
+    <li> <a onclick="RdpConnect(this)"> <span class="fa fa-user  font24 iconbg01"></span>远程桌面</a> </li>
+    <@auth name ="SERVER_DELETE">
+    <#if hasPermission>
+        <li> <a  data-url="${ctx}/project/equipmentinfor!delete.do?id={#bjui-selected}" data-toggle="doajax" data-xternal="true" data-isrefsh="true" data-confirm-msg="确定要删除选中项吗？"><span class="fa fa-trash font24 iconbg03"></span>删除</a> </li>
+
+    </#if>
+</@auth>
+<@auth name ="DATABASE_MANA">
+<#if hasPermission>
+    <li> <a onclick="databaseManager(this,_d('#bjui-moreParams').val(),'',_d('#bjui-selected').val());" title=""><span class="fa fa-database font24 iconbg02"></span>数据库管理</a> </li>
+</#if>
+</@auth>
+<@auth name ="DOMAIN_MANA">
+<#if hasPermission>
+    <li> <a onclick="domainManager(this,_d('#bjui-moreParams').val(),'',_d('#bjui-selected').val());" title=""><span class="fa fa-plus-square font24 iconbg04"></span>域管理</a> </li>
+</#if>
+</@auth>
+<@auth name ="APPLICATION_MANA">
+<#if hasPermission>
+    <li> <a onclick="applicationManager(this,_d('#bjui-moreParams').val(),'',_d('#bjui-selected').val());" title=""><span class="fa fa-plus-square font24 iconbg04"></span>应用管理</a> </li>
+</#if>
+</@auth>
+<@auth name ="ETL_MANA">
+<#if hasPermission>
+    <li> <a onclick="etlManager(this,'','');" title=""><span class="fa fa-plus-square font24 iconbg04"></span>ETL管理</a> </li>
+</#if>
+</@auth>
+<!--                 <li> <a  data-url="${ctx}/standard/dataelementcode!delete.do?code={#bjui-selected}" data-toggle="doajax" data-xternal="true" data-confirm-msg="确定要删除选中项吗？"><span class="iconbg03"><i class="fa fa-trash font24"></i></span>删除</a> </li> -->
+<li><span class="ttt"></span></li>
+<li><a id="refresh" data-toggle="reloadsearch"
+       data-target="#bjui-pageContent" data-icon="search"><span class="iconbg02">
+				<i class="fa fa-refresh font24"></i></span>刷新</a>
+</li>
+<li> <a  onclick="servercloseDialogAndRefresh();" class="a-close closecutab"><span class="iconbg03"><i class="fa fa-remove  font24"></i></span>关闭</a> </li>
+</ul>
+</div>
+
+<div class="bjui-searchBar">
+    <input type="hidden" name="limit" value="${limit}">
+    <input type="hidden" name="start" value="${start}">
+    <input type="hidden"  id="projectid" value="${filter.parameters.id!}">
+    <input type="hidden"  id="loginId" value="${filter.parameters.loginId!}">
+    <label>&nbsp;&nbsp;服务器名：</label>
+    <input  id="serverIdName" name="serverName" class="form-control" size="15" type="text" value="${filter.parameters.serverName!}" />
+    <label>&nbsp;&nbsp;服务器类型：</label>
+    <select id="serverType" name="type" data-toggle="selectpicker" data-width="150">
+        <option selected="selected" value="">--请选择--</option>
+        <option value="01"
+        <#if (filter.parameters.type!)=='01'> selected="selected"</#if>
+        >应用服务器</option>
+        <option value="02"
+        <#if (filter.parameters.type!)=='02'> selected="selected"</#if>
+        >前置机服务器</option>
+        <option value="03"
+        <#if (filter.parameters.type!)=='03'> selected="selected"</#if>
+        >数据中心服务器</option>
+    </select>
+    <label>&nbsp;&nbsp;服务器IP：</label>
+    <input id="serverIdP" name="serverIp" class="form-control" size="15" type="text" value="${filter.parameters.serverIp!}" />
+    <br>
+    <label>&nbsp;&nbsp;是否删除：</label>
+    <select id="isDel" name="isDel" data-toggle="selectpicker" data-width="150">
+        <option selected="selected" value="">--请选择--</option>
+        <option value="1"
+        <#if (filter.parameters.isDel!)=='1'> selected="selected"</#if>
+        >是</option>
+        <option value="0"
+        <#if (filter.parameters.isDel!)=='0'> selected="selected"</#if>
+        >否</option>
+    </select>
+    <!--             <button type="button" class="showMoreSearch" data-toggle="moresearch" data-name="custom" title="更多查询条件"> -->
+    <!--             	<i class="fa fa-angle-double-down"></i> -->
+    <!--             </button>    -->
+    &nbsp;
+    <button id="serverSearch"type="submit" class="btn-default"  data-toggle="ajaxsearch" data-icon="search">查询</button>
+    &nbsp;
+    <a id="white_reloadPersonChangeForm" class="btn btn-orange" href="javascript:;" onclick="serverUndoForm();" data-icon="undo">重置</a></div>
+<!--         <div class="bjui-moreSearch"> -->
+
+<!--         </div> -->
+</form>
+</div>
+<div class="bjui-pageContent" style="top: 102px; bottom: 28px; margin-top: 0px;"  style="overflow:scroll;">
+    <table style="table-layout:fixed;min-width:1800px;" data-width="100%" data-nowrap="true" data-selected-multi="false"
+           class="table table-bordered table-hover table-striped table-top">
+        <thead>
+        <tr>
+            <th width="12"></th>
+            <th width="12">NO.</th>
+            <th  style="text-align:center" title="服务器名称" width="180">服务器名称</th>
+            <th  style="text-align:center" title="服务器类型" width="100">服务器类型</th>
+            <th  style="text-align:center" title="服务器用户名" width="80">服务器用户名</th>
+            <th  style="text-align:center" title="服务器密码" width="80">服务器密码 </th>
+            <!--                  <th  style="text-align:center" width="20%" title="版本号">版本号 </th> -->
+            <th  style="text-align:center" title="服务器IP" width="100">服务器远程地址</th>
+            <th  style="text-align:center" title="服务器MAC" width="100">服务器MAC</th>
+            <th  style="text-align:center" title="服务器内网IP" width="100">服务器内网IP</th>
+            <th  style="text-align:center" title="服务器外网IP" width="100">服务器外网IP</th>
+        </tr>
+        </thead>
+        <tbody id="dataelementcodeTb">
+
+        <#list entitys as entity>
+            <tr >
+                <!--                 <td><input type="checkbox" value="${entity.id}" name="ids" -->
+                <!-- 					data-toggle="icheck"> -->
+                <!-- 				</td>	 -->
+                <td><input type="checkbox"  value="${entity.id}" name="id" data-toggle="icheck" icheck-values="recordMoreParams('${entity.type!}',this)"
+                           serverUsername="${entity.serverUsername!}" serverPassword="${entity.serverPassword!}" serverIp="${entity.serverIp!}"> </td>
+                <td>${entity_index+1+(start-1)*limit}</td>
+                <!-- 				        <td class="center" title="${entity.serverName!}">${entity.serverName!}</td>	                         -->
+                <td nowrap="nowrap">
+                    <a  data-toggle="dialog" data-width="900" data-height="450"  data-mask="true"
+                        data-title='查看服务器信息' data-id="equipment_view"
+                        data-url="${ctx}/project/equipmentinfor!edit.do?id=${entity.id!}&types=view"
+                        data-xternal="true" class="list-a" title="${entity.serverName!}">${entity.serverName!}</a>
+                </td>
+                <td class="center">
+                    <#if entity.type=="01"><div title="应用服务器">应用服务器</div></#if>
+                    <#if entity.type=="02"><div title="前置机服务器">前置机服务器</div></#if>
+                    <#if entity.type=="03"><div title="数据中心服务器">数据中心服务器</div></#if>
+                </td>
+                <td class="center" title="${entity.serverUsername!}">${entity.serverUsername!}</td>
+                <td class="center" title="${entity.serverUsername!}">${entity.serverPassword!}</td>
+                <td class="left" title="${entity.serverUsername!}">${entity.serverIp!}</td>
+                <td class="center" title="${entity.serverUsername!}">${entity.serverMac!}</td>
+                <td class="left" title="${entity.serverUsername!}">${entity.serverInsideIp!}</td>
+                <td class="left" title="${entity.serverUsername!}">${entity.serverOutsideIp!}</td>
+                <!--                         <td class="left"><a data-toggle="dialog" data-width="1300" data-title="明细管理" data-height="500" title="${entity.name!}" data-mask="true"
+                                            data-id="news_view" data-url="" class="list-a" onclick="detailManager(this,'${entity.name!}','${ctx}/standard/dataelementvalue.do?id=${entity.code!}')">${entity.name!}</a></td>
+                                        <td class="center" title="${entity.version!}">${entity.version!}</td>
+                                        <td class="center">
+                                            <#if entity.source??>
+                                                <#if entity.source=="01"><div title="国际行业标准">国际行业标准</div></#if>
+                                                   <#if entity.source=="02"><div title="国家标准">国家标准</div></#if>
+                                                   <#if entity.source=="03"><div title="卫生部标准">卫生部标准</div></#if>
+                                                   <#if entity.source=="04"><div title="地方扩展标准">地方扩展标准</div></#if>
+                                                   <#if entity.source=="99"><div title="自定义标准">自定义标准</div></#if>
+                                               </#if>
+                                        </td> -->
+            </tr>
+        </#list>
+        </tbody>
+    </table>
+</div>
+<div id='batchloading' style='display:none;width:100%;height:120%;text-align:center;top: 0px; position: absolute;alpha(opacity=45); opacity:0.45;background-color:#FFFFFF;z-index:1000;'>
+
+</div>
+<div id='batchload' style='display:none;width:100%;height:120%;text-align:center;top:0px;padding-top:20%; position: absolute;alpha(opacity=45);z-index:1000;'>
+    <h3><img style="height: 50px;width:50px;text-align:center;"src="${ctx}/BJUI/themes/css/img/load.gif" ></h3>
+    状态变更中...
+</div>
+<div id="connectArea" style="display: none;">
+    <object id="MsRdpClient"
+            classid="CLSID:7584c670-2274-4efb-b00b-d6aaba6d3850"
+            codebase="msrdp.cab#version=5,2,3790,0">
+    </object>
+</div>
+<script language="javascript" type="text/javascript">
+    function databaseManager(obj,type,url,id){
+        debugger;
+        if(isEmpty(id)){
+            $(obj).alertmsg('error','请选择一条数据!');
+            return;
+        }
+        if(''==url){
+            url="${ctx}/project/databaseinfomanagement.do?id={#bjui-selected}";
+        }
+// 		var type=type.substring(10);
+        if("02"!= type&&"03"!= type){
+            $(obj).alertmsg('warn','只有前置机服务器和数据中心服务器才能进行数据库管理操作！');
+            return;
+        }
+        var dialog_options ={
+            id: "dialog-manager",
+            url:url,
+            title: "数据库管理",
+            mask: true,
+            width: 1000,
+            height: 500,
+            fresh: true
+        };
+        $(obj).dialog(dialog_options);
+        _d('#refresh').click();
+    }
+    function domainManager(obj,type,url,id){
+        if(isEmpty(id)){
+            $(obj).alertmsg('error','请选择一条数据!');
+            return;
+        }
+        if(''==url){
+            url="${ctx}/project/domain.do?id={#bjui-selected}";
+        }
+// 		var type=type.substring(10);
+        if("02" != type){
+            $(obj).alertmsg('warn','非前置机服务器不能进行域管理操作！');
+            return;
+        }
+        var dialog_options ={
+            id: "dialog-domain",
+            url:url,
+            title: "域管理",
+            mask: true,
+            width: 1000,
+            height: 500,
+            fresh: true
+        };
+        $(obj).dialog(dialog_options);
+    }
+    function applicationManager(obj,type,url,id){
+        if(isEmpty(id)){
+            $(obj).alertmsg('error','请选择一条数据!');
+            return;
+        }
+        if(''==url){
+            url="${ctx}/project/application.do?id={#bjui-selected}";
+        }
+// 		var type=type.substring(10);
+        if("01" != type){
+            $(obj).alertmsg('warn','非应用服务器不能进行应用管理操作！');
+            return;
+        }
+        var dialog_options ={
+            id: "dialog-application",
+            url:url,
+            title: "应用管理",
+            mask: true,
+            width: 1000,
+            height: 500,
+            fresh: true
+        };
+        $(obj).dialog(dialog_options);
+    }
+    function etlManager(obj,params,url){
+        if(''==url){
+            url="${ctx}/project/etlmanagement.do?id={#bjui-selected}";
+        }
+        $(obj).dialog({
+            id: "dialog-etl",
+            url:url,
+            title: "etl管理",
+            mask: true,
+            width: 1000,
+            height: 500,
+            fresh: true
+        });
+    }
+    function serverUndoForm() {
+        _d("#serverIdc").val("");
+        _d("#serverIdName").val("");
+        _d("#serverIdP").val("");
+        _d("#isDel").val("");
+        _d("#serverType").val("");
+        _d("#serverSearch").submit();
+    }
+    function servercloseDialogAndRefresh() {
+        //$(this).dialog("close", "combinationmembers_addMembers");
+        $("#project_search").click();
+    }
+    //远程桌面
+    function RdpConnect(obj) {
+        debugger;
+        var checked = $("#dataelementcodeTb").find("input[type='checkbox']:checked");
+        var serverUsername=checked.attr('serverUsername');
+        var serverPassword=checked.attr('serverPassword');
+        var serverIp=checked.attr('serverIp');
+        var i=serverIp.indexOf(":");
+        var port1=serverIp.substring(i+1,serverIp.length);
+        var userName, Pwd, server, domain, port;
+//        userName =serverUsername; //用户名
+//        server =serverIp; //IP
+//        port = port1; //端口
+//        Pwd=serverPassword;
+        domain = "myDomain";  //域
+        if (!MsRdpClient.Connected){
+            try {
+                document.getElementById("connectArea").style.display = "block"; //显示远程桌面div
+                MsRdpClient.Server = serverIp.split(":")[0]; //设置远程桌面IP地址
+                try {
+                    MsRdpClient.AdvancedSettings2.RedirectDrives = false;
+                    MsRdpClient.AdvancedSettings2.RedirectPrinters = false;
+                    MsRdpClient.AdvancedSettings2.RedirectPrinters = false;
+                    MsRdpClient.AdvancedSettings2.RedirectClipboard = true;
+                    MsRdpClient.AdvancedSettings2.RedirectSmartCards = false;
+                } catch (ex) {
+                    alert(11111);
+                };
+                MsRdpClient.Domain = domain;//域
+                MsRdpClient.UserName = serverUsername;
+                MsRdpClient.AdvancedSettings2.ClearTextpassword = serverPassword; //密码
+                MsRdpClient.AdvancedSettings2.RDPPort = port1; //端口
+//                if (document.getElementById("ColorDepth").value == 1) {
+//                    ColorDepth16();
+//                } else {
+//                    ColorDepthDefault();
+//                };
+//                MsRdpClient.FullScreen = 1;  //是否全屏 0否 1是
+//                if (document.getElementById("Screen").value == 1) {
+//                    Screen1();
+//                } else {
+//                    ScreenDefault();
+//                };
+                try {
+                    //如果不支持，继续下面操作
+                    MsRdpClient.AdvancedSettings7.EnableCredSspSupport = true;
+                    MsRdpClient.AdvancedSettings5.AuthenticationLevel = 2;
+                } catch (ex) {
+                } finally {
+                    MsRdpClient.Connect();  //连接远程桌面
+                }
+            } catch (ex) {
+                alert("发生错误：" + ex.message + "请尝试刷新页面重新连接。");
+            };
+        } else {
+            alert("已连接！");
+        };
+    };
+    function MsRdpClient::OnDisconnected(disconnectCode) {
+            document.getElementById("connectArea").style.display = "none";
+            $("#serverSearch").click();
+        }
+</script>
+<#include "../common/_page.html"/>

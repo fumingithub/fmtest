@@ -1,0 +1,129 @@
+<script type="text/javascript">
+
+var setting = {
+    async: {
+        autoParam: ["id"],
+        enable: true,
+        dataType: "text",
+        url: "${ctx}/admin/system/sysorg!ajaxQueryOrgForZTree.do",
+        dataFilter: filter,
+        type: "post"
+    },
+    callback: {
+        beforeClick: beforeClick,
+        onAsyncError: onAsyncError,
+        onAsyncSuccess: onAsyncSuccess,
+        onClick: onClick,
+        onCheck: onCheck
+    },
+    check: {
+        enable: true,
+        chkStyle: "radio",
+        radioType: "all"
+    },
+    data: {
+        simpleData: {
+            enable: true,
+            idKey: "id",
+            pIdKey: "pid"
+        }
+    },
+    view: {
+        showIcon: false
+    }
+}
+
+/**
+ * 对返回数据进行预格式化处理
+ * @param treeId
+ * @param parentNode
+ * @param responseData
+ * @returns {Array}
+ */
+function filter(treeId, parentNode, responseData){
+    var arr = [];
+    if (responseData) {
+           for(var i = 0; i < responseData.length; i++) {
+               arr[i] = {
+                   id: responseData[i].id,
+                   pid: responseData[i].parentId,
+                   name: responseData[i].name,
+                   isParent: true
+               }
+           }
+    }
+    return arr;
+}
+
+ /**
+  * 点击前预处理函数
+  * @param treeId
+  * @param treeNode
+  * @param clickFlag
+  * @returns {boolean}
+  */
+ function beforeClick(treeId, treeNode, clickFlag){
+     var zTree = $.fn.zTree.getZTreeObj(treeId);
+     zTree.checkNode(treeNode, !treeNode.checked, true);
+     return true;
+ }
+
+/**
+ * 节点点击时的回调函数
+ * @param event
+ * @param treeId
+ * @param treeNode
+ * @param clickFlag
+ */
+function onClick(event, treeId, treeNode, clickFlag){
+	var zTreeObj = $.fn.zTree.getZTreeObj(treeId);
+    zTreeObj.expandNode(treeNode);
+	$("#newOrgId").val(treeNode.id);
+	$("#newOrgName").val(treeNode.name);
+}
+
+/**
+ * 节点选中时的回调函数
+ * @param event
+ * @param treeId
+ * @param treeNode
+ * @param clickFlag
+ */
+function onCheck(event, treeId, treeNode, clickFlag){
+	$("#newOrgId").val(treeNode.id);
+	$("#newOrgName").val(treeNode.name);
+}
+
+  
+/**
+ * 异步失败时的回调函数
+ * @param event
+ * @param treeId
+ * @param treeNode
+ * @param XMLHttpRequest
+ * @param textStatus
+ * @param errorThrown
+ */
+function onAsyncError(event, treeId, treeNode, XMLHttpRequest, textStatus, errorThrown){
+
+}
+
+/**
+ * 异步成功时的回调函数
+ * @param event
+ * @param treeId
+ * @param treeNode
+ * @param msg
+ */
+function onAsyncSuccess(event, treeId, treeNode, msg){
+
+}
+
+/**
+ * 初始化加载
+ */
+$(document).ready(function(){
+    // 初始化行政区划树
+    $.fn.zTree.init($("#newOrgzTree"), setting);
+});
+</script>

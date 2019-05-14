@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<!DOCTYPE Configure PUBLIC "-//Mort Bay Consulting//DTD Configure//EN" "http://jetty.mortbay.org/configure.dtd">
+<Configure class="org.mortbay.jetty.webapp.WebAppContext">
+  <!-- MsSqlServer DataSource -->
+<!--<New id="hecv" class="org.mortbay.jetty.plus.naming.Resource">-->
+    <!---->
+<!--</New>-->
+
+
+</Configure>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DatasourceManager xmlVersion="20151125" releaseVersion="8.0.0">
+    <ConnectionMap>
+        <Connection name="dqha" class="com.fr.data.impl.JDBCDatabaseConnection">
+            <DatabaseAttr/>
+            <JDBCDatabaseAttr url="jdbc:oracle:thin:@192.168.44.168:1521:dqdb" driver="oracle.jdbc.driver.OracleDriver" user="dquser" password="dquser" encryptPassword="false">
+                <DBCPAttr/>
+            </JDBCDatabaseAttr>
+        </Connection>
+    </ConnectionMap>
+</DatasourceManager>

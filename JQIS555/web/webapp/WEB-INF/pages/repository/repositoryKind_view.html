@@ -1,0 +1,64 @@
+<#include "../common/_public.html"/>
+<div class="bjui-pageContent">
+    <table data-width="100%" data-nowrap="true" data-selected-multi="false"
+           class="table table-bordered table-hover table-striped table-top">
+        <thead>
+        <tr>
+            <th width="30">NO.</th>
+            <th class="list-col-VerifyNo" style="text-align:center">
+                <div class="list-col-VerifyNo">编码</div>
+            </th>
+            <th class="list-col-HouseholdAddress" style="text-align:center">
+                <div class="list-col-HouseholdAddress">名称</div>
+            </th>
+            <th class="list-col-HouseholdAddress" style="text-align:center">
+                <div class="list-col-HouseholdAddress">备注</div>
+            </th>
+
+            <th class="list-col-HouseholdAddress" style="text-align:center">
+                <div class="list-col-HouseholdAddress">创建人</div>
+            </th>
+            <th class="list-col-HouseholdAddress" style="text-align:center">
+                <div class="list-col-HouseholdAddress">创建时间</div>
+            </th>
+
+        </tr>
+        </thead>
+        <tbody>
+        <#list proKindList as pro>
+            <tr>
+                <td class="center">${pro_index+1+(start-1)*limit}</td>
+                <td class="center">
+                    <div title='${pro.code!}'>${pro.code!}</div>
+                </td>
+                
+                <td class="center">
+                    <div title='${pro.name!}'>${pro.name!}</div>
+                </td>
+                <td style="text-align:center">
+                    <#if entity.status??>
+                        <#if entity.status=="0">
+                            <div title="" class="label label-success">启用</div>
+                        </#if>
+                        <#if entity.status=="1">
+                            <div title="" class="label label-danger">未启用</div>
+                        </#if>
+                    </#if>
+                </td>
+                <td class="center">
+                    <div title='${pro.createName!}'>${pro.createName!}</div>
+                </td>
+				 <td class="center">
+                    <#if pro.createTime??>
+                        ${pro.createTime?string('yyyy-MM-dd HH')}
+                        <#else>
+                            <div title="" class="label label-danger">未创建</div>
+                    </#if>
+                </td>
+
+            </tr>
+        </#list>
+        </tbody>
+    </table>
+</div>
+<#include "../common/_page.html"/>

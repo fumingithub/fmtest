@@ -1,0 +1,43 @@
+<#include "../common/_public.html"/>
+<div class="bjui-pageContent">
+<form action="" data-isrefsh="false" id="pageform">
+<div style="margin:15px auto 0; ">
+<fieldset >
+    <legend id="title" style="font-size:16px;">发布版本</legend>
+    <table class="table table-condensed" width="100%">
+        <tbody>
+			
+        <tr>
+            <td class="right" style="width: 130px">版本号：</td>
+            <td class="left" >
+                <input id="entity_code" name="entity.code" type="text" data-rule="required;length[~50]" value="AAAA0001" size="20" />
+            </td>  
+        </tr>
+        </tr>   
+            <td class="right" style="width: 130px">生效时间：</td>
+            <td class="left">
+                <input id="entity_name" data-toggle="datepicker"  name="entity.name" type="text" data-rule="required" value="" size="20" />
+            </td>
+        </tr>
+        <tr>
+			<td class="right" style="width: 130px">说明：</td>
+            <td id="source" class="left" >
+               <textarea rows="4" cols="20">版本说明</textarea>
+            </td>
+        </tr>
+        <tbody>
+    </table>
+</fieldset>
+</div>
+</form>
+</div>
+<div class="bjui-pageFooter">
+    <ul>
+        <li>
+            <button type="button" class="btn-close closecutab" data-icon="close">关闭</button>
+        </li>
+        <li >
+            <button  onclick="saveForm(this,'${ctx}/standard/treatdict!save.do','pageform')" class="btn-default" data-icon="save">发布</button>
+        </li>
+    </ul>
+</div>

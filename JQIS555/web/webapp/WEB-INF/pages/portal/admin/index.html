@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<#import "../../common/_common.html" as common />
+<html lang="zh">
+<head>
+    <#include "../../common/_public.html"/>
+<@common.admin/>
+</head>
+<body>
+<!--[if lte IE 7]>
+        <div id="errorie"><div>您还在使用老掉牙的IE，正常使用系统前请升级您的浏览器到 IE8以上版本 <a target="_blank" href="http://windows.microsoft.com/zh-cn/internet-explorer/ie-8-worldwide-languages">点击升级</a>&nbsp;&nbsp;强烈建议您更改换浏览器：<a href="http://down.tech.sina.com.cn/content/40975.html" target="_blank">谷歌 Chrome</a></div></div>
+    <![endif]-->
+<@common.header/>
+
+<div id="bjui-container" class="clearfix">
+  <@common.sidebar/>
+    <div id="bjui-navtab" class="tabsPage">
+        <div class="tabsPageHeader">
+            <div class="tabsPageHeaderContent">
+                <ul class="navtab-tab nav nav-tabs">
+                    <li data-url="${ctx}/admin/home.do"><a href="javascript:;"><span><i class="fa fa-home"></i> #maintab#</span></a></li>
+                </ul>
+            </div>
+            <div class="tabsLeft"><i class="fa fa-angle-double-left"></i></div>
+            <div class="tabsRight"><i class="fa fa-angle-double-right"></i></div>
+            <div class="tabsMore"><i class="fa fa-angle-double-down"></i></div>
+        </div>
+        <ul class="tabsMoreList">
+            <li><a href="javascript:;">#maintab#</a></li>
+        </ul>
+        <div class="navtab-panel tabsPageContent">
+            <div class="navtabPage unitBox">
+                <div class="bjui-pageHeader" style="background:#FFF;">
+                    <div style="padding: 0 15px;width: 140px;">
+                        <!-- loading messages -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<@common.footer/>
+</body>
+</html>

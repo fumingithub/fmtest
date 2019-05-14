@@ -1,0 +1,390 @@
+<#include "../../../common/_public.html"/>
+<div class="bjui-pageContent" id="elevatorTroubleDeclareDiv">
+    <div class="clearfix">
+        <div style="overflow:hidden; border-left: 0px #c3ced5 solid;">
+            <input  class="hidden" value="${(elevator.id)!}">
+            <input  class="hidden" value="${(elevator.elevatorCode)!}">
+            <input  class="hidden" id="isDel" value="${(elevator.isDel)!}">
+            <input  class="hidden" id="myPermission" value="${myPermission!}" name="myPermission" >
+            <input  class="hidden" id="loginUserName" value="${loginUserName!}">
+            <form id="pagerForm" data-toggle="ajaxsearch" method="post"
+                  action="${ctx}/admin/system/elevatorTroubleDeclarefm.do?id=${(elevator.id)!}" >
+                <!-- 功能按钮 -->
+                <div class="office">
+                    <ul class="offbtn">
+                        <@auth name="TROUBLEDECLARE_ADD">
+                        <#if hasPermission>
+                        <li>
+                            <a title="查看" id="elevator_troubleDeclare_view" data-xternal="true"
+                               onclick="addOrEditTroubleDeclare('查看','view','')">
+                                <span class="iconbg01"><i class="fa fa-search font24 iconbg02"></i></span>查看</a>
+                        </li>
+                        </#if>
+                        </@auth>
+
+                        <@auth name="TROUBLEDECLARE_ADD">
+                        <#if hasPermission>
+                        <li>
+                            <a  title="新增" id="elevator_troubleDeclare_add" data-xternal="true"
+                                onclick="addOrEditTroubleDeclare('新增','add','${(elevator.id)!}')">
+                            <span><i class="fa fa-plus font24 iconbg01"></i></span>新增</a>
+                        </li>
+                        </#if>
+                        </@auth>
+
+                        <@auth name="TROUBLEDECLARE_EDIT">
+                        <#if hasPermission>
+                        <li>
+                            <a id="elevator_troubleDeclare_edit" title="修改" data-xternal="true"
+                               onclick="addOrEditTroubleDeclare('修改','edit','${(entity.id)!}') " >
+                            <span class="fa fa-edit font24 iconbg03"></span>修改</a>
+                        </li>
+                        </#if>
+                        </@auth>
+
+                        <@auth name="TROUBLEDECLARE_DELETE">
+                        <#if hasPermission>
+                        <li>
+                            <a  title="删除" id="elevator_troubleDeclare_delete"  data-xternal="true"
+                                onclick="logicalDeleteTroubleDeclare(this)">
+                                <span class="fa fa-trash font24 iconbg01"></span>删除
+                            </a>
+                        </li>
+                        </#if>
+                        </@auth>
+
+                        <@auth name="WY_CONFIRM">
+                        <#if hasPermission>
+                        <li>
+                            <a title="物业确认"id="elevator_wy_confirm" data-xternal="true"
+                               onclick="confirmTroubleDeclare(this) ">
+                                <span class="fa fa-calendar-check-o font24 iconbg02"></span>物业确认
+                            </a>
+                        </li>
+                        </#if>
+                        </@auth>
+
+                        <@auth name="JS_MAINTENANCERECORD">
+                        <#if hasPermission>
+                        <li>
+                            <a  title="技师维保" id="elevator_js_maintenanceRecord" data-xternal="true"
+                                onclick="troubleDeclareMaintenance(this)" >
+                                <span class="fa fa-gavel font24 iconbg04"></span>技师维保
+                            </a>
+                        </li>
+                        </#if>
+                        </@auth>
+
+                        <li><span class="ttt"></span></li>
+                        <li>
+                            <a id="refresh_troubleDeclare" data-toggle="reloadsearch"
+                               data-target="#bjui-pageContent" data-icon="search">
+                                <span class="iconbg02"><i class="fa fa-refresh font24"></i></span>刷新</a>
+                        </li>
+                        <li>
+                            <a  class="closecutab" onclick="closePage(this)">
+                                <span class="iconbg03"><i class="fa fa-remove font24"></i></span>关闭
+                            </a>
+                        </li>
+
+                        <lable id="s1" style="margin-left:350px;font-size: 12px" >
+                             电梯编号：${(elevator.elevatorCode)!}
+                        </lable>
+                        <lable id="s2" style="margin-left:350px;font-size: 12px" >
+                            位置：${(elevator.villageName)!}的${(elevator.floor)!}号楼的${(elevator.elevatorNumber)!}号电梯
+                        </lable>
+                    </ul>
+                 </div>
+
+                    <!-- 查询区域 -->
+                    <div class="bjui-pageHeader">
+                        <form data-toggle="ajaxsearch" method="post" >
+                            <div class="bjui-searchBar">
+                                &nbsp;&nbsp;
+                                <lable>故障状态：</lable>
+                                <select id="troubleStatus" name="troubleStatus" data-toggle="selectpicker"  data-width="150" type="text">
+                                    <option selected="selected" value="">--请选择--</option>
+                                    <option value="1"<#if (filter.parameters.troubleStatus!)=='1'> selected="selected"</#if>>已提交</option>
+                                    <option value="2"<#if (filter.parameters.troubleStatus!)=='2'> selected="selected"</#if>>维保中</option>
+                                    <option value="3"<#if (filter.parameters.troubleStatus!)=='3'> selected="selected"</#if>>待确认</option>
+                                    <option value="4"<#if (filter.parameters.troubleStatus!)=='4'> selected="selected"</#if>>已完成</option>
+                                </select>
+
+                                &nbsp;&nbsp;
+                                <lable>故障类型：</lable>
+                                <select id="troubleType" name="troubleType" data-toggle="selectpicker"  data-width="150" type="text">
+                                    <option selected="selected" value="">--请选择--</option>
+                                    <option value="1"<#if (filter.parameters.troubleType!)=='1'> selected="selected"</#if>>外观损害不影响使用</option>
+                                    <option value="2"<#if (filter.parameters.troubleType!)=='2'> selected="selected"</#if>>面板损坏影响使用</option>
+                                    <option value="3"<#if (filter.parameters.troubleType!)=='3'> selected="selected"</#if>>故障不可使用</option>
+                                </select>
+
+                                &nbsp;&nbsp;
+                                <label>申报时间：</label>
+                                <input id="bjui-starttime" name="starttime" class="form-control" data-max-date="#bjui-endtime" size="15" type="text" data-toggle="datepicker" width="70"
+                                       value="${filter.parameters.starttime!}" readonly/>
+                                <input id="bjui-endtime" name="endtime"   size="15" type="text" width="70"readonly  class="hidden"
+                                       value="${filter.parameters.endtime?default(.now?string('yyyy-MM-dd'))}"/>
+
+                                &nbsp;&nbsp;
+                                <button type="submit" class="btn-default" data-toggle="ajaxsearch" data-icon="search" id="elevatorTroubleDeclareSubmit">查询</button>&nbsp;
+                                <a class="btn btn-orange" href="javascript:;" onclick="drefreshTroubleDeclare();" data-icon="undo">重置</a>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- 列表数据 -->
+                    <div>
+                        <div class="bjui-pageContent" style="top: 103px; bottom: 0px; margin-top: 0px;">
+                            <table data-width="100%" data-toggle="tablefixed" data-nowrap="true" data-selected-multi="false"
+                                   class="table table-bordered table-hover table-striped table-top">
+                                <thead>
+                                <tr >
+                                    <th style="white-space:nowrap;" width="50"></th>
+                                    <th style="white-space:nowrap;" width="50">NO.</th>
+                                    <th style="text-align:center; white-space:nowrap;" width="100">申报时间</th>
+                                    <th style="text-align:center; white-space:nowrap;" width="100">申报人</th>
+                                    <th style="text-align:center; white-space:nowrap;" width="100">申报电话</th>
+                                    <th style="text-align:center; white-space:nowrap;" >故障状态</th>
+                                    <th style="text-align:center; white-space:nowrap;" width="200">故障描述</th>
+                                    <th style="text-align:center; white-space:nowrap;">故障类型</th>
+                                </tr>
+                                </thead>
+                                <tbody id="elevatorTroubleDeclareListTbl">
+                                    <#list entitys as entity>
+                                    <tr >
+                                        <td style="white-space:nowrap;" align="center">
+                                            <input type="checkbox" class="testChk" value="${entity.id!}"
+                                                   name="ids" data-toggle="icheck"
+                                                   troubleStatus = "${entity.troubleStatus!}"
+                                                   floor = "${entity.floor!}"
+                                                   elevatorCode = "${entity.elevatorCode!}"
+                                                   elevatorNumber = "${entity.elevatorNumber!}"
+                                                   creatorName = "${entity.creatorName!}"
+                                                   elevatorId = "${entity.elevatorId!}"/>
+                                        </td>
+                                        <td class="center">${entity_index+1+(start-1)*limit}</td>
+                                        <td style="white-space:nowrap;" align="left" title='${(entity.declareTime?string("yyyy-MM-dd HH:mm:ss"))}'>${(entity.declareTime?string("yyyy-MM-dd"))}</td>
+                                        <td style="white-space:nowrap;" align="left"  >
+                                            <#if (myPermission=='jsfm') && ((loginUserName!) != '${entity.creatorName!}')>
+                                            ${entity.declareName?substring(0,2)!}****
+                                            <#else>
+                                            ${entity.declareName!}
+                                        </#if>
+
+                                        </td>
+
+                                        <td style="white-space:nowrap;" align="center" title="${entity.declareTel!}">
+                                            <#if myPermission=='jsfm' && ((loginUserName!) != '${entity.creatorName!}')>
+                                            ${entity.declareTel?substring(0,3)!}********
+                                            <#else>
+                                            ${entity.declareTel!}
+                                        </#if>
+
+                                        </td>
+
+                                        <td style="white-space:nowrap;" align="center">
+                                            <#if entity.troubleStatus??>
+                                                <#if entity.troubleStatus == "1" ><div title="已提交" class="label label-success">已提交</div></#if>
+                                                <#if entity.troubleStatus == "2" ><div title="维保中" class="label label-danger">维保中</div></#if>
+                                                <#if entity.troubleStatus == "3" ><div title="待确认" class="label label-danger">待确认</div></#if>
+                                                <#if entity.troubleStatus == "4" ><div title="已完成" class="label label-success">已完成</div></#if>
+                                            </#if>
+                                        </td>
+                                        <td style="white-space:nowrap;" align="left" title="${entity.troubleDescribe!}">
+                                            <#if (entity.troubleDescribe)?length gt 15>
+                                            ${entity.troubleDescribe?substring(0,15)!}.....
+                                            <#else>
+                                            ${entity.troubleDescribe!}
+                                            </#if>
+
+                                        </td>
+                                        <td style="white-space:nowrap;" align="center" title="${entity.troubleType!}">
+                                            <#if entity.troubleType??>
+                                                <#if entity.troubleType == "1" ><div title="外观损害不影响使用" class="label label-success">外观损害不影响使用</div></#if>
+                                                <#if entity.troubleType == "2" ><div title="面板损坏影响使用" class="label label-danger">面板损坏影响使用</div></#if>
+                                                <#if entity.troubleType == "3" ><div title="故障不可使用" class="label label-danger">故障不可使用</div></#if>
+                                            </#if>
+                                        </td>
+                                    </tr>
+
+                                    </#list>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    /**
+     * 页面加载时初始化方法
+     */
+    $(document).ready(function () {
+        //判断当前数据是否被删除
+        if ($("#isDel").val() == '1') {
+            $(this).alertmsg('warn', "当前数据已被删除，请刷新页面！");
+            $(this).dialog('close', $.CurrentDialog);
+            return;
+        }
+    });
+    /**重置**/
+    function drefreshTroubleDeclare() {
+        $("#refresh_troubleDeclare").click();
+    }
+
+    /**当前页面关闭**/
+    function closePage(Obj) {
+        $(this).dialog("close", $.CurrentDialog);
+        $("#refresh_elevator").click();
+    }
+
+    /** 新增,编辑，查看故障申报信息**/
+    function addOrEditTroubleDeclare(title,types,id) {
+        var myPermission=$("#myPermission").val();
+        var loginUserName=$("#loginUserName").val();
+        var url = "" ;
+        //电梯信息修改
+        if("edit" == types || "view" == types){
+            if($("#elevatorTroubleDeclareListTbl input:checked").length > 0){
+                id = $("#elevatorTroubleDeclareListTbl input:checked").val();
+                var troubleStatus = $("#elevatorTroubleDeclareListTbl input:checked").attr("troubleStatus");
+                var creatorName = $("#elevatorTroubleDeclareListTbl input:checked").attr("creatorName");
+
+                if ( "edit" == types){
+                    if ("1" != troubleStatus){
+                        $(this).alertmsg('warn',"只有“已提交”状态才能修改！");
+                        return;
+                    }
+                    if (loginUserName != creatorName){
+                        $(this).alertmsg('warn',"当前数据不是您新增的，您不能修改！");
+                        return;
+                    }
+                }
+            }else{
+                $(this).alertmsg('warn',"请选择一条数据！");
+                return;
+            }
+        }
+        url ="${ctx}/admin/system/elevatorTroubleDeclarefm!troubleDeclare.do?id=" + id + "&types=" + types + "&myPermission=" + myPermission;
+        var dialog_options = {
+            id:"elevator_TroubleDeclare_addOrEdit",
+            title:title,
+            url:url,
+            width: 750,
+            height: 550,
+            fresh: true,
+            mask: true
+        };
+        $(this).dialog(dialog_options);
+    }
+
+    /**删除故障申报信息**/
+    function logicalDeleteTroubleDeclare(Obj) {
+        if ($("#elevatorTroubleDeclareListTbl input:checked").length > 0) {
+            var id = $("#elevatorTroubleDeclareListTbl input:checked").val();
+            var troubleStatus = $("#elevatorTroubleDeclareListTbl input:checked").attr("troubleStatus");
+            var creatorName = $("#elevatorTroubleDeclareListTbl input:checked").attr("creatorName");
+            var loginUserName = $("#loginUserName").val();
+            var myPermission=$("#myPermission").val();
+
+
+            $(Obj).alertmsg("confirm", "确定要删除当前故障申报信息吗？", {
+                okCall:function () {
+                    $.ajax({
+                        type: "POST",
+                        url: "${ctx}/admin/system/elevatorTroubleDeclarefm!localDeleteTroubleDeclare.do?id=" + id +"&myPermission=" + myPermission,
+                        async: false,
+                        success: function (data) {
+                            var dataJson = eval('(' + data + ')');
+                            if (dataJson.statusCode == 300) {
+                                $(this).alertmsg('warn', dataJson.message);
+                            } else {
+                                $(this).alertmsg('correct',"故障申报信息删除成功!");
+                                $("#refresh_elevator").click();
+                                drefreshTroubleDeclare();
+                            }
+                        }
+                    });
+                }
+            });
+        }else{
+            $(this).alertmsg('warn', "请选中一条数据！");
+            return;
+        }
+    }
+
+    /**
+     * 物业确认——故障申报信息
+     */
+    function confirmTroubleDeclare(Obj) {
+        if ($("#elevatorTroubleDeclareListTbl input:checked").length > 0) {
+            var id = $("#elevatorTroubleDeclareListTbl input:checked").val();
+            var troubleStatus = $("#elevatorTroubleDeclareListTbl input:checked").attr("troubleStatus");
+            var myPermission = $("#myPermission").val();
+            var url = "";
+            var title = "";
+
+            if ("2" == troubleStatus || "4" == troubleStatus){
+                $(this).alertmsg('warn', "只有“已提交”,“待确认”状态才能确认，请重新选择！");
+                return;
+            } else {
+                if ("1" == troubleStatus){
+                    url = "${ctx}/admin/system/elevatorTroubleDeclarefm!confirmTroubleDeclare.do?id=";
+                    title="物业确认——故障申报内容";
+                }else {
+                    url = "${ctx}/admin/system/elevatorTroubleDeclarefm!confirmMaintenanceRecord.do?id=";
+                    title="物业确认——技师维保内容";
+                }
+
+                var dialog_reason = {
+                    id:"elevator_troubleDeclare_confirm",
+                    title:title,
+                    url: url + id +"&troubleStatus="+troubleStatus + "&myPermission=" + myPermission,
+                    width:750,
+                    height: 750,
+                    fresh: true,
+                    mask: true
+                };
+                $(this).dialog(dialog_reason);
+            }
+        }else{
+            $(this).alertmsg('warn', "请选中一条数据！");
+            return;
+        }
+    }
+    /**技师维保**/
+    function troubleDeclareMaintenance(Obj) {
+        if ($("#elevatorTroubleDeclareListTbl input:checked").length > 0) {
+            var id = $("#elevatorTroubleDeclareListTbl input:checked").val();
+            var troubleStatus = $("#elevatorTroubleDeclareListTbl input:checked").attr("troubleStatus");
+            var myPermission = $("#myPermission").val();
+
+            if ("2" != troubleStatus){
+                $(this).alertmsg('warn', "只有“维保中”状态才能进行技师维保，请重新选择！");
+                return;
+            }
+            else {
+                var dialog_reason = {
+                    id:"elevator_troubleDeclare_technician",
+                    title: "技师维保",
+                    url: "${ctx}/admin/system/elevatorTroubleDeclarefm!troubleDeclareMaintenance.do?id=" + id
+                    +"&troubleStatus=" + troubleStatus + "&myPermission=" + myPermission,
+                    width:750,
+                    height: 750,
+                    fresh: true,
+                    mask: true
+                };
+                $(this).dialog(dialog_reason);
+            }
+        }else{
+            $(this).alertmsg('warn', "请选中一条数据！");
+            return;
+        }
+    }
+
+
+</script>
+
+<#include "../../../common/_page.html"/>

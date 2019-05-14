@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="News" >
+	<typeAlias alias="News" type="net.jqsoft.base.system.domain.News" />
+	
+    <!-- 通过ID删除 -->
+    <update id="delete" parameterClass="java.util.HashMap">
+        <![CDATA[
+        UPDATE SYS_NEWS SET FLAG=1,UPDATOR=#updator#,UPDATE_TIME=#updateTime# where id = #id:VARCHAR#
+     ]]>
+    </update>
+    
+    <!-- 更新发布状态 -->
+    <update id="releaseNews" parameterClass="java.util.HashMap">
+        <![CDATA[
+        UPDATE SYS_NEWS SET STATUS = '0',RELEASETIME = #releasetime#,
+        	UPDATOR=#updator#,UPDATE_TIME=#updateTime# where id = #id:VARCHAR#
+     ]]>
+    </update>
+    
+  	<sql id="VISACTIONRESULT-SELECT-SQL">
+  		FROM SYS_NEWS a left join SYS_USER c on c.USER_NAME = a.RELEASEPERSON where a.flag=0
+		<dynamic>
+		    <isNotEmpty prepend=" and " property="title">a.title like '%' || #title:VARCHAR# ||  '%'</isNotEmpty>
+			<isNotEmpty prepend=" and " property="author">a.author like '%' || #author:VARCHAR# ||  '%'</isNotEmpty>
+			<isNotEmpty prepend=" and " property="type">a.type = #type#</isNotEmpty>
+			<isNotEmpty prepend=" and " property="status">a.status = #status#</isNotEmpty>
+			<isNotEmpty prepend=" and " property="areaId">
+			a.read_area_id in (select t.code from sys_area t 
+    		start with t.code=#areaId# connect by prior t.code=t.p_code)
+    		</isNotEmpty>
+        </dynamic>        
+    </sql>
+    
+    <!-- COUNT查询apply表 -->
+    <select id="count" resultClass="int">
+        SELECT COUNT(*) 
+        <include refid="VISACTIONRESULT-SELECT-SQL" />
+    </select>
+    
+    <!-- 多表查询 -->
+    <select id="select" resultClass="News">
+		SELECT a.ID, a.TITLE, a.TYPE, a.AUTHOR, a.status,
+		 a.releasetime, c.real_NAME as releaseperson,a.READ_AREA_ID readAreaId
+		<include refid="VISACTIONRESULT-SELECT-SQL" />
+	    ORDER BY a.RELEASETIME desc
+    </select>
+    <!-- 查询最新的5篇已发布文章 -->
+  	<select id="getAllFirst5News" resultClass="News">
+  	 <![CDATA[
+  		select id,title,rownum from SYS_NEWS where rownum <= 4 and status=0 and flag=0 order by RELEASETIME DESC
+  		]]>
+  	</select>
+
+  	<!-- 根据ID查询apply表 -->
+    <select id="get" parameterClass="String" resultClass="News">
+        <![CDATA[
+           	   SELECT t.id, 
+t.title, 
+t.type, 
+t.author, 
+t.status, 
+t.releasetime, 
+t.releaseperson,
+t.subtitle, 
+t.message, 
+t.read_area_id readAreaId,b.name areaName FROM SYS_NEWS t left join SYS_AREA b on t.read_Area_Id=b.code WHERE t.ID=#id:VARCHAR#
+         ]]>
+    </select>
+    
+    <insert id="insert" parameterClass="News">
+        <![CDATA[
+        INSERT INTO SYS_NEWS(
+	id,
+        TITLE,
+        TYPE,
+        AUTHOR,
+        status,
+        RELEASETIME,
+        RELEASEPERSON,
+        SUBTITLE,
+        MESSAGE,
+        READ_AREA_ID,
+        UPDATOR,
+        UPDATE_TIME
+        ) values(
+	    #id#,
+                #title#,
+                #type#,
+                #author#,
+                #status#,
+                #releasetime#,
+                #releaseperson#,
+                #subtitle#,
+                #message#,
+                #readAreaId#,
+                #updator#,
+                #updateTime#
+             )
+		]]>
+    </insert>
+    <update id="update" parameterClass="News">
+        <![CDATA[
+			UPDATE SYS_NEWS ]]>
+			<dynamic prepend="SET">
+
+            <isNotEmpty  property="title" prepend=",">
+                <![CDATA[
+					TITLE = #title:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="type" prepend=",">
+                <![CDATA[
+					TYPE = #type:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="author" prepend=",">
+                <![CDATA[
+					AUTHOR = #author:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="status" prepend=",">
+                <![CDATA[
+					status = #status:String#
+				]]>
+            </isNotEmpty >
+
+            ,
+                <![CDATA[
+					RELEASETIME = #releasetime:VARCHAR#
+				]]>
+
+
+            <isNotEmpty  property="releaseperson" prepend=",">
+                <![CDATA[
+					RELEASEPERSON = #releaseperson:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="subtitle" prepend=",">
+                <![CDATA[
+					SUBTITLE = #subtitle:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="message" prepend=",">
+                <![CDATA[
+					MESSAGE = #message:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="readAreaId" prepend=",">
+                <![CDATA[
+					READ_AREA_ID = #readAreaId:String#
+				]]>
+            </isNotEmpty >
+            <isNotEmpty  property="updator" prepend=",">
+                <![CDATA[
+					updator = #updator:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="updateTime" prepend=",">
+                <![CDATA[
+					update_time = #updateTime#
+				]]>
+            </isNotEmpty >
+        </dynamic>
+        <dynamic prepend="WHERE">
+            <![CDATA[
+					id = #id#
+				]]>
+        </dynamic>
+    </update>
+</sqlMap>

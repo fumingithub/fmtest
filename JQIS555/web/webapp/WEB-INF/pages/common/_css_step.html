@@ -1,0 +1,71 @@
+<style>
+    ul, ol {
+        padding-left: 0;
+        list-style-type: none;
+    }
+    .processor_bar {
+        background-color: #fff;
+        background-image: none;
+        border-color: #e6e7ea;
+        box-shadow: none;
+        -moz-box-shadow: none;
+        -webkit-box-shadow: none;
+        /*border-bottom: 1px solid #cecece;*/
+        /*border-top: 1px solid #cecece;*/
+    }
+    .processor_bar .step.current {
+        background-color: #44b549;
+        background-image: none;
+        color: #fff;
+    }
+    .processor_bar .step {
+        /*background: transparent url(https://res.wx.qq.com/mpres/htmledition/images/bg/bg_processor218877.png) no-repeat 0 0;*/
+        text-align: center;
+        line-height: 44px;
+        color: #747474;
+    }
+    .size1of4 {
+        width: 25%;
+    }
+    .size1of5 {
+        width: 20%;
+    }
+    .size1of3 {
+        width: 33.3%;
+    }
+    .size1of2 {
+        width: 50%;
+    }
+    .grid_item {
+        float: left;
+    }
+    .processor_bar h4 {
+        font-weight: 400;
+        font-style: normal;
+        width: auto;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        word-wrap: normal;
+    }
+    .processor_bar .step.next {
+        background-position: 0 -88px;
+    }
+    .processor_bar .step.next h4 {
+        padding-left: 8px;
+    }
+    .processor_bar .step.nnext {
+        background-position: 0 0;
+    }
+    .grid_line .no_extra.grid_item {
+        float: none;
+        width: auto;
+        overflow: hidden;
+    }
+    .grid_line:after {
+        content: "\200B";
+        display: block;
+        height: 0;
+        clear: both;
+    }
+</style>

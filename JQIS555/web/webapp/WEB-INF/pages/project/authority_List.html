@@ -1,0 +1,162 @@
+<#include "../common/_public.html"/>
+<div class="bjui-pageHeader">
+    <form id="pagerForm" data-toggle="ajaxsearch" action="${ctx}/project/Authority!authority.do?projectId=${filter.parameters.projectId}" method="post">
+        <div class="office">
+            <ul class="offbtn">
+                <@auth name="TOGRANTAUTHORITYSON">
+                <#if hasPermission>
+                    <li><a
+                            onclick="toSaveGrantProAndServ2(this)"
+                             id="saveResource_assign"><span class="iconbg02">
+							<i class="fa fa-shirtsinbulk font24"></i>
+					</span>授权</a></li>
+                </#if>
+            </@auth>
+            <li><span class="ttt"></span></li>
+            <li> <a id="refresh" data-toggle="reloadsearch" data-target="#bjui-pageContent" data-icon="search" ><span class="fa fa-refresh font24 iconbg02"></span>刷新</a> </li>
+            <li> <a  id="authoritycloseDialogAndRefreshId" onclick="authoritycloseDialogAndRefresh(this);" class="a-close closecutab"><span class="iconbg03"><i class="fa fa-remove  font24"></i></span>关闭</a> </li>
+            </ul>
+        </div>
+        <div class="bjui-searchBar">
+            <input type="hidden" name="limit" value="${limit}">
+            <input type="hidden" name="start" value="${start}">
+            <input type="hidden" id="projectId" name="projectId" value="${filter.parameters.projectId}">
+            <input type="hidden" id="currentUserId"  value="${currentUserId!}">
+            <label>登录账号：</label>
+            <input id="userName" name="userName" class="form-control" size="15" type="text" value="${filter.parameters.userName!}" />
+            <label>&nbsp;用户姓名：</label>
+            <input id="realNameId" name="realName" class="form-control" size="15" type="text" value="${filter.parameters.realName!}" />
+            <button id="auth_user_search" type="submit" class="btn-default"  data-toggle="ajaxsearch" data-icon="search" >查询</button>&nbsp;
+            <a id="authority_reloadChangeForm" class="btn btn-orange" href="javascript:;" onclick="authorityUndoForm();" data-icon="undo">重置</a></div>
+</div>
+</form>
+</div>
+<div class="bjui-pageContent">
+    <table data-width="100%" data-nowrap="true" data-selected-multi="true"
+           class="table table-bordered table-hover table-striped table-top">
+        <thead>
+        <tr>
+            <th width="3%"></th>
+            <th width="3%">NO.</th>
+            <th  width="42%" style="text-align:center" title="地区" width="100">登录账号</th>
+            <th  width="42%" style="text-align:center" title="项目名称" width="100">用户姓名</th>
+        </tr>
+        </thead>
+        <table data-width="100%" data-nowrap="true" data-selected-multi="true"
+               class="table table-bordered table-hover table-striped table-top">
+            <tbody id="userAuthorityTable">
+            <#list entitys as user>
+                <tr>
+                    <td width="3%">
+                        <input type="checkbox" name="ids" data-toggle="icheck" value="${user.id}"
+                        <#if user.ischeck == "1">checked="checked"</#if>/>
+                    </td>
+                    <td width="3%" style="text-align:center">${user_index+1+(start-1)*limit}</td>
+                    <#if "${currentUserId!}"=="1">
+                    <td width="42%" nowrap="nowrap" style="text-align:center">
+                        <a  data-toggle="dialog" data-width="500" data-height="500"  data-mask="true"
+                            data-title='授权信息' data-id="authorInfor"
+                            data-url="${ctx}/project/Authority!serverAssign.do?selectUserId=${user.id}&currentUserId=${currentUserId}"
+                            data-xternal="true" class="list-a" title="${user.userName!}">${user.userName!}</a>
+                    </td>
+                     <#else>
+                        <td width="42%" nowrap="nowrap" style="text-align:center">
+                          <div title="${user.userName!}"> ${user.userName!}</div>
+                        </td>
+
+                      </#if>
+
+                    <td width="42%" style="text-align:center">
+                        <div title="${user.realName!}"> ${user.realName!}</div>
+                    </td>
+                </tr>
+            </#list>
+            </tbody>
+        </table>
+    </table>
+</div>
+<script type="text/javascript">
+    /**
+     * 保存授权
+     * @param obj
+     */
+//    function toSaveGrantProAndServ1(obj, url) {
+//        $.ajax({
+//            type: "POST",
+//            url: url,
+//            success: function (data) {
+//                var dataJson = eval('(' + data + ')');
+//                if (dataJson.statusCode == 300) {
+//                    $(this).alertmsg('warn', dataJson.message);
+//                } else if (dataJson.statusCode == 200) {
+//                    $(this).alertmsg('correct', dataJson.message);
+//                    $("#refresh").click();
+//                    $(this).dialog("close", $.CurrentDialog);
+//                    /* $(this).dialog("close", $.CurrentDialog);
+//                         $("#userSearch").submit(); */
+//                    }
+//                }
+//            })
+//        }
+    /**
+     * 保存授权
+     * @param obj
+     */
+//    function toSaveGrantProAndServ(obj,id) {
+//        debugger;
+////         var id=$('#bjui-selected').val();
+//        var projectId=$("#projectId").val();
+//        var url = "${ctx}/project/Authority!saveServerAssign.do?selectUserId="+id+"&projectId="+projectId;
+//                    $.ajax({
+//                        type: "POST",
+//                        url:url,
+//                        success: function(data){
+//                            var dataJson = eval('(' + data + ')');
+//                            if (dataJson.statusCode == 300) {
+//                                $(obj).alertmsg('warn', dataJson.message);
+//                            } else if (dataJson.statusCode == 200) {
+//                                $(obj).alertmsg('correct', dataJson.message);
+//                            }
+//                            $("#auth_user_search").click();
+//                        }
+//                    });
+//    }
+
+    function authoritycloseDialogAndRefresh(obj) {
+        $(obj).dialog("close", $.CurrentDialog);
+        $("#project_search").click();
+    }
+    function authorityUndoForm() {
+        _d("#userName").val("");
+        _d("#realNameId").val("");
+        _d("#auth_user_search").submit();
+    }
+
+    function toSaveGrantProAndServ2(obj) {
+        debugger;
+        var projectId=$("#projectId").val();
+        var checkbox = $("#userAuthorityTable :checkbox:checked");
+        var userIds = "";
+        if (checkbox.length > 0) {
+            for (var i = 0; i < checkbox.length; i++) {
+                userIds = userIds + checkbox[i].value + ",";
+            }
+            userIds = userIds.substring(0, userIds.length - 1);
+        }
+        var url="${ctx}/project/Authority!saveServerAssign.do?selectUserId="+userIds+"&projectId="+projectId;
+        $.ajax({
+            type: "POST",
+            url: url,
+            success: function(data){
+                var dataJson = eval('(' + data + ')');
+                if (dataJson.statusCode == 300) {
+                    $(obj).alertmsg('warn', dataJson.message);
+                } else if (dataJson.statusCode == 200) {
+                    $(obj).alertmsg('correct', dataJson.message);
+                }
+                $("#authoritycloseDialogAndRefreshId").click();
+            }
+        });
+    }
+</script>
+<#include "../common/_page.html"/>

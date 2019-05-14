@@ -1,0 +1,73 @@
+<script language="javascript" type="text/javascript">
+    //新增、编辑
+    function toEditUser(obj, operate){
+        var id = "", url = "";
+        if ("add" == operate) {
+            url = "${ctx}/admin/system/user!edit.do?ztSysOrgId=" + $("#ztSysOrgId").val();
+        } else {
+            if ($("#userListTbl input:checked").length > 0) {
+                id = $("#userListTbl input:checked").val();
+                if ("edit" == operate) {
+                    url = "${ctx}/admin/system/user!edit.do?id=" + id;
+                } else {
+                    // 添加角色
+                    url = "${ctx}/admin/system/user!queryrole.do?entity.id=" + id;
+                }
+            } else {
+                $(this).alertmsg('warn', "请选中一条数据！");
+                return;
+            }
+        }
+
+        var dialog_options = {
+            id:obj.id,
+            url: url,
+            fresh:true,
+            width:500,
+            height:500,
+            mask:true,
+            title:obj.title
+        }
+        $(obj).dialog(dialog_options)
+    }
+
+    // 初始化密码
+    function initPassword(){
+        var  userId = $("input[name='ids']:checked").val();
+        if(userId){
+            $(this).alertmsg('confirm', '确定初始化密码？', {okCall:function(){
+                $.ajax({
+                    type:'get',
+                    data:'userId='+userId,
+                    url:'${ctx}/admin/system/user!initpassword.do',
+                    success:function(data){
+                        var dataJson = eval('(' + data + ')');
+                           if (dataJson.statusCode == 300) {
+                               $(this).alertmsg('warn',dataJson.message);
+                           } else if (dataJson.statusCode == 200) {
+                               $(this).alertmsg('correct',dataJson.message);
+                           }
+                    }
+                });
+            }});
+        }else{
+            $(this).alertmsg('warn','请选择用户');
+        }
+    }
+
+    function undoForm() {
+        $("#userName").val("");
+        $("#realName").val("");
+        $("#mobiePhone").val("");
+        $("#userSearch").submit();
+        
+    }
+
+    $(function () {
+        var user_sonPName = $("#user_sonPName").val(); // 左侧树-组织机构名称
+        var user_parentId = $("#user_parentId").val(); // 左侧树-组织机构代码
+
+        $("#user_pName").val(user_sonPName).attr("title", user_sonPName);
+        $("#ztSysOrgId").val(user_parentId);
+    });
+</script>

@@ -1,0 +1,72 @@
+<#include "../../../common/_public.html"/>
+<div class="bjui-pageContent">
+    <form id="inputForm" action="${ctx }/snaker/process!processDeploy.do" method="post"
+          enctype="multipart/form-data">
+        <div style="margin:15px auto 0; width:900px;">
+            <fieldset>
+                <legend>
+                    <h3 class="listtitle">编辑工作流</h3>
+                    <input type="hidden" name="id" value="${process.id }">
+                </legend>
+
+
+            <table class="table" width="100%">
+                <tr>
+                    <td class="td_table_1">
+                        <span>流程名称：</span>
+                    </td>
+                    <td class="td_table_2" colspan="3">
+                        &nbsp;${process.name }
+                    </td>
+                </tr>
+                <tr>
+                    <td class="td_table_1">
+                        <span>显示名称：</span>
+                    </td>
+                    <td class="td_table_2" colspan="3">
+                        &nbsp;${process.displayName }
+                    </td>
+                </tr>
+                <tr>
+                    <td class="td_table_1">
+                        <span>状态：</span>
+                    </td>
+                    <td class="td_table_2" colspan="3">
+                        <#if process.state==1>
+                            <span class="label label-success">正常</span>
+                            <#else>
+                                <span class="label label-danger">禁用</span>
+                        </#if>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="td_table_1">
+                        <span>上传流程定义文件：</span>
+                    </td>
+                    <td class="td_table_2" colspan="3">
+                        <input type="file" class="input_file" id="attach" name="attach"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="td_table_1">
+                        <span>流程定义：</span>
+                    </td>
+                    <td class="td_table_2" colspan="3">
+                        ${content }
+                    </td>
+                </tr>
+            </table>
+            </fieldset>
+        </div>
+    </form>
+</div>
+<div class="bjui-pageFooter">
+    <ul>
+        <li>
+            <button type="button" class="btn-close closecutab" data-icon="close">关闭</button>
+        </li>
+        <li>
+            <button type="submit" class="btn-default" data-icon="save">保存</button>
+        </li>
+    </ul>
+</div>

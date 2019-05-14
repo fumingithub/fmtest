@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap
+        PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+        "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="Travel">
+    <typeAlias alias="Travel" type="net.jqsoft.base.system.domain.Travel" />
+
+    <resultMap id="TravelMap" class="Travel">
+        <result property="id" column="ID"/>
+        <result property="code" column="CODE"/>
+        <result property="name" column="NAME"/>
+        <result property="level" column="LEVE"/>
+        <result property="provinceId" column="PROVINCE_ID"/>
+        <result property="provinceName" column="PROVINCE_NAME"/>
+        <result property="describe" column="DESCRIBE"/>
+        <result property="status" column="STATUS"/>
+        <result property="localTime" column="LOCALTime"/>
+    </resultMap>
+
+    <select id="get" parameterClass="String" resultMap="TravelMap">
+        <![CDATA[
+                 SELECT * FROM SYS_TRAVEL_FM WHERE ID = #id:String#
+         ]]>
+    </select>
+
+    <insert id="insert" parameterClass="Travel">
+        <![CDATA[
+        INSERT INTO SYS_TRAVEL_FM(
+        ID,
+        CODE,
+        NAME,
+        LEVE,
+        PROVINCE_ID,
+        PROVINCE_NAME,
+        DESCRIBE,
+        STATUS,
+        LOCALTIME
+        ) VALUES (
+                #id#,
+                #code#,
+                #name#,
+                #level#,
+                #provinceId#,
+                #provinceName#,
+                #describe#,
+                #status#,
+                #localTime#
+             )
+        ]]>
+    </insert>
+
+    <sql id="selectByConditions">
+        <dynamic>
+            <isNotEmpty prepend=" AND " property="name">
+                TRAVEL.NAME LIKE '%' || #name# || '%'
+            </isNotEmpty>
+            <isNotEmpty prepend=" AND " property="code">
+                TRAVEL.CODE LIKE '%' || #code# || '%'
+            </isNotEmpty>
+            <isNotEmpty prepend=" AND " property="provinceName">
+                TRAVEL.PROVINCE_NAME LIKE '%' || #provinceName# || '%'
+            </isNotEmpty>
+            <isNotEmpty prepend=" AND " property="status">
+                TRAVEL.STATUS = #status#
+            </isNotEmpty>
+        </dynamic>
+    </sql>
+
+    <select id="count" resultClass="int">
+        SELECT COUNT(1) FROM SYS_TRAVEL_FM TRAVEL WHERE TRAVEL.STATUS IS NOT NULL
+
+        <include refid="selectByConditions"/>
+    </select>
+
+    <select id="select" resultMap="TravelMap" parameterClass="java.util.HashMap">
+        SELECT * FROM SYS_TRAVEL_FM TRAVEL WHERE TRAVEL.STATUS IS NOT NULL
+
+        <include refid="selectByConditions"/>
+    </select>
+
+    <update id="update" parameterClass="Travel">
+        <![CDATA[
+            UPDATE SYS_TRAVEL_FM ]]>
+        <dynamic prepend="SET">
+
+            <isNotEmpty  property="code" prepend=",">
+                <![CDATA[
+                    CODE = #code:String#
+                ]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="name" prepend=",">
+                <![CDATA[
+                    NAME = #name:String#
+                ]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="provinceId" prepend=",">
+                <![CDATA[
+                    PROVINCE_ID = #provinceId:String#
+                ]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="provinceName" prepend=",">
+                <![CDATA[
+                    PROVINCE_NAME = #provinceName:String#
+                ]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="describe" prepend=",">
+                <![CDATA[
+                    DESCRIBE = #describe:String#
+                ]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="level" prepend=",">
+                <![CDATA[
+                    LEVE = #level:String#
+                ]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="status" prepend=",">
+                <![CDATA[
+                    STATUS = #status:int#
+                ]]>
+            </isNotEmpty >
+            <isNotEmpty property="localTime" prepend=",">
+                <![CDATA[
+                      LOCALTIME = #localTime:Date#
+                ]]>
+            </isNotEmpty>
+
+        </dynamic>
+
+        <dynamic prepend="WHERE">
+            <![CDATA[
+                ID = #id:String#
+            ]]>
+        </dynamic>
+    </update>
+
+    <delete id="deleteById" parameterClass="String">
+        <![CDATA[
+        DELETE FROM SYS_TRAVEL_FM WHERE ID = #id:String#
+     ]]>
+    </delete>
+
+    <!-- 根据组织机构编码查询一条记录 -->
+    <select id="getInfoByCode" resultMap="TravelMap" parameterClass="java.util.HashMap">
+        <![CDATA[
+          SELECT * FROM SYS_TRAVEL_FM TRAVEL WHERE TRAVEL.CODE = #code#
+        ]]>
+    </select>
+</sqlMap>

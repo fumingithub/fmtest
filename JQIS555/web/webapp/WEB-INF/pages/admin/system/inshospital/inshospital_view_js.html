@@ -1,0 +1,30 @@
+﻿<script language="javascript" type="text/javascript">
+function saveInfo() {
+	var dataForms = $.CurrentNavtab.find("#frm_inshospital");
+	var $formFlag = dataForms.isValid();
+	if(!$formFlag) {
+		return;
+	}
+	$("#hidOpenTime").val(getIntFromTime($("#txtOpenTime").val()));
+	var options = {
+        resetForm:false,
+        clearForm:false,
+        error:function() {
+            $(this).alertmsg("error","保存失败！");
+        },
+        success:function(data) {
+            var dataJson = eval('(' + data + ')');
+              if (dataJson.statusCode == 300) {
+                  $(this).alertmsg('warn',dataJson.message);
+              } else if (dataJson.statusCode == 200) {
+                  $(this).alertmsg('correct',dataJson.message);
+                  if(dataJson.forward != "") {
+                      $.CurrentNavtab.find("input[name='id']").val(dataJson.forward);
+                      $.CurrentNavtab.find("input[name='type']").val(2);
+                  }
+              }
+        }
+    }
+    dataForms.ajaxSubmit(options);
+}
+</script>

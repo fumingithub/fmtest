@@ -1,0 +1,82 @@
+﻿<script language="javascript" type="text/javascript">
+var role_id = "";
+var doType = 0;
+var node="";
+//查看用户
+function viewUser(obj,url) {
+    var dialog_options = {
+        id: 'entrust-dialog-edit',
+        url:url,
+        fresh: false,
+        width: 600,
+        height: 500,
+        mask: true,
+        title: "查看用户",
+        isrefshpar:false
+    }
+    $(obj).dialog(dialog_options)
+}
+
+//授权、新增、编辑
+function toEdit(obj,url){
+	var title = obj.title;
+	var dialog_options = {
+		id: 'role-dialog-edit',
+		url: url,
+		fresh: false,
+		width: 500,
+		height: 500,
+		mask: true,
+		title: title,
+		isrefshpar:true
+	}
+	$(obj).dialog(dialog_options)
+}
+
+function checkDelRole(e) {
+	var roleId = "",count=0;
+	$("input[name='ids']:checked").each(function(){
+		roleId = $(this).val();
+		count++;
+	})
+	if(count == 0) {
+		$(e).alertmsg('error',"请选择一条数据！");
+		return;
+	}
+	$.ajax({
+       type: "POST",
+       url: "${ctx}/admin/system/role!checkdel.do?id="+roleId,
+       success: function(data){
+    	   var d = eval("("+data+")");
+    	   if(d.statusCode == "300") {
+    		   $(e).alertmsg('warn',"选择的角色存在子角色，不可删除！");
+    		   return;
+    	   }
+    	   $(this).alertmsg('confirm', '确认删除？',{
+  				okCall:function(){
+  					delRole(e,roleId);
+  				},
+  				cancelCall:function(){
+  					return false;
+  				}
+  		   });
+       }
+	});
+}
+
+function delRole(e,roleId) {
+	$.ajax({
+       type: "POST",
+       url: "${ctx}/admin/system/role!deleterole.do?id="+roleId,
+       success: function(data){
+    	   var d = eval("("+data+")");
+    	   if(d.statusCode == "200") {
+    		   $(this).alertmsg('correct',"删除成功！");
+    		   $("#refresh").click();
+    	   } else {
+    		   $(this).alertmsg('error',"删除失败！");
+    	   }
+       }
+	});
+}
+</script>

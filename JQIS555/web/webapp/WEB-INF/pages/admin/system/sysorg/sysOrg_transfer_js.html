@@ -1,0 +1,208 @@
+﻿<script language="javascript" type="text/javascript">
+
+    var TOP_ID = "230606"; // 最顶级机构编码
+
+    // 初始化设置
+    var setting = {
+        async: {
+            autoParam: ["id"],
+            enable: true,
+            dataType: "text",
+            url: "${ctx}/admin/system/sysorg!ajaxQueryOrgForZTree.do",
+            dataFilter: filter,
+            type: "post",
+            otherParam: { "transferSysOrgIds": $("#transferSysOrgId").val()}
+        },
+        callback: {
+            onNodeCreated: zTreeOnNodeCreated,
+            beforeClick: beforeClick,
+            onAsyncError: onAsyncError,
+            onAsyncSuccess: onAsyncSuccess,
+            onClick: onClick,
+            onCheck: onCheck,
+            onDblClick: zTreeOnDblClick
+        },
+        check: {
+            enable: false,
+            chkStyle: "radio"
+        },
+        data: {
+            simpleData: {
+                enable: true,
+                idKey: "id",
+                pIdKey: "pid",
+                rootPId: null
+            }
+        }
+    }
+
+    /**
+     * 对返回数据进行预格式化处理
+     * @param treeId
+     * @param parentNode
+     * @param responseData
+     * @returns {Array}
+     */
+    function filter(treeId, parentNode, responseData){
+        var arr = [];
+        if (responseData) {
+            if ("none" != responseData[0].rootId) {TOP_ID = responseData[0].rootId;}
+            for(var i = 0; i < responseData.length; i++) {
+                arr[i] = {
+                    id: responseData[i].id,
+                    pid: responseData[i].parentId,
+                    name: responseData[i].name,
+                    isParent: true
+                }
+            }
+        }
+        return arr;
+    }
+
+    /**
+     * 点击前预处理函数
+     * @param treeId
+     * @param treeNode
+     * @param clickFlag
+     * @returns {boolean}
+     */
+    function beforeClick(treeId, treeNode, clickFlag){
+        var zTree = $.fn.zTree.getZTreeObj(treeId);
+        zTree.checkNode(treeNode, !treeNode.checked, true);
+        return true;
+    }
+
+    /**
+     * 节点点击时的回调函数
+     * @param event
+     * @param treeId
+     * @param treeNode
+     * @param clickFlag
+     */
+    function onClick(event, treeId, treeNode, clickFlag){
+        var zTreeObj = $.fn.zTree.getZTreeObj(treeId);
+        zTreeObj.expandNode(treeNode);
+    }
+
+    /**
+     * 节点双击时的回调函数
+     * @param event
+     * @param treeId
+     * @param treeNode
+     */
+    function zTreeOnDblClick(event, treeId, treeNode) {
+        $.ajax({
+            url: "${ctx}/admin/system/sysorg!transferOrg.do",
+            type: "post",
+            dataType: "json",
+            data: {"transferId": $("#transferSysOrgId").val(), "selected": treeNode.id},
+            success: function (dataJson) {
+                if (dataJson.statusCode == 300) {
+                    $(this).alertmsg('warn', dataJson.message);
+                } else if (dataJson.statusCode == 200) {
+                    $(this).alertmsg('correct', dataJson.message);
+                    $('#refresh').click();
+//                    drefresh();
+                    $(this).dialog("close", $.CurrentDialog);
+                }
+            },
+            error: function () {
+                alert("网络异常，请稍候再试！");
+            },
+        });
+    };
+
+    /**
+     * 节点选中时的回调函数
+     * @param event
+     * @param treeId
+     * @param treeNode
+     * @param clickFlag
+     */
+    function onCheck(event, treeId, treeNode, clickFlag){
+
+    }
+
+    /**
+     * 异步失败时的回调函数
+     * @param event
+     * @param treeId
+     * @param treeNode
+     * @param XMLHttpRequest
+     * @param textStatus
+     * @param errorThrown
+     */
+    function onAsyncError(event, treeId, treeNode, XMLHttpRequest, textStatus, errorThrown){
+
+    }
+
+    /**
+     * 异步成功时的回调函数
+     * @param event
+     * @param treeId
+     * @param treeNode
+     * @param msg
+     */
+    function onAsyncSuccess(event, treeId, treeNode, msg){
+        if ("" == $("#" + treeId).html()) {
+            $("#" + treeId).text("无匹配的结果");
+        }
+    }
+
+    /**
+     * ztree加载dom对象的回调函数（可参考zTree官网API文档）
+     * @param event
+     * @param treeId
+     * @param treeNode
+     */
+    function zTreeOnNodeCreated(event, treeId, treeNode) {
+        var sysOrgTransferName = $.trim($("#sysOrgTransferName").val());
+        var treeObj = $.fn.zTree.getZTreeObj(treeId);
+
+        // 只有搜索参数不为空且该节点为父节点时才进行异步加载
+        if(sysOrgTransferName != "" && treeNode.isParent){
+            treeObj.reAsyncChildNodes(treeNode, "refresh");
+        }
+    }
+
+    /**
+     * 右侧列表刷新
+     */
+    function drefresh(){
+        $("#name").val("");
+        $("#code").val("");
+        $("#status").val("");
+        $("#sysOrgSubmit").submit();
+    }
+
+    /**
+     * 页面加载时的初始化方法
+     */
+    $(document).ready(function(){
+        $.fn.zTree.init($("#sysOrgTransferTree"), setting);
+
+        // 绑定搜索树按钮的单击事件
+        $("#sysOrg_transferSearchBtn").click(function(){
+            var treeObj = $.fn.zTree.getZTreeObj("sysOrgTransferTree");
+            var sysOrgTransferName = $.trim($("#sysOrgTransferName").val());
+            var node = treeObj.getNodeByParam("id", TOP_ID, null);
+            if(sysOrgTransferName != ""){
+                sysOrgTransferName = encodeURI(encodeURI(sysOrgTransferName));
+                treeObj.setting.async.otherParam = ["sysOrgName", sysOrgTransferName];
+            } else {
+                // 搜索参数为空时必须将参数数组设为空
+                treeObj.setting.async.otherParam = [];
+            }
+            treeObj.reAsyncChildNodes(node, "refresh");
+        });
+
+        // 初始化页面可看到的样式及数据
+        setTimeout(function () {
+            // 默认展开的到第二级
+            var zTreeObj = $.fn.zTree.getZTreeObj("sysOrgTransferTree");
+            var node = zTreeObj.getNodeByParam("id", TOP_ID, null);
+            zTreeObj.expandNode(node);
+        }, 300);
+    });
+
+</script>

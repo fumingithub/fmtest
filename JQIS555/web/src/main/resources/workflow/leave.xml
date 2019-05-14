@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<process name="leave" displayName="请假流程测试" instanceUrl="pages/leave/apply.html">
+    <start layout="24,124,50,50" name="start1" displayName="start1">
+        <transition offset="0,0" to="apply" name="transition1"/>
+    </start>
+    <end layout="570,124,50,50" name="end1" displayName="end1">
+    </end>
+    <task layout="117,122,100,50" name="apply" displayName="请假申请" form="pages/leave/apply.html" assignee="U_admin"
+          taskType="Major" performType="ANY">
+        <transition offset="0,0" to="approveDept" name="transition2" displayName="提交"/>
+    </task>
+    <task layout="272,122,100,50" name="approveDept" displayName="部门经理审批" form="/admin/workflow/leave.do"
+          assignee="U_admin" taskType="Major" performType="ANY">
+        <transition offset="0,0" to="decision1" name="transition3" displayName="同意"/>
+        <transition offset="0,-10" to="apply" g="246,88" name="path14" displayName="不同意"/>
+    </task>
+    <decision layout="426,124,50,50" name="decision1" expr="#day > 2 ? 'transition5' : 'transition4'"
+              displayName="decision1">
+        <transition offset="0,0" to="end1" name="transition4" displayName="小于2天"/>
+        <transition offset="0,0" to="approveBoss" name="transition5" displayName="大于2天"/>
+    </decision>
+    <task layout="404,231,100,50" name="approveBoss" displayName="总经理审批" form="/admin/workflow/leave.do"
+          assignee="U_admin" taskType="Major" performType="ANY">
+        <transition offset="0,0" to="end1" name="transition6" displayName="同意"/>
+        <transition offset="0,-10" to="apply" g="214,275" name="path15" displayName="不同意"/>
+    </task>
+</process>

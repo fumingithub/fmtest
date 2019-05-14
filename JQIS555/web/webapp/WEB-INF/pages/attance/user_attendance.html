@@ -1,0 +1,118 @@
+<#include "../common/_public.html"/>
+
+<div class="bjui-pageHeader">
+    <form id="pagerForm" data-toggle="ajaxsearch" method="post"
+          action="${ctx}/admin/workrecord/workrecord.do">
+        <div class="office">
+            <ul class="offbtn">
+                <li><a data-toggle="doajax"
+                       data-url="${ctx}/admin/workrecord/workrecord!signInCard.do?id={#bjui-selected}&starttime={#bjui-starttime}"> <span class="iconbg01">
+				<i class="fa fa-calendar-check-o font24"></i></span>签到</a></li>
+                <li><a data-toggle="doajax"
+                       data-url="${ctx}/admin/workrecord/workrecord!signOutCard.do?id={#bjui-selected}&starttime={#bjui-starttime}"> <span class="iconbg02">
+				<i class="fa fa-calendar-times-o  font24"></i></span>签退</a></li>
+                <li><a data-url="${ctx}/admin/workrecord/workrecord!resert.do?starttime={#bjui-starttime}" data-toggle="doajax" data-external="false" data-isrefsh="true" data-confirm-msg="确定重置吗？">
+                    <span class="iconbg03"><i class="fa fa-home font24"></i></span>重置</a></li>
+
+                <li><a data-toggle="doajax"
+                       data-url="${ctx}/admin/workrecord/workrecord!resertStatus.do">
+                    <span class="iconbg04"><i class="fa fa-calendar-plus-o font24"></i></span>统计</a></li>
+
+                <li><a data-toggle="dialog" data-title="加班时长" data-mask="true" data-id="anti_view" data-width="600" data-height="400"
+                       data-url="${ctx}/admin/workrecord/workrecord!countOverTime.do">
+                    <span class="iconbg04"><i class="fa fa-calendar-plus-o font24"></i></span>加班时长</a></li>
+
+                <li><span class="ttt"></span></li>
+                <li><a data-toggle="reloadsearch" data-target="#bjui-pageContent" data-icon="search">
+                    <span class="iconbg02"><i class="fa fa-refresh font24"></i></span>刷新</a></li>
+                <li><a class="closecutab"><span class="iconbg03"><i class="fa fa-remove  font24"></i></span>关闭</a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="bjui-searchBar">
+            <input type="hidden" name="limit" value="${limit}">
+            <input type="hidden" name="start" value="${start}">
+            <label>人员名称:</label>
+            <input name="realName" class="form-control" size="15" type="text" value="${filter.parameters.realName!}"/>
+            <label>开始时间:</label>
+            <input name="starttime" id="bjui-starttime" class="form-control" size="15" type="text" data-toggle="datepicker" width="70" value="${filter.parameters.starttime?default(.now?string('yyyy-MM-dd'))}"/>
+            <label>结束时间:</label>
+            <input name="endtime" class="form-control" data-min-date="#bjui-starttime" size="15" type="text" data-toggle="datepicker" width="70" value="${filter.parameters.endtime?default(.now?string('yyyy-MM-dd'))}"/>
+            <label>状态:</label>
+            <td class="left">
+                <select name="workStatus" data-width="150px"  data-toggle="selectpicker">
+                    <option selected="selected" value="">--请选择--</option>
+                    <option value="01" <#if (filter.parameters.workStatus!) == '01'>selected</#if> >已签到</option>
+                    <option value="02" <#if (filter.parameters.workStatus!) == '02' >selected</#if> >已签退</option>
+                    <option value="03" <#if (filter.parameters.workStatus!) == '03' >selected</#if> >迟到</option>
+                    <option value="04" <#if (filter.parameters.workStatus!) == '04' >selected</#if> >旷工</option>
+                    <option value="05" <#if (filter.parameters.workStatus!) == '05' >selected</#if> >请假</option>
+                    <option value="06" <#if (filter.parameters.workStatus!) == '06' >selected</#if> >早退</option>
+                    <option value="07" <#if (filter.parameters.workStatus!) == '07'>selected</#if> >未签到</option>
+                    <option value="99" <#if (filter.parameters.workStatus!) == '99' >selected</#if> >异常</option>
+                </select>
+            </td>
+            <button type="submit" class="btn-default" data-toggle="ajaxsearch" data-icon="search">查询</button>
+            &nbsp; <a class="btn btn-orange" href="javascript:;" onclick="$(this).navtab('reloadForm', true);" data-icon="undo">清空</a>
+        </div>
+    </form>
+</div>
+<div class="bjui-pageContent">
+    <table data-width="100%" data-nowrap="true"
+           class="table table-bordered table-hover table-striped table-top"
+           data-toggle="tablefixed">
+        <thead>
+        <tr>
+            <th width="20"></th>
+            <th width="30">NO.</th>
+            <th style="text-align:center">姓名</th>
+            <th style="text-align:center">日期</th>
+            <th style="text-align:center">签到时间</th>
+            <th style="text-align:center">签退时间</th>
+            <th style="text-align:center">状态</th>
+        </tr>
+        </thead>
+        <tbody>
+        <#list entitys as entity>
+            <tr>
+                <td><input type="checkbox" value="${entity.id!}" name="ids" data-toggle="icheck"></td>
+                <td class="center">${entity_index+1+(start-1)*limit}</td>
+                <td class="center"><a href="#" onclick="showUserCOunt(this,'${ctx}/admin/workrecord/workrecord!getUserCount.do?userId=${entity.userId!}&flag=1')"
+                       ><span style="color: blue">${entity.realName!}</span></a></td>
+                <td class="center">${(entity.currentTime?string('yyyy-MM-dd'))!}</td>
+                <td class="center">${(entity.signInTime?string('yyyy-MM-dd HH:mm:ss'))!}</td>
+                <td class="center">${(entity.signOutTime?string('yyyy-MM-dd HH:mm:ss'))!}</td>
+                <td class="center">
+                    <#if "${entity.workStatus!}"=="01"><div title="" class="label label-success">已签到</div></#if>
+                    <#if "${entity.workStatus!}"=="02"><div title="" class="label label-info">已签退</div></#if>
+                    <#if "${entity.workStatus!}"=="03"><div title="" class="label label-warning">迟到</div></#if>
+                    <#if "${entity.workStatus!}"=="04"><div title="" class="label label-danger">旷工</div></#if>
+                    <#if "${entity.workStatus!}"=="05"><div title="" class="label label-primary">请假</div></#if>
+                    <#if "${entity.workStatus!}"=="06"><div title="" class="label label-danger">早退</div></#if>
+                    <#if "${entity.workStatus!}"=="07"><div title="" class="label label-default">未签到</div></#if>
+                    <#if "${entity.workStatus!}"=="99"><div title="" class="label label-danger">异常</div></#if>
+                </td>
+
+            </tr>
+        </#list>
+        </tbody>
+    </table>
+</div>
+<div class="bjui-pageFooter" style="padding:5px 5px;">
+    <button type="button" class="btn-close closecutab" style="float: right" data-icon="close" data-toggle="reloadsearch"
+            data-target="#bjui-pageContent">关闭</button>
+</div>
+<script>
+    function showUserCOunt(obj,url){
+        $(obj).dialog({
+            title:'个人加班时间',
+            id:'11',
+            url:url,
+            width:600,
+            height:400,
+            mask:true
+        });
+    }
+</script>
+<#include "../common/_page.html"/>

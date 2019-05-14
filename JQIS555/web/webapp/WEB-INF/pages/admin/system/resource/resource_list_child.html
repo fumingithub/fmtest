@@ -1,0 +1,37 @@
+<#include "../../../common/_public.html"/>
+        <#list entitys as resource>
+        <#if resource.parentCode??>
+            <tr pp="${resource.id}" class="treegrid-${resource.id} treegrid-parent-${resource.parentCode}">
+        <#else>
+            <tr class="treegrid-${resource.id} treegrid-collapsed">
+        </#if>
+            <td>
+            <input type="checkbox" name="ids" data-toggle="icheck" value="${resource.id}">
+            </td>
+            <td class="left" title='${resource.display!}'>
+            	<#if (resource.isHavaChild>0)>
+            	<span class="glyphicon glyphicon-plus res-treegrid-expander" style="padding-left: 16px;cursor: pointer;" onclick="showResourceChild(this,'${resource.id}')"></span>
+                <font style="padding-left: 16px;">${resource.display!}</font>
+            	<#else>
+            	<font style="padding-left: 32px;">${resource.display!}</font>
+            	</#if>
+            </td>
+            <td class="left" title="${resource.code!}">
+                ${resource.code!}
+            </td>
+            <td class="left" title='${resource.description!}'>
+                ${resource.description!}
+            </td>
+            <td class="left" title='${resource.parentName!}'>
+                ${resource.parentName!}
+            </td>
+            <td class="left" title='${resource.url!}'>
+                ${resource.url!}
+            </td>            
+            <td class="center">
+               	<#if resource.type=="0"><div style='color:red'>URL</div></#if>
+               	<#if resource.type=="1"><div style='color:green'>菜单</div></#if>
+               	<#if resource.type=="2"><div style='color:blue'>按钮</div></#if>
+            </td>
+        </tr>
+        </#list>

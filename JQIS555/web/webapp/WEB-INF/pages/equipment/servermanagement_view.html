@@ -1,0 +1,159 @@
+<#include "../common/_public.html"/>
+<#include "../common/_area.html"/>
+<#include "../common/_pinyin.html"/>
+<!-- <div class="bjui-pageHeader" style="background:#FFF;"> -->
+<!-- 	<div class="row" style="height:70px"> -->
+<!-- 		<div class="col-md-12"> -->
+<!-- 			<div class="office"> -->
+<!-- 				<ul class="offbtn"> -->
+<!-- 					<li><a id="lbtnSave" class="submit"><span class="iconbg04"><i -->
+<!-- 								class="fa fa-save font24"></i> -->
+<!-- 						</span>保存</a> -->
+<!-- 					</li> -->
+<!-- 					<li><a class="closecutab"><span class="iconbg03"><i -->
+<!-- 								class="fa fa-remove  font24"></i> -->
+<!-- 						</span>关闭</a> -->
+<!-- 					</li> -->
+<!-- 				</ul> -->
+<!-- 			</div> -->
+<!-- 		</div> -->
+<!-- 	</div> -->
+<!-- </div> -->
+<div class="bjui-pageContent">
+	<form id="serverViewform" action="">	
+	<div style="margin:15px auto 0;">
+		<fieldset>
+			<legend>
+				<h3 class="listtitle" id="unitTitle">服务器信息</h3>
+				<input type="hidden" name="id" value="${entity.id!}" />
+				<input type="hidden" name="entity.projectId" value="${projectId!}" />
+			</legend>
+			
+			<table class="table table-condensed" width="100%">
+				<tbody>
+					
+					<tr>	
+						<td class="right"><span style="color:red;">*</span>服务器用户名</td>
+						<td class="left"><input id="serverUsername"
+							name="entity.serverUsername" type="text" data-rule="required" readonly="readonly" maxlength="25" onkeyup="getText(this)"
+							value="${entity.serverUsername!}" size="20" /></td>
+					</tr>
+					<tr>
+					      <td class="right" style="width: 130px"><span style="color:red">*</span>服务器类型：</td>
+                          <td id="type" class="left" colspan="3">
+					        <#if entity.type=="01"><input name="entity.type" type="text" data-rule="required" readonly="readonly" size="20" value="应用服务器"></#if>
+               				<#if entity.type=="02"><input name="entity.type" type="text" data-rule="required" readonly="readonly" size="20" value="前置机服务器" ></#if>
+               				<#if entity.type=="03"><input name="entity.type" type="text" data-rule="required" readonly="readonly" size="20" value="数据中心服务器" ></#if>
+               		      </td>
+               		 </tr>
+<!-- 					<tr>	 -->
+<!-- 						<td class="right"><span style="color:red;">*</span>项目ID</td> -->
+<!-- 						<td class="left"><input id="projectId" -->
+<!-- 							name="entity.projectId" type="text" data-rule="required" maxlength="25" onkeyup="getText(this)" -->
+<!-- 							value="${projectId!}" size="20" /></td> -->
+<!-- 					</tr> -->
+					
+<!-- 					<tr>	 -->
+<!-- 						<td class="right"><span style="color:red;">*</span>服务器类型</td> -->
+<!-- 						<td class="left"><input id="type" -->
+<!-- 							name="entity.type" type="text" data-rule="required" readonly="readonly" maxlength="25" onkeyup="getText(this)" -->
+<!-- 							value="${entity.type!}" size="20" /></td> -->
+<!-- 					</tr>	 -->
+					
+					<tr>	
+						<td class="right"><span style="color:red;">*</span>服务器密码</td>
+						<td class="left"><input id="serverPassword"
+							name="entity.serverPassword" type="text" data-rule="required" readonly="readonly" maxlength="25" onkeyup="getText(this)"
+							value="${entity.serverPassword!}" size="20" /></td>
+					</tr>
+					<tr>	
+						<td class="right"><span style="color:red;">*</span>服务器IP</td>
+						<td class="left"><input id="serverIp"
+							name="entity.serverIp" type="text" data-rule="required" readonly="readonly" maxlength="25" onkeyup="getText(this)"
+							value="${entity.serverIp!}" size="20" /></td>
+					</tr>
+					<tr>	
+						<td class="right"><span style="color:red;">*</span>服务器MAC</td>
+						<td class="left"><input id="serverMac"
+							name="entity.serverMac" type="text" data-rule="required" readonly="readonly" maxlength="25" onkeyup="getText(this)"
+							value="${entity.serverMac!}" size="20" /></td>
+					</tr>
+					<tr>	
+						<td class="right"><span style="color:red;">*</span>服务器内网IP</td>
+						<td class="left"><input id="serverInsideIp"
+							name="entity.serverInsideIp" type="text" data-rule="required" readonly="readonly" maxlength="25" onkeyup="getText(this)"
+							value="${entity.serverInsideIp!}" size="20" /></td>
+					</tr>
+					<tr>	
+						<td class="right"><span style="color:red;">*</span>服务器外网IP</td>
+						<td class="left"><input id="serverOutsideIp"
+							name="entity.serverOutsideIp" type="text" data-rule="required" readonly="readonly" maxlength="25" onkeyup="getText(this)"
+							value="${entity.serverOutsideIp!}" size="20" /></td>
+					</tr>
+					<tr>	
+						<td class="right"><span style="color:red;">*</span>备注</td>
+						<td class="left"><input id="remarks"
+							name="entity.remark" type="text" data-rule="required" maxlength="25" readonly="readonly" onkeyup="getText(this)"
+							value="${entity.remark!}" size="20" /></td>
+					</tr>
+					
+						<tr>
+							<td class="right"  style="width: 130px">服务器状态:</td>
+							<td class="left" colspan="3" readonly="readonly"><#if
+								entity.status == '1'>
+								<div title="启用" class="label label-success">启用</div></#if> <#if
+								entity.status == '0'>
+								<div title="禁止" class="label label-danger">禁用</div></#if>
+							</td>
+						</tr>
+				</tbody>
+			</table>
+		</fieldset>
+	</div>
+</form>
+</div>
+<div class="bjui-pageFooter">
+    <ul>
+        <li>
+            <button type="button" class="btn-close closecutab" data-icon="close">关闭</button>
+        </li>
+        <li>
+            <button onclick="serversersaveForm(this,'${ctx}/project/equipmentinfor!save.do','serverform')" class="btn-default" data-icon="save">保存</button>
+        </li>
+    </ul>
+</div>
+<script type="text/javascript">
+    function setInsStatus(flag,param){
+        if(flag){
+            $("#"+param).val("0");//正常
+        }else{
+            $("#"+param).val("1");//锁定
+        }
+    }
+    
+    function serversersaveForm(obj, url, formId) {
+        var dataForms = $("#" + formId);
+        var $formFlag = dataForms.isValid();
+        if ($formFlag) {
+            $.ajax({
+                type : "POST",
+                url : url,
+                data : $("#" + formId).serialize(),
+                success : function(data) {
+                    var dataJson = eval('(' + data + ')');
+                    if (dataJson.statusCode == 300) {
+                        $(this).alertmsg('warn', dataJson.message);
+                    } else if (dataJson.statusCode == 200) {
+                        $(this).alertmsg('correct', dataJson.message);
+                        $("#projectSearchBtn").click();
+                        $(this).dialog("close", $.CurrentDialog);
+                        /* $(this).dialog("close", $.CurrentDialog);
+                        $("#userSearch").submit(); */
+                        
+                        
+                    }
+                }
+            })
+        }
+    };
+</script>

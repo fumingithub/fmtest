@@ -1,0 +1,40 @@
+﻿<script language="javascript" type="text/javascript">
+function showInsChild(e,pid) {
+	var asyncParam = {"parentIns.id":pid};
+	showTreegridChild(e,pid,"insTbody","${ctx}/admin/system/department!showchild.do",asyncParam);
+}
+
+// 删除组织机构
+function deleteUnit(url,obj){
+	var unitId = "",count=0;
+	_n("input[name='ids']:checked").each(function(){
+		unitId = $(this).val();
+		count++;
+	})
+	if(count == 0) {
+		$(obj).alertmsg('error',"请选择一条数据！");
+		return;
+	}
+	url = url + unitId;
+	$(obj).alertmsg('confirm', '确定要删除选中项吗？', {okCall:function(){
+       	$.ajax({
+	       type: "POST",
+	       url: url,
+	       success: function(data){
+	       		if(data=="1"){
+	       			$(obj).alertmsg('error',"有子节点不允许删除！");
+	       		}
+	       		if(data=="2"){
+	       			$(obj).alertmsg('error',"已禁用，无需再禁用！");
+	       		}
+       		 	if(data=="t"){
+	       			$(obj).alertmsg('correct',"删除成功！");
+		      	  	$("#pagerForm").submit();
+	       		}
+	       }
+		});
+	}});
+}
+
+
+</script>

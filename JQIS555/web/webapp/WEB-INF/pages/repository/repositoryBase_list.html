@@ -1,0 +1,81 @@
+<#include "../common/_public.html"/>
+<#include "repositoryBase_list_js.html"/>
+
+<div class="bjui-pageContent" id="user_sysOrgDiv">
+    <div class="clearfix">
+        <div id="user_sysOrgLeftDiv" style="height: 530px; width: auto; float:left; margin-top: 5px;
+            padding-right: 20px; border: 0px solid;">
+           
+            <div style="margin-top: 5px; margin-left: 5px;">
+                <input type="text" id="user_sysOrgName" size="15" placeholder="分类过滤" />
+                <button id="user_sysOrgSearchBtn" class="btn-default" style="padding-left: 4px;padding-right: 4px" data-icon="search"></button>
+            </div>
+            <ul id="user_sysOrgTree" class="ztree"></ul>
+        </div>
+        <div style="overflow:hidden; border-left: 1px #c3ced5 solid;">
+            <div style="border-bottom: 0px #c3ced5 solid;">
+                <input type="hidden" id="user_parentId" value="" />
+                <input type="hidden" id="user_bAreaId"  value="" />
+                <input type="hidden" id="user_sonPName" value="" />
+                <form id="pagerForm" data-toggle="ajaxsearch" method="post"
+                      action="${ctx}/admin/repository/repositoryBase.do">
+                    <div class="office">
+                        <ul class="offbtn">
+                            <@auth name="SYS_USER_ADD">
+	                            <#if hasPermission>
+	                                <li><a onclick="toEditUser(this, 'add')" title="新增" id="user-add"><span class="iconbg01">
+	                                <i class="fa fa-file-text-o font24"></i></span>新增</a></li>
+	                            </#if>
+                        	</@auth>
+
+	                        <@auth name="SYS_USER_EDIT">
+	                        	<#if hasPermission>
+	                            <li><a onclick="toEditUser(this, 'edit')" title="编辑" id="user-edit"><span class="iconbg02">
+	                                 <i class="fa fa-edit  font24"></i></span>编辑</a></li>
+	
+	                        	</#if>
+	                    	</@auth>
+	                    	 <li><a data-external="false" onclick="return viewUser(this,'${ctx}/admin/repository/repositoryBase!viewRepoBase.do?entity.id={#bjui-selected}');">
+                    		<span class="iconbg01"><i class="fa fa-user font24"></i></span>查看</a></li>
+		
+		                   <@auth name="SYS_NEWS_RELEASENEWS">
+        					<#if hasPermission>
+        					
+         							 <li><a data-url="${ctx}/admin/repository/repositoryBase!viewHots.do" data-toggle="dialog" data-external="false" data-isrefsh="true" id="sub"><span class="iconbg02"><i class="fa fa-globe font24"></i></span>热点</a></li> 
+        					</#if>
+        					</@auth>
+		                  
+		                    <@auth name="SYS_USER_DELETE">
+		                    	<#if hasPermission>
+		                            <li><a
+		                                    data-url="${ctx}/admin/repository/repositoryBase!delete.do?id={#bjui-selected}"
+		                                    data-toggle="doajax" data-external="false" data-isrefsh="true"
+		                                    data-confirm-msg="确定要删除选中项吗？"><span class="iconbg03">
+		                            <i class="fa fa-trash font24"></i></span>删除</a>
+		                            </li>
+		                    	</#if>
+		                	</@auth>
+			           						            	
+
+                            <li><span class="ttt"></span></li>
+                            <li><a id="refresh" data-toggle="reloadsearch"
+                                   data-target="#bjui-pageContent" data-icon="search"><span class="iconbg02">
+                					<i class="fa fa-refresh font24"></i></span>刷新</a>
+                            </li>
+                            <li> <a  class="closecutab"><span class="iconbg03">
+             					<i class="fa fa-remove  font24"></i></span>关闭</a> 
+             				</li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+            <div id="user_sysOrgRightDiv" style="height:460px;overflow:hidden; padding-bottom: 0px;">
+                
+                    <legend id="title" style="font-size:16px; display: none;"></legend>
+                    <div class="bjui-layout" id="user_sonSysOrgList" style="height:100%; overflow:hidden; margin: auto 0px;">
+                    </div>      
+            </div>
+        </div>
+    </div>
+</div>
+

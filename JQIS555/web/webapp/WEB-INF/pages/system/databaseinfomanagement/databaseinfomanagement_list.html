@@ -1,0 +1,124 @@
+﻿<#include "../../common/_public.html"/>
+<div class="bjui-pageHeader">
+    <form id="pagerForm" data-toggle="ajaxsearch" method="post" action="${ctx}/project/databaseinfomanagement.do?id=${filter.parameters.id!}">
+        <div class="office">
+            <ul class="offbtn">
+            <@auth name ="DATABASE_ADD">
+				<#if hasPermission>
+                <li> <a  data-toggle="dialog" data-width="900" data-height="450"  data-id="database_add"  data-url="${ctx}/project/databaseinfomanagement!edit.do?serverid=${filter.parameters.id!}" data-xternal="true" data-title="数据库维护> 新增" data-mask="true"> <span class="fa fa-file-text-o font24 iconbg01"></span>新增</a> </li>
+                </#if>
+             </@auth>
+             <@auth name ="DATABASE_EDIT">
+				<#if hasPermission>   
+                <li> <a  data-toggle="dialog" data-width="900" data-height="450"  data-id="database_edit" data-url="${ctx}/project/databaseinfomanagement!edit.do?id={#bjui-selected}&types=edit&serverid=${filter.parameters.id!}" data-title="数据库维护>编辑" data-xternal="true"><span class="fa fa-edit  font24 iconbg02"></span>编辑</a></li>
+                </#if>
+             </@auth>
+             <@auth name ="DATABASE_VIEW">
+				<#if hasPermission>
+                 <li> <a  data-toggle="dialog" data-width="900" data-height="450"  data-id="database_view" data-url="${ctx}/project/databaseinfomanagement!edit.do?id={#bjui-selected}&types=view&serverid=${filter.parameters.id!}" data-title="数据库维护>查看" data-xternal="true"><span class="fa fa-search font24 iconbg04"></span>查看</a></li>
+                </#if>
+             </@auth>
+             <@auth name ="DATABASE_DELETE">
+				<#if hasPermission>
+                <li> <a  data-url="${ctx}/project/databaseinfomanagement!delete.do?id={#bjui-selected}" data-toggle="doajax" data-xternal="true" data-isrefsh="true" data-confirm-msg="确定要删除选中项吗？"><span class="fa fa-trash font24 iconbg03"></span>删除</a> </li>
+                </#if>
+             </@auth>
+                <li><span class="ttt"></span></li>
+                <li> <a id="refresh" data-toggle="reloadsearch" data-target="#bjui-pageContent"data-icon="search" ><span class="fa fa-refresh font24 iconbg02"></span>刷新</a> </li>
+<!--             	<li> <a  class="closecutab"><span class="iconbg03"><i class="fa fa-remove  font24"></i></span>关闭</a> </li>  -->
+            	<li> <a  onclick="databasecloseDialogAndRefresh();"class="a-close closecutab"><span class="iconbg03"><i class="fa fa-remove  font24"></i></span>关闭</a> </li>             	
+            </ul>
+        </div>
+        <div class="bjui-searchBar">
+            <input type="hidden" name="limit" value="${limit}">
+            <input type="hidden" name="start" value="${start}">
+            <input type="hidden"  id="serverid" value="${filter.parameters.id!}">
+            &nbsp;<label>数据库IP：</label>
+            <input id="dataId" name="databaseIp" class="form-control" size="15" type="text" value="${filter.parameters.databaseIp!}" />
+            <label>&nbsp;&nbsp;数据结构是否升级：</label>
+            <select id="dataStrucUpdateId" name="dataStrucUpdate" data-toggle="selectpicker" data-width="150">
+                 <option selected="selected" value="">--请选择--</option>
+                 <option value="01"
+                 <#if (filter.parameters.dataStrucUpdate!)=='01'> selected="selected"</#if>
+                 >是</option>
+                 <option value="02"
+                 <#if (filter.parameters.dataStrucUpdate!)=='02'> selected="selected"</#if>
+                 >否</option>
+            </select>
+            <label>&nbsp;&nbsp;校验是否升级：</label>
+            <select id="checkIsornotUpdateId" name="checkIsornotUpdate" data-toggle="selectpicker" data-width="150">
+                 <option selected="selected" value="">--请选择--</option>
+                 <option value="01"
+                 <#if (filter.parameters.checkIsornotUpdate!)=='01'> selected="selected"</#if>
+                 >是</option>
+                 <option value="02"
+                 <#if (filter.parameters.checkIsornotUpdate!)=='02'> selected="selected"</#if>
+                 >否</option>
+            </select>
+            <br>
+            <label>&nbsp;&nbsp;是否删除：</label>
+            <select id="isDel" name="isDel" data-toggle="selectpicker" data-width="150">
+                 <option selected="selected" value="">--请选择--</option>
+                 <option value="1"
+                 <#if (filter.parameters.isDel!)=='1'> selected="selected"</#if>
+                 >是</option>
+                 <option value="0"
+                 <#if (filter.parameters.isDel!)=='0'> selected="selected"</#if>
+                 >否</option>
+            </select>
+            &nbsp;
+            <button id="databaseSearch" type="submit" class="btn-default"  data-toggle="ajaxsearch" data-icon="search">查询</button>&nbsp;
+            <a id="database_reloadPersonChangeForm" class="btn btn-orange" href="javascript:;" onclick="databaseUndoForm();" data-icon="undo">重置</a></div>
+
+        </div>
+    </form>
+   </div>
+<div class="bjui-pageContent" style="top: 102px; bottom: 28px; margin-top: 0px;"  style="overflow:scroll;">
+	<table style="table-layout:fixed;min-width:1451px;" data-width="100%" data-nowrap="true" data-selected-multi="false"
+		class="table table-bordered table-hover table-striped table-top">
+        <thead>
+        <tr>
+            <th width="20"></th>
+            <th width="30">NO.</th>
+            <th style="text-align:center" width="200">数据库IP</th>
+            <th style="text-align:center" width="100">数据库端口</th>
+            <th style="text-align:center" width="100">数据库SID</th>
+            <th style="text-align:center" width="200">用户名</th>
+            <th style="text-align:center" width="200">密码</th>
+        </tr>
+        </thead>
+        <tbody>
+        <#list entitys as entity>
+            <tr >
+                <td><input type="checkbox"  value="${entity.id}" name="ids" data-toggle="icheck"> </td>
+                <td>${entity_index+1+(start-1)*limit}</td>               
+                <td nowrap="nowrap">
+                    <a  data-toggle="dialog" data-width="900" data-height="450"  data-mask="true"
+                    data-title='查看数据库信息' data-id="database_view"
+                    data-url="${ctx}/project/databaseinfomanagement!edit.do?id=${entity.id!}&types=view&serverid=${filter.parameters.id!}"
+                    data-xternal="true" class="list-a" title="${entity.databaseIp!}">${entity.databaseIp!}</a>
+                 </td>                        
+<!--                 <td class="center" title="${entity.databaseIp!}">${entity.databaseIp!}</td> -->
+                <td class="center" title="${entity.databasePort!}">${entity.databasePort!}</td>
+                <td class="center" title="${entity.databaseSid!}">${entity.databaseSid!}</td>
+                <td class="center" title="${entity.userName!}">${entity.userName!}</td>
+                <td class="center" title="${entity.password!}">${entity.password!}</td>
+            </tr>
+        </#list>
+        </tbody>
+    </table>
+</div>
+<script type="text/javascript">  
+    function databaseUndoForm() {
+        _d("#dataId").val("");
+        _d("#dataStrucUpdateId").val("");
+        _d("#checkIsornotUpdateId").val("");
+        _d("#isDel").val("");
+        _d("#databaseSearch").submit();  
+    }
+    function databasecloseDialogAndRefresh() {
+        //$(this).dialog("close", "combinationmembers_addMembers");
+        $("#serverSearch").click();
+    }
+    </script>
+<#include "../../common/_page.html"/>

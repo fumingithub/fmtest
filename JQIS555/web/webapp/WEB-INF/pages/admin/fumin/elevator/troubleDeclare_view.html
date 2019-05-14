@@ -1,0 +1,192 @@
+<#include "../../../common/_public.html"/>
+<div class="bjui-pageContent">
+    <form action="${ctx}/admin/system/elevatorTroubleDeclarefm!troubleDeclareSave.do" id="pageform" data-isrefsh="true">
+        <input class="hidden  "  id="types" name="types" value="${types!}">
+        <input class="hidden"  id="iId" name="id" value="${entity.id!}"/>
+        <input class="hidden"  id="troubleStatus" name="troubleStatus" value="${(entity.troubleStatus)!}"/>
+        <input class="hidden"  id="myPermission" name="myPermission" value="${myPermission!}"/>
+        <div style="margin:15px auto 0;">
+            <fieldset>
+                <legend>
+                    <h3 class="listtitle">故障申报</h3>
+                </legend>
+                <table class="table table-condensed">
+                    <tbody>
+                            <tr  >
+                                <td class="right" ><span style="color:red">*</span>申报人姓名：</td>
+                                <td class="left" >
+                                    <input id="entity_declareName" name="entity.declareName" type="text" data-rule="required;length[~50]"
+                                           title="${entity.declareName!}" size="15" readonly
+                                    <#if ((types!)=='add')>
+                                    value="${loginUserName!}"
+                                    <#else> value="${entity.declareName!}"
+                                    </#if>/>
+
+
+                                </td>
+                                <td class="right" ><span style="color:red">*</span>申请人电话：</td>
+                                <td class="left"  >
+                                    <input id="entity_declareTel" name="entity.declareTel" type="text" data-rule="required;mobilePhone"
+                                           value="${entity.declareTel!}" title="${entity.declareTel!}" size="15" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="right" ><span style="color:red">*</span>申报时间：</td>
+                                <td class="left" >
+                                    <input id="entity_declareTime" name="entity.declareTime" type="text" data-rule="required"
+                                            <#if types != "view"> data-toggle="datepicker"</#if> data-max-date="${.now?date}" readonly
+                                            value="${((entity.declareTime)?string('yyyy-MM-dd HH:mm:ss'))!}"
+                                            title="${((entity.declareTime)?string('yyyy-MM-dd HH:mm:ss'))!}" size="15" />
+                                </td>
+
+                                <td class="right"><span style="color:red">*</span>故障类型：</td>
+                                <td class="left">
+                                    <select data-clear="" name="entity.troubleType" id="troubleType" data-toggle="selectpicker" data-width="150" data-rule="required">
+                                        <option value="" >--请选择--</option>
+                                        <option value= '1'  <#if (entity.troubleType)! == '1' >selected="selected"</#if>>外观损害不影响使用 </option>
+                                        <option value= '2'  <#if (entity.troubleType)! == '2' >selected="selected"</#if>>面板损坏影响使用正常</option>
+                                        <option value= '3'  <#if (entity.troubleType)! == '3' >selected="selected"</#if>>故障不可使用</option>
+                                    </select>
+                                </td>
+                            </tr>
+
+                            <tr colspan="4">
+                                <td class="right" ><span style="color:red">*</span>故障描述：</td>
+                                <td class="left" colspan="3">
+                                    <textarea name="entity.troubleDescribe" type="text" data-rule="required;length[0~500]"
+                                              style="width:513px; height:60px">${entity.troubleDescribe!}</textarea>
+                                </td>
+                            </tr>
+
+
+                    <#if (myPermission!) == 'wyfm'>
+
+                            <tr colspan="4">
+                                <td class="right" ><span style="color:red">*</span>确认人：</td>
+                                <td class="left" >
+                                    <input id="entity_confirmorName" name="entity.confirmorName" type="text" data-rule="required;length[~50]"
+                                           title="${entity.confirmorName!}" size="15"readonly
+                                    <#if ((types!)=='add')>
+                                    value="${loginUserName!}"
+                                    <#else> value="${entity.confirmorName!}"
+                                </#if>
+                                             />
+                                </td>
+
+                                <td class="right" ><span style="color:red">*</span>确认时间：</td>
+                                <td class="left" >
+                                    <input id="entity_confirmorTime" name="entity.confirmorTime" type="text" data-rule="required;date"size="15" class="input_cxcalendar"
+                                        <#if types != "view"> data-toggle="datepicker"</#if> data-max-date="${.now?date}" data-min-date="#entity_declareTime"readonly
+                                            value="${((entity.confirmorTime)?string('yyyy-MM-dd HH:mm:ss'))!}"
+                                            title="${((entity.confirmorTime)?string('yyyy-MM-dd'))!}"  />
+                                </td>
+                            </tr>
+
+                            <tr colspan="4">
+                                <td class="right" ><span style="color:red">*</span>确认内容：</td>
+                                <td class="left" colspan="3" >
+                                    <textarea  id="entity_confirmorContent" name="entity.confirmorContent" type="text" data-rule="required;length[0~500]"
+                                               value="${entity.confirmorContent!}"title="${entity.confirmorContent!}"
+                                              style="width:513px; height:60px">${entity.confirmorContent!}</textarea>
+                                </td>
+                            </tr>
+                            <tr colspan="4">
+                                <td class="right" ><span style="color:red">*</span>技师姓名：</td>
+                                <td class="left" >
+
+                                    <select id="entity_technicianId" name="entity.technicianName" data-toggle="selectpicker" data-width="150" type="test"data-rule="required"
+                                            onchange="getTelPhone(this)">
+                                        <option value="" >--请选择--</option>
+                                        <#list technicianUserList as user>
+                                        <option technicianTel="${(user.mobiePhone)!}" value="${(user.userName)!}"
+                                        <#if ((entity.technicianId)!) == '${(user.id)!}' >selected="selected"</#if>>${(user.userName)!}</option>
+                                        </#list>
+                                </select>
+                                </td>
+
+
+                                <td class="right" ><span style="color:red">*</span>技师电话：</td>
+                                <td class="left" >
+                                    <input id="entity_technicianTel" name="entity.technicianTel" value="${entity.technicianTel!}" type="text" data-rule="required;mobilePhone" size="15"/>
+                                </td>
+                            </tr>
+                    </#if>
+                    </tbody>
+                </table>
+            </fieldset>
+        </div>
+    </form>
+</div>
+<div class="bjui-pageFooter">
+    <ul>
+        <li>
+            <button type="button" class="btn-close closecutab" data-icon="close">关闭</button>
+        </li>
+        <li
+            <#if types??>
+                <#if types == "view">
+                    hidden="true"
+                </#if>
+            </#if>>
+            <button type="button" class="btn-default" data-icon="save" onclick="troubleDeclareSave('pageform');">保存</button>
+        </li>
+    </ul>
+</div>
+
+<script>
+    /**
+     * 页面加载时初始化方法
+     */
+    $(document).ready(function () {
+        /**新增、编辑、查看页面状态控制**/
+        var pageType = $("#types").val();
+        if(pageType != null && pageType!="" && pageType!= "undefined" ){
+            if (pageType == "view" || pageType == "view1"){
+                $("table").find("input").each(function () {
+                    $(this).attr("readonly","readonly");
+                });
+                $("table").find("textArea").each(function () {
+                    $(this).attr("readonly","readonly");
+                });
+                $("table").find("select").each(function () {
+                    $(this).attr("disabled","disabled");
+                });
+            }else {
+                $(".view").html("");
+            }
+        }
+    });
+
+    /**联动获取技师号码**/
+    function getTelPhone(obj) {
+        var index = obj.selectedIndex;
+        var technicianTel = obj.options[index].getAttribute("technicianTel");
+        $("#entity_technicianTel").val(technicianTel);
+    }
+
+    /**保存数据并刷新**/
+    function troubleDeclareSave(formId ) {
+        var elevatorId = $("#elevatorTroubleDeclareListTbl input:checked").attr("elevatorId");
+        var dataForms = $("#" + formId);
+        var $formFlag = dataForms.isValid();
+        var myPermission = $("#myPermission").val();
+        if ($formFlag) {
+            $.ajax({
+                type: "post",
+                data: $("#" + formId).serialize(),
+                url: "${ctx}/admin/system/elevatorTroubleDeclarefm!troubleDeclareSave.do?"+"&elevatorId="+elevatorId,
+                success: function(data){
+                    var dataJson = eval('(' + data + ')');
+                    if (dataJson.statusCode == 300) {
+                        $(this).alertmsg('warn', dataJson.message);
+                    } else if (dataJson.statusCode == 200) {
+                        $(this).alertmsg('correct', dataJson.message);
+                        $(this).dialog("close", $.CurrentDialog);
+                        $("#refresh_troubleDeclare").click();
+                        $("#refresh_elevator").click();
+                    }
+                }
+            });
+        }
+    }
+</script>

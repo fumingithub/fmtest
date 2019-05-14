@@ -1,0 +1,407 @@
+<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!--[if lte IE 9]>
+<script src="${ctx}/BJUI/other/html5shiv.min.js"></script>
+<script src="${ctx}/BJUI/other/respond.min.js"></script>
+<![endif]-->
+<!-- jquery -->
+<script src="${ctx}/BJUI/js/jquery-1.7.2.min.js"></script>
+<script src="${ctx}/BJUI/js/jquery.form.js"></script>
+<script src="${ctx}/BJUI/js/jquery.cookie.js"></script>
+<script type="text/javascript" src="${ctx}/BJUI/js/common.js"></script>
+
+<!--[if lte IE 9]>
+<script src="${ctx}/BJUI/other/jquery.iframe-transport.js"></script>
+<![endif]-->
+<!-- BJUI.all 分模块压缩版 -->
+<!--<script src="resourse/js/bjui-all.js"></script>-->
+<!-- 以下是B-JUI的分模块未压缩版，建议开发调试阶段使用下面的版本 -->
+<script src="${ctx}/BJUI/js/bjui-core.js"></script>
+<script src="${ctx}/BJUI/js/bjui-regional.zh-CN.js"></script>
+<script src="${ctx}/BJUI/js/bjui-frag.js"></script>
+<script src="${ctx}/BJUI/js/bjui-extends.js"></script>
+<script src="${ctx}/BJUI/js/bjui-basedrag.js"></script>
+<script src="${ctx}/BJUI/js/bjui-slidebar.js"></script>
+<script src="${ctx}/BJUI/js/bjui-contextmenu.js"></script>
+<script src="${ctx}/BJUI/js/bjui-navtab.js"></script>
+<script src="${ctx}/BJUI/js/bjui-dialog.js"></script>
+<script src="${ctx}/BJUI/js/bjui-taskbar.js"></script>
+<script src="${ctx}/BJUI/js/bjui-ajax.js"></script>
+<script src="${ctx}/BJUI/js/bjui-alertmsg.js"></script>
+<script src="${ctx}/BJUI/js/bjui-pagination.js"></script>
+<script src="${ctx}/BJUI/js/bjui-util.date.js"></script>
+<script src="${ctx}/BJUI/js/bjui-datepicker.js"></script>
+<script src="${ctx}/BJUI/js/bjui-ajaxtab.js"></script>
+<script src="${ctx}/BJUI/js/bjui-datagrid.js"></script>
+<script src="${ctx}/BJUI/js/bjui-tablefixed.js"></script>
+<script src="${ctx}/BJUI/js/bjui-tabledit.js"></script>
+<script src="${ctx}/BJUI/js/bjui-spinner.js"></script>
+<script src="${ctx}/BJUI/js/bjui-lookup.js"></script>
+<script src="${ctx}/BJUI/js/bjui-tags.js"></script>
+<script src="${ctx}/BJUI/js/bjui-upload.js"></script>
+<script src="${ctx}/BJUI/js/bjui-theme.js"></script>
+<script src="${ctx}/BJUI/js/bjui-initui.js"></script>
+<script src="${ctx}/BJUI/js/bjui-plugins.js"></script>
+<script src="${ctx}/BJUI/js/switch.js"></script>
+<script src="${ctx}/BJUI/js/jquery-adorn.js"></script>
+
+<script src="${ctx}/BJUI/js/jquery.fileDownload.js"></script>
+
+<script src="${ctx}/BJUI/js/ztree-extend.js"></script>
+
+<!-- plugins -->
+<!-- swfupload for uploadify && kindeditor -->
+<script src="${ctx}/BJUI/plugins/swfupload/swfupload.js"></script>
+<!-- kindeditor -->
+<script src="${ctx}/BJUI/plugins/kindeditor_4.1.10/kindeditor-all.min.js"></script>
+<script src="${ctx}/BJUI/plugins/kindeditor_4.1.10/lang/zh_CN.js"></script>
+<!-- colorpicker -->
+<script src="${ctx}/BJUI/plugins/colorpicker/js/bootstrap-colorpicker.min.js"></script>
+<!-- ztree -->
+<script src="${ctx}/BJUI/plugins/ztree/jquery.ztree.all-3.5.js"></script>
+<script src="${ctx}/BJUI/plugins/ztree/jquery.ztree.exhide-3.5.js"></script>
+<script src="${ctx}/BJUI/plugins/ztree/jquery.ztree.exhide-3.5.min.js"></script>
+<!-- nice validate -->
+<script src="${ctx}/BJUI/plugins/niceValidator/jquery.validator.js"></script>
+<script src="${ctx}/BJUI/plugins/niceValidator/jquery.validator.themes.js"></script>
+<!-- bootstrap plugins -->
+<script src="${ctx}/BJUI/plugins/bootstrap.min.js"></script>
+<script src="${ctx}/BJUI/plugins/bootstrapSelect/bootstrap-select.min.js"></script>
+<!-- icheck -->
+<script src="${ctx}/BJUI/plugins/icheck/icheck.min.js"></script>
+<!-- dragsort -->
+<script src="${ctx}/BJUI/plugins/dragsort/jquery.dragsort-0.5.1.min.js"></script>
+<!-- HighCharts -->
+<script src="${ctx}/BJUI/plugins/highcharts/highcharts.js"></script>
+<script src="${ctx}/BJUI/plugins/highcharts/highcharts-3d.js"></script>
+<script src="${ctx}/BJUI/plugins/highcharts/themes/gray.js"></script>
+<!-- ECharts -->
+<script src="${ctx}/BJUI/plugins/echarts/echarts.js"></script>
+<!-- other plugins -->
+<script src="${ctx}/BJUI/plugins/other/jquery.autosize.js"></script>
+<link href="${ctx}/BJUI/plugins/uploadify/css/uploadify.css" rel="stylesheet">
+<script src="${ctx}/BJUI/plugins/uploadify/scripts/jquery.uploadify.js"></script>
+
+<script src="${ctx}/BJUI/plugins/fonticonpicker/jquery.fonticonpicker.js"></script>
+<script src="${ctx}/BJUI/plugins/fonticonpicker/fa_icon.js"></script>
+<!-- <script src="${ctx}/bjui/plugins/download/jquery.fileDownload.js"></script> -->
+<!-- init -->
+
+<script src="${ctx}/BJUI/plugins/select2/select2.js"></script>
+<script src="${ctx}/BJUI/plugins/select2/select2_locale_zh-CN.js"></script>
+
+<script src="${ctx}/BJUI/plugins/treegrid/js/jquery.treegrid.js"></script>
+<script src="${ctx}/BJUI/plugins/treegrid/js/jquery.treegrid.bootstrap3.js"></script>
+<script src="${ctx}/BJUI/plugins/bootstrapChineseRegion/bootstrap-chinese-region.js"></script>
+
+
+<script type="text/javascript">
+$(function() {
+
+    BJUI.init({
+        JSPATH       : '${ctx}/BJUI/',         //[可选]框架路径
+        PLUGINPATH   : '${ctx}/BJUI/plugins/', //[可选]插件路径
+        loginInfo    : {url:'${ctx}/status!R0.do', title:'登录', width:450, height:180}, // 会话超时后弹出登录对话框
+        statusCode   : {ok:200, error:300, timeout:301}, //[可选]
+        ajaxTimeout  : 50000, //[可选]全局Ajax请求超时时间(毫秒)
+        alertTimeout : 6000,  //[可选]信息提示[info/correct]自动关闭延时(毫秒)
+        pageInfo     : {pageCurrent:'start', pageSize:'limit', orderField:'orderField', orderDirection:'orderDirection'}, //[可选]分页参数
+        keys         : {statusCode:'statusCode', message:'message'}, //[可选]
+        ui           : {
+                         showSlidebar     : true, //[可选]左侧导航栏锁定/隐藏
+                         clientPaging     : true, //[可选]是否在客户端响应分页及排序参数
+                         overwriteHomeTab : false //[可选]当打开一个未定义id的navtab时，是否可以覆盖主navtab(我的主页)
+                       },
+        debug        : true,    // [可选]调试模式 [true|false，默认false]
+        theme        : 'blue' // 若有Cookie['bjui_theme'],优先选择Cookie['bjui_theme']。皮肤[五种皮肤:default, orange, purple, blue, red, green]
+    })
+
+    // main - menu - 列表菜单
+    $('#bjui-accordionmenu')
+            .collapse()
+            .on('hidden.bs.collapse', function(e) {
+                $(this).find('> .panel > .panel-heading').each(function() {
+                    var $heading = $(this), $a = $heading.find('> h4 > a');
+
+                    if ($a.hasClass('collapsed')) $heading.removeClass('active');
+                })
+            })
+            .on('shown.bs.collapse', function (e) {
+                $(this).find('> .panel > .panel-heading').each(function() {
+                    var $heading = $(this), $a = $heading.find('> h4 > a');
+
+                    if (!$a.hasClass('collapsed')) $heading.addClass('active');
+                })
+            })
+
+    $(document).on('click', 'ul.menu-items li > a', function(e) {
+        var $a = $(this),
+                $li = $a.parent(),
+                options = $a.data('options').toObj(),
+                $children = $li.find('> .menu-items-children');
+        var onClose = function() {
+            $li.removeClass('active');
+        }
+        var onSwitch = function() {
+            $('#bjui-accordionmenu').find('ul.menu-items li').removeClass('switch');
+            $li.addClass('switch');
+        }
+
+        $li.addClass('active');
+        if (options) {
+            options.url = $a.attr('href');
+            options.onClose = onClose;
+            options.onSwitch = onSwitch;
+            if (!options.title) options.title = $a.text();
+
+            if (!options.target)
+                $a.navtab(options);
+            else
+                $a.dialog(options);
+        }
+        if ($children.length) {
+            $li.toggleClass('open');
+        }
+
+        e.preventDefault();
+    })
+
+    /* 	window.setTimeout(function () {
+            $.ajax({
+                async:true,
+                type: "POST",
+                url: "${ctx}/admin/system/user!isadmin.do",
+                success: function(data){
+                if(data=="f"){
+                    var treeObj = $.fn.zTree.getZTreeObj("leftmenu");
+                    treeObj.expandAll(true);}
+                }
+            });
+
+
+        }, 300); */
+   
+})
+
+//console.log('IE:'+ (!$.support.leadingWhitespace))
+//菜单-事件
+function MainMenuClick(event, treeId, treeNode) {
+    if (treeNode.isParent) {
+        var zTree = $.fn.zTree.getZTreeObj(treeId)
+
+        zTree.expandNode(treeNode)
+        return
+    }
+
+	var url=treeNode.url;
+   // if(url.indexOf('?')>-1){
+     //    url=url+"&_tabid="+treeNode.tabid;
+   // }else{
+   //     url=url+"?_tabid="+treeNode.tabid;}
+
+
+    if (treeNode.target && treeNode.target == 'dialog')
+        $(event.target).dialog({id:treeNode.tabid, url:url, title:treeNode.name})
+    else
+        $(event.target).navtab({id:treeNode.tabid, url:url, title:treeNode.name, fresh:treeNode.fresh, external:treeNode.external, isrefsh:false})
+    event.preventDefault()
+}
+
+function addTab(url,name,id,obj)
+{
+$.CurrentNavtab.find();
+ $(obj).navtab({id:id, url:url, title:name, external:false});
+}
+
+//var form1;
+function getCurrentNavtabForm()
+{
+    var navForm;
+    if($.CurrentNavtab==null|| $.CurrentNavtab.length==0)
+    {
+        var Tindex=0;
+        $("#bjui-navtab").find(".navtab-tab").find('>li').each(function(i){
+            if($(this).hasClass('.active')) Tindex=i;
+        });
+        navForm= $("#bjui-navtab").find(".navtab-panel").find(">div").eq(Tindex).find("#j_custom_form");
+    }else{navForm=$.CurrentNavtab.find("#j_custom_form")}
+    return navForm;
+}
+//var t;
+function readCharBuffer(toTextObj,toImgObj,toHidObj) {
+    //t = setTimeout("readCharBuffer()", 1000);
+
+    form1.finger.TimeOut = 3;
+    form1.finger.Fpcharsorce = 60;//图像质量要求60分及格才生成BASE64
+    form1.finger.Fpbmpishave = 1;//指纹图像是否生成
+    var fpReadResult = form1.finger.LDGetbmpCode();
+
+
+
+    if (fpReadResult == -1) {
+        $(this).alertmsg("error","指纹采集器与系统连接有误，请确认连接无误后重试！");
+        //clearTimeout(t);
+        return false;
+    }
+    else if (fpReadResult == -2) {
+        $(this).alertmsg("info","2");
+        //设备忙碌中
+        return false;
+    }
+    else if (fpReadResult == -3) {
+        $(this).alertmsg("info","3");
+        //控件调用文件被占用或被删除
+        //clearTimeout(t);
+        return false;
+    }
+    else if (fpReadResult == 1) {
+        //成功
+        var a = form1.finger.Ldbmptocharbase64(form1.finger.GetPrintBuffer);
+        var s1 = form1.finger.GetPrintChar;
+        getCurrentNavtabForm().find('#'+toTextObj).val(s1);
+        getCurrentNavtabForm().find("#"+toHidObj).val(s1);
+        //$('#').val(s1);
+        //form1.finger.Fpfile = "D:\\finger\\" + newGuid() + ".bmp";
+
+
+        var imgName;
+        imgName = "C:\\LDFinger.bmp";
+        form1.JFngStr.GetFngInf(imgName);
+        var type = "Finger";
+       // uploadFinger(type, form1.JFngStr.FngInf, newGuid());
+        //clearTimeout(t);
+        if(toImgObj)
+            getCurrentNavtabForm().find("#"+toImgObj).attr("src",imgName);
+        return false;
+    }
+    else if (fpReadResult == 0) {
+
+        $(this).alertmsg("error","没读到指纹，请重新读取！");
+        return false;
+    }
+    //设备超时无符合质量的指纹
+}
+
+
+//显示身份证信息
+function readIDCard(toTextObj,toImgObj,toHidObj) {
+   // getCurrentNavtabForm();
+    i = 0;
+    flag = 0;
+
+    if (form1.oCard.OpenComm(1001) == 1) {
+        flag = 1;
+        //alert(i);
+
+    }
+    else {
+        for (i = 1; i < 3; i++) {
+            if (form1.oCard.OpenComm(i) == 1) {
+                flag = 1;
+                //alert(i);
+                break;
+            }
+            if (flag != 1) {
+                $(this).alertmsg("error","打开端口失败")
+                //$.msg().post("打开端口失败");
+
+            }
+        }
+    }
+    var ret = 0;
+    if (flag == 1) {
+        ret = form1.oCard.ReadCard(1);
+        if (form1.oCard.Authen() == 1 || ret == 1 || ret == 3) {
+            ret = form1.oCard.ReadCardPath("c:\\", 1);
+            if (ret == 1 || ret == 3) {
+            	 var name = form1.oCard.SName;//姓名
+                var cardno = form1.oCard.sIDNo;//身份证ID
+                var sex = form1.oCard.sSex;//性别
+                var str = form1.oCard.sBornDate;//日期
+                var date_str = str.replace(/(\d{4})(\d{2})(\d{2})/g,'$1-$2-$3');//格式转化
+    
+                //赋值到input
+                document.getElementById("dialogName").value=name;
+               // document.getElementById("dialogSex").value=sex;
+               $("#dialogSex").val(sex);
+               document.getElementById("dialogBirthday").value=date_str;
+               document.getElementById("dialogCardNo").value=cardno;
+                
+                
+//                 getCurrentNavtabForm().find("#"+toTextObj).val(cardno);//身份证ID
+//                 getCurrentNavtabForm().find("#"+toHidObj).val(cardno);//身份证ID
+//                 var imgName;
+//                 imgName = "C:\\zp.bmp";
+//                 form1.JFngStr.GetFngInf(imgName);
+//                 var type = "Card";
+//                 if(toImgObj)
+//                     getCurrentNavtabForm().find("#"+toImgObj).attr("src",imgName);
+               // uploadFinger(type, form1.JFngStr.FngInf, cardno);
+
+            }
+            else {
+                $(this).alertmsg("error","读卡错误！" + form1.form1.oCard.ReadCardPath("", 1));
+                // $.msg().post("读卡错误！" + form1.form1.oCard.ReadCardPath("", 1));
+            }
+        }
+        else {
+            $(this).alertmsg("error","找卡错误,请重新放卡!");
+            //$.msg().post("找卡错误,请重新放卡!");
+        }
+    }
+    form1.oCard.EndComm();
+};
+
+/**
+ * 根据日期获取日期秒数  仅适用于yyyy-MM-dd 格式
+ * @param val
+ * @returns {number}
+ */
+function getIntFromTime(val){
+    if(val == "" || val == null || val == undefined) return null;
+    var str = val.split("-");
+    return new Date(str[0],parseInt(str[1])-1,str[2]).getTime()/1000;
+}
+//获取当前标签页下的元素
+_n = function(s){
+    if(s==null || s=="") return $.CurrentNavtab;
+    return $.CurrentNavtab.find(s);
+}
+//获取当前窗口下的元素
+_d = function(s){
+    if(s==null || s=="") return $.CurrentDialog;
+    return $.CurrentDialog.find(s);
+}
+function changeManageYear(obj){
+   _n('form').submit();
+}
+
+/**
+ * 判断是否null 或 空
+ * @param data {string}
+ */
+function isEmpty(data){
+    return (data == "" || data == undefined || data == null) ? true : false;
+}
+/**
+ * 判断是否null
+ * @param data {number}
+ */
+function isNull(data){
+    return (data == undefined || data == null) ? true : false;
+}
+
+//清除当前标签页所有的验证信息
+//form ----form的name
+function clearAllValid(form){
+    var $form = form? _n('form[name="'+form+'"]') :_n('form');
+    if($form.find('.n-invalid').length>0){
+        $form.find('.n-invalid').removeClass('n-invalid');
+        $form.find('span.msg-box').hide();
+    }
+//此方法会清除掉所有的验证实例 导致验证失效，所以弃用
+//        _n('form').validator({
+//            ignore: ':hidden'
+//        });
+//        _n('form').validator( "cleanUp" );
+}
+</script>

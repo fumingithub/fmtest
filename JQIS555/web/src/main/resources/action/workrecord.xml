@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+        "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+    <!--管理后台 -->
+    <package name="workrecord" namespace="/admin/workrecord" extends="ncms-default">
+
+        <action name="workrecord" class="net.jqsoft.attendance.action.WorkRecordAction">
+            <result name="success" type="freemarker">/WEB-INF/pages/attance/user_attendance.html</result>
+            <result name="view" type="freemarker">/WEB-INF/pages/attance/user_count_time.html</result>
+        </action>
+
+    </package>
+
+</struts>

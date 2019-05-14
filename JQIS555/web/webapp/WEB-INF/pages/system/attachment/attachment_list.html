@@ -1,0 +1,77 @@
+﻿<#include "../../common/_public.html"/>
+<div class="bjui-pageHeader">
+    <form id="pagerForm" data-toggle="ajaxsearch" method="post" action="${ctx}/system/attachment.do">
+        <div class="office">
+            <ul class="offbtn">
+                <li> <a  data-toggle="dialog" data-width="500" data-height="450"  data-id="attachment_add"  data-url="${ctx}/system/attachment!edit.do?" data-xternal="true" data-title="Attachment新增"> <span class="fa fa-file-text-o font24 iconbg01"></span>新增</a> </li>
+                <li> <a  data-toggle="dialog" data-width="500" data-height="450"  data-id="attachment_edit" data-url="${ctx}/system/attachment!edit.do?id={#bjui-selected}" data-title="Attachment编辑" data-xternal="true"> <span class="fa fa-edit  font24 iconbg02"></span>编辑</a> </li>
+                <li> <a  data-url="${ctx}/attachment!delete.do?id={#bjui-selected}" data-toggle="doajax" data-xternal="true" data-isrefsh="true" data-confirm-msg="确定要删除选中项吗？"><span class="fa fa-trash font24 iconbg03"></span>删除</a> </li>
+                <li><span class="ttt"></span></li>
+                <li> <a id="refresh" data-toggle="reloadsearch" data-target="#bjui-pageContent"data-icon="search" ><span class="fa fa-refresh font24 iconbg02"></span>刷新</a> </li>
+            	<li> <a  class="closecutab"><span class="iconbg03"><i class="fa fa-remove  font24"></i></span>关闭</a> </li> 
+            </ul>
+        </div>
+        <div class="bjui-searchBar">
+            <input type="hidden" name="limit" value="${limit}">
+            <input type="hidden" name="start" value="${start}">
+            <lable>XXX</lable>
+            <input name="XXX" class="form-control" size="15" type="text" value="${filter.parameters.name!}" />
+            <button type="submit" class="btn-default"  data-toggle="ajaxsearch" data-icon="search">查询</button>&nbsp;
+            <a class="btn btn-orange" href="javascript:;" onclick="$(this).navtab('reloadForm', true);" data-icon="undo">清空</a>
+
+        </div>
+    </form>
+   </div>
+<div class="bjui-pageContent">
+
+    <table data-width="100%" data-nowrap="true" data-selected-multi="false"  class="table table-bordered table-hover table-striped table-top" >
+        <thead>
+        <tr>
+            <th width="20"></th>
+            <th width="30">NO.</th>
+                 <th style="text-align:center">附件名称,加密前的原文件名</th>
+                 <th style="text-align:center">文件类型</th>
+                 <th style="text-align:center">文件大小</th>
+                 <th style="text-align:center">描述</th>
+                 <th style="text-align:center">文件路径</th>
+                 <th style="text-align:center">加密后的密码</th>
+                 <th style="text-align:center">关连业务代码：HEALTH_CARD-健康卡信息；</th>
+                 <th style="text-align:center">相关业务表单ID</th>
+                 <th style="text-align:center">状态</th>
+                 <th style="text-align:center">备注</th>
+                 <th style="text-align:center">更新人ID</th>
+                 <th style="text-align:center">更新人name</th>
+                 <th style="text-align:center">更新时间</th>
+                 <th style="text-align:center">创建人ID</th>
+                 <th style="text-align:center">创建人name</th>
+                 <th style="text-align:center">创建时间</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        <#list entitys as entity>
+            <tr >
+                <td><input type="checkbox"  value="${entity.id}" name="ids" data-toggle="icheck"> </td>
+                <td>${entity_index+1+(start-1)*limit}</td>
+                        <td>${entity.name}</td>
+                        <td>${entity.type}</td>
+                        <td>${entity.fileSize}</td>
+                        <td>${entity.description}</td>
+                        <td>${entity.path}</td>
+                        <td>${entity.encodeName}</td>
+                        <td>${entity.relateBizCode}</td>
+                        <td>${entity.relateBizId}</td>
+                        <td>${entity.status}</td>
+                        <td>${entity.remark}</td>
+                        <td>${entity.updator}</td>
+                        <td>${entity.updatorName}</td>
+                        <td>${entity.updateTime}</td>
+                        <td>${entity.creator}</td>
+                        <td>${entity.creatorName}</td>
+                        <td>${entity.createTime}</td>
+            </tr>
+        </#list>
+        </tbody>
+    </table>
+</div>
+<#include "../../common/_page.html"/>

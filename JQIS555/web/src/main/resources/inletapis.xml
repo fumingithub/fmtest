@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://code.alibabatech.com/schema/dubbo
+    http://code.alibabatech.com/schema/dubbo/dubbo.xsd" default-autowire="byName" default-lazy-init="false">
+    
+    <!-- 接口配置 -->
+    <!-- DUBBO 应用名称 注册地址 协议 配置 -->
+    <dubbo:application name="${dubbo.application.name}"/>
+    <dubbo:registry address="${dubbo.registry.address}"/>  
+    
+    <!-- ================ 测试接口 =========================== -->
+	<!-- ================ 测试接口 =========================== -->
+	
+	<!-- ================ 基础信息模块 =========================== -->
+
+	<!-- ================ 基础信息模块 =========================== -->
+	
+
+	<!-- ================ 门诊住院模块 =========================== -->
+	<!-- 门诊住院 -->
+	<dubbo:reference id="medicalApiServer"
+		interface="net.jqsoft.ncmsapi.core.medical.api.rpc.MedicalRpcService" ></dubbo:reference>
+	<dubbo:reference id="medicalFeeApiServer"
+		interface="net.jqsoft.ncmsapi.core.medical.api.rpc.MedicalFeeRpcService" ></dubbo:reference>
+	<dubbo:reference id="compenApiServer"
+					 interface="net.jqsoft.ncmsapi.core.compen.api.rpc.CompenRpcService" ></dubbo:reference>
+	<!-- 门诊住院 -->
+	<!-- ================ 门诊住院模块 =========================== -->
+</beans>

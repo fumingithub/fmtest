@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+        "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+    <package name="system" namespace="/system" extends="ncms-default">
+        <action name="equipmentinfor" class="net.jqsoft.base.system.view.EquipmentInforAction">
+            <result name="success" type="freemarker">/WEB-INF/pages/equipment/servermanagement_list.html</result>
+            <result name="input" type="freemarker">/WEB-INF/pages/equipment/servermanagement_edit.html</result>
+           <result name="view" type="freemarker">/WEB-INF/pages/equipment/servermanagement_view.html</result>            
+        </action>
+    </package>
+</struts>

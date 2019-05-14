@@ -1,0 +1,160 @@
+<#include "../../../common/_public.html"/>
+<!-- <div class="bjui-pageHeader" style="background:#FFF;"> -->
+<!--     <div class="row" style="height:70px"> -->
+<!--         <div class="col-md-6"> -->
+<!--             <div class="office"> -->
+<!--                 <ul class="offbtn"> -->
+<!--                     <li><a id="lbtnSave" class="submit"><span class="iconbg04"><i class="fa fa-save font24"></i></span>保存</a></li> -->
+<!--                     <li><a class="closecutab"><span class="iconbg03"><i class="fa fa-remove  font24"></i></span>关闭</a> -->
+<!--                     </li> -->
+<!--                 </ul> -->
+<!--             </div> -->
+<!--         </div> -->
+<!--     </div> -->
+<!-- </div> -->
+<div class="bjui-pageContent">
+    <form id="form" action="" name="pagerform">
+        <input type="hidden" id="editType" name="editType" value="${editType!}">
+        <div style="margin:15px auto 0; ">
+            <fieldset>
+                <legend>
+                    <h3 class="listtitle">资源管理</h3>
+                    <input type="hidden" name="id" value="${entity.id!}"/>
+                </legend>
+                <table class="table table-bordered" width="100%">
+                    <tbody>
+                    <tr>
+                        <td class="right width150"><span style="color: Red">*</span>资源名称：</td>
+                        <td><input size="30" type="text" value="${entity.display!}" maxlength="64" name="entity.display"
+                        		onblur="_n('#resDesc_1').val(this.value)"
+                                   data-rule="required"/></td>
+                    </tr>
+                    <tr>
+                        <td class="right width150"><span style="color: Red">*</span>资源代码：</td>
+                        <td><input size="30" type="text" value="${entity.code!}" maxlength="25" name="entity.code"
+                                   data-rule="required"/></td>
+                    </tr>
+                    <tr>
+                        <td class="right width150">资源描述：</td>
+                        <td><input size="50" type="text" id="resDesc_1" value="${entity.description!}" maxlength="250" name="entity.description"/></td>
+                    </tr>
+                    <tr>
+                    <tr>
+                        <td class="right width150">父资源：</td>
+                        <td>
+                            <#if !entity.id?exists >
+                                <input name="entity.parentCode" type="hidden" id="parentId" 
+                                <#if parent??>value="${parent.id!}"</#if>
+                                />
+                                <input id="parentDisplay" class="form-control"
+                                <#if parent??>value="${parent.display!}"</#if> readonly="readonly"/ >
+                                <#else>
+                                    <input name="entity.parentCode" type="hidden" id="parentId"
+                                           value="${entity.parentCode!}"/>
+                                    <input id="parentDisplay" class="form-control" value="${entity.parentName!}"
+                                    <#if parent??>value="${parent.display!}"</#if>readonly="readonly" />
+                            </#if>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="right width150"><span style="color: Red">*</span>资源地址：</td>
+                        <td><input size="50" type="text" value="${entity.url!}" name="entity.url" maxlength="250" data-rule="required"/></td>
+                    </tr>
+                    <tr>
+                        <td class="right width150"><span style="color: Red">*</span>资源类型：</td>
+                        <td>
+                            <select name="entity.type" data-toggle="selectpicker" data-rule="required">
+                                <option selected="selected" value="">--请选择--</option>
+                                <option value="0"
+                                <#if entity.type??&&entity.type=='0'> selected="selected"</#if>
+                                >URL</option>
+                                <option value="1"
+                                <#if entity.type??&&entity.type=='1'> selected="selected"</#if>
+                                >菜单</option>
+                                <option value="2"
+                                <#if entity.type??&&entity.type=='2'> selected="selected"</#if>
+                                >按钮</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="right width150">图标</td>
+                        <td>
+                            <input type="text" name="entity.icon" data-toggle="fonticonpicker" value="${entity.icon!}"/>
+                        </td>
+                    </tr>
+                    <tr hidden="true">
+                        <td class="right width150"><span style="color: Red">*</span>是否启用：</td>
+                        <td>
+                            <select name="entity.status" data-toggle="selectpicker" data-rule="required">
+                                <option value="0"
+                                <#if entity.status??&&entity.status=='0'> selected="selected"</#if>
+                                >是</option>
+                                <option value="1"
+                                <#if entity.status??&&entity.status=='1'> selected="selected"</#if>
+                                >否</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="right width150">排序：</td>
+                        <td>
+                            <input id="j_custom_total" class="form-control" type="text"
+                                   data-step="1" data-max="100" data-min="0"
+                                   data-toggle="spinner" size="5" value="${entity.sortby!}"
+                                   name="entity.sortby">
+                        </td>
+                    </tr>
+                   </tbody>
+                </table>
+            </fieldset>
+        </div>
+    </form>
+</div>
+<div class="bjui-pageFooter">
+    <ul>
+        <li>
+            <button type="button" class="btn-close closecutab" data-icon="close">关闭</button>
+        </li>
+        <li>
+            <button onclick="saveForm(this,'${ctx}/admin/system/resource!save.do','form')" class="btn-default" data-icon="save">保存</button>
+        </li>
+    </ul>
+</div>
+
+<script>
+    function saveForm(obj, url, formId) {
+        var editType = $("#editType").val();
+        var dataForms = $("#" + formId);
+        var $formFlag = dataForms.isValid();
+        if ($formFlag) {
+            $.ajax({
+                type : "POST",
+                url : url,
+                data : $("#" + formId).serialize(),
+                success : function(data) {
+                    var dataJson = eval('(' + data + ')');
+                    if (dataJson.statusCode == 300) {
+                        $(obj).alertmsg('warn', dataJson.message);
+                    } else if (dataJson.statusCode == 200) {
+                        $(obj).alertmsg('correct', dataJson.message);
+                        $(obj).dialog("close", $.CurrentDialog);
+                        if (editType == "1") {
+                            $("#refresh").click();
+                        } else if (editType == "2") {
+                            drefresh();
+                        }
+                    }
+                }
+            })
+        }
+    }
+
+    /**
+     * 清空操作
+     */
+    function drefresh(){
+        $("#displayName, #resourceType").val("");
+        $("#resourceSearch").submit();
+    }
+</script>

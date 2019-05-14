@@ -1,0 +1,75 @@
+<#include "../../../common/_public.html"/>
+<#include "sysOrg_list_js.html"/>
+<#include "sysOrg_sonList_js.html"/>
+
+<!--<div class="bjui-pageHeader">-->
+
+<!--</div>-->
+<div class="bjui-pageContent" id="sysOrgDiv">
+        <div class="clearfix">
+            <div id="sysOrgLeftDiv" style="height: 530px; width: auto; float:left; margin-top: 5px;
+            padding-right: 20px; border: 0px solid;">
+                <div style="margin-top: 5px; margin-left: 5px;">
+                    <input type="text" id="sysOrgName" size="15" placeholder="部门过滤" />
+                    <button id="sysOrgSearchBtn" class="btn-default" style="padding-left: 4px;padding-right: 4px" data-icon="search"></button>
+                </div>
+                <ul id="sysOrgTree" class="ztree"></ul>
+            </div>
+        <div style="overflow:hidden; border-left: 1px #c3ced5 solid;">
+            <div style="border-bottom: 0px #c3ced5 solid;">
+                <input type="hidden" id="parentId" value="" />
+                <input type="hidden" id="sonPName" value="" />
+                <form id="pagerForm" data-toggle="ajaxsearch" method="post"
+                      action="${ctx}/admin/system/sysorg.do">
+                    <div class="office">
+                        <ul class="offbtn">
+                             <li>
+                                 <a onclick="toEditOrgPage(3, '新增')" title="新增" id="sysOrg_add"
+                                     data-xternal="true">
+                                 <span class="iconbg01"><i class="fa fa-file-text-o font24"></i></span>新增</a>
+                             </li>
+                             <li>
+                                 <a onclick="toEditOrgPage(4, '编辑', '', 'edit')"
+                                     id="sysOrg_edit" title="编辑" data-xternal="true">
+                                 <span class="fa fa-edit font24 iconbg02"></span>编辑</a>
+                             </li>
+<!--                             <@auth name="SYS_ORG_TRANS_FREPAGE"> -->
+<!--                                 <#if hasPermission> -->
+<!--                                     <li> -->
+<!--                                         <a onClick="toOrgTransferPage('组织机构>机构调动（双击选中父级机构）')" data-xternal="true"> -->
+<!--                                             <span span class="iconbg04"><i class="fa fa-exchange font24"></i></span>机构调动 -->
+<!--                                         </a> -->
+<!--                                     </li> -->
+<!--                                 </#if> -->
+<!--                             </@auth> -->
+                            <li>
+                                <a onclick="delSysOrg(this);" data-xternal="true">
+                                    <span class="fa fa-trash font24 iconbg03"></span>删除
+                                </a>
+                            </li>
+
+                            <li><span class="ttt"></span></li>
+                            <li>
+                                <a id="refresh" data-toggle="reloadsearch"
+                                   data-target="#bjui-pageContent" data-icon="search">
+                                    <span class="iconbg02"><i class="fa fa-refresh font24"></i></span>刷新</a>
+                            </li>
+                            <li>
+                                <a class="closecutab">
+                                    <span class="iconbg03"><i class="fa fa-remove font24"></i></span>关闭
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+            <div id="sysOrgRightDiv" style="height:460px;overflow:hidden; padding-bottom: 0px;">
+                <!--<fieldset style="height:100%; border-left: 0px; padding-bottom: 0px;">-->
+                    <legend id="title" style="font-size:16px; display: none;"></legend>
+                    <div class="bjui-layout" id="sonSysOrgList" style="height:100%; overflow:hidden; margin: auto 0px;">
+                    </div>
+                <!--</fieldset>-->
+            </div>
+        </div>
+    </div>
+</div>

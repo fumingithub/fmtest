@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="Leave">
+    <typeAlias alias="Leave" type="net.jqsoft.attendance.domain.Leave" />
+
+    <resultMap id="leaveMap" class="Leave">
+	    <result property="id" column="ID"/>
+		<result property="userId" column="USER_ID"/>
+	    <result property="leaveStartTime" column="LEAVE_START_TIME"/>
+        <result property="leaveEndTime" column="LEAVE_END_TIME"/>
+		<result property="leaveDays" column="LEAVE_DAYS"/>
+        <result property="leaveReason" column="LEAVE_REASON"/>
+		<result property="remark" column="REMARK"/>
+		<result property="updator" column="UPDATOR"/>
+		<result property="updatorName" column="UPDATOR_NAME"/>
+		<result property="updateTime" column="UPDATE_TIME"/>
+		<result property="creator" column="CREATOR"/>
+		<result property="creatorName" column="CREATOR_NAME"/>
+		<result property="createTime" column="CREATE_TIME"/>
+        <result property="userName" column="USER_NAME"/>
+    </resultMap>
+
+    <!-- 模糊查询-->
+    <sql id="sel-common">
+        <dynamic>
+            <isNotEmpty prepend=" AND " property="userName">  t1.REAL_NAME LIKE '%'||#userName#||'%' </isNotEmpty>
+        </dynamic>
+    </sql>
+
+    <!-- 请假列表分页-->
+    <select id="count" resultClass="int">
+        select COUNT(*) from  PEOPLE_LEAVE t  left join SYS_USER t1 on t.user_id=t1.id
+        WHERE 1=1
+        <include refid="sel-common"/>
+    </select>
+
+    <!-- 查询请假信息-->
+    <select id="select" resultMap="leaveMap">
+        select t.*,t1.REAL_NAME as USER_NAME from  PEOPLE_LEAVE t  left join SYS_USER t1 on t.user_id=t1.id
+        WHERE 1=1
+        <include refid="sel-common"/>
+    </select>
+
+    <!-- 增加请假信息-->
+    <insert id="insert" parameterClass="Leave">
+        <![CDATA[
+        INSERT INTO PEOPLE_LEAVE(ID,
+        USER_ID,
+        LEAVE_START_TIME,
+        LEAVE_END_TIME,
+        LEAVE_DAYS,
+        LEAVE_REASON,
+        REMARK,
+        UPDATOR,
+        UPDATOR_NAME,
+        UPDATE_TIME,
+        CREATOR,
+        CREATOR_NAME,
+        CREATE_TIME
+        ) values(#id#,
+                #userId#,
+                #leaveStartTime#,
+                #leaveEndTime#,
+                #leaveDays#,
+                #leaveReason#,
+                #remark#,
+                #updator#,
+                #updatorName#,
+                #updateTime#,
+                #creator#,
+                #creatorName#,
+                #createTime#
+             )
+		]]>
+    </insert>
+
+    <!-- 删除请假信息-->
+    <delete id="deleteById" parameterClass="String">
+        delete from PEOPLE_LEAVE where ID=#id#
+    </delete>
+
+    <!-- 更新请假信息-->
+    <update id="update" parameterClass="Leave">
+        <![CDATA[ UPDATE PEOPLE_LEAVE ]]>
+        <dynamic prepend="SET">
+            <isNotEmpty  property="leaveStartTime" prepend=","><![CDATA[ LEAVE_START_TIME = #leaveStartTime# ]]></isNotEmpty >
+
+            <isNotNull  property="leaveEndTime" prepend=","><![CDATA[ LEAVE_END_TIME = #leaveEndTime# ]]></isNotNull >
+
+            <isNotNull  property="leaveReason" prepend=","><![CDATA[  LEAVE_REASON = #leaveReason# ]]></isNotNull >
+
+            <isNotNull  property="leaveDays" prepend=","><![CDATA[  LEAVE_DAYS = #leaveDays# ]]></isNotNull >
+
+            <isNotNull  property="remark" prepend=","><![CDATA[   REMARK = #remark# ]]></isNotNull >
+
+            <isNotNull  property="updator" prepend=","><![CDATA[  UPDATOR = #updator# ]]></isNotNull >
+
+            <isNotNull  property="updatorName" prepend=","><![CDATA[   UPDATOR_NAME = #updatorName# ]]></isNotNull >
+
+            <isNotNull  property="updateTime" prepend=","><![CDATA[    UPDATE_TIME = #updateTime# ]]></isNotNull >
+
+        </dynamic>
+        <dynamic prepend="WHERE"><![CDATA[ ID = #id# ]]></dynamic>
+    </update>
+
+    <!-- 查看请假信息-->
+    <select id="get" parameterClass="String" resultMap="leaveMap">
+       select t.*,t1.REAL_NAME as USER_NAME from  PEOPLE_LEAVE t  left join SYS_USER t1 on t.user_id=t1.id
+        WHERE t.ID=#id#
+    </select>
+</sqlMap>

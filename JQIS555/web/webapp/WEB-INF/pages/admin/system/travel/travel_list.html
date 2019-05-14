@@ -1,0 +1,118 @@
+﻿﻿﻿<#include "../../../common/_public.html"/>
+<#include "travel_list_js.html"/>
+
+<div class="bjui-pageContent" id="travelDiv">
+    <div class="clearfix">
+
+        <div style="overflow:hidden; border-left: 1px #c3ced5 solid;">
+            <div style="border-bottom: 0px #c3ced5 solid;">
+                <form id="pagerForm" data-toggle="ajaxsearch" method="post"
+                      action="${ctx}/admin/system/travelfm.do">
+                    <div class="office">
+                        <ul class="offbtn">
+                            <li>
+                                <a onclick="toEditTravelPage('add','景点管理>新增','')" title="新增" id="travel_add"
+                                   data-xternal="true">
+                                    <span class="iconbg01"><i class="fa fa-file-text-o font24"></i></span>新增</a>
+                            </li>
+                            <li>
+                                <a onclick="toEditTravelPage('edit','景点管理>编辑', 'edit')"
+                                   id="travel_edit" title="编辑" data-xternal="true">
+                                    <span class="fa fa-edit font24 iconbg02"></span>编辑</a>
+                            </li>
+
+                            <li>
+                                <a onclick="delTravel(this);" data-xternal="true">
+                                    <span class="fa fa-trash font24 iconbg03"></span>删除
+                                </a>
+                            </li>
+
+                            <li><span class="ttt"></span></li>
+                            <li>
+                                <a id="refresh" data-toggle="reloadsearch"
+                                   data-target="#bjui-pageContent" data-icon="search">
+                                    <span class="iconbg02"><i class="fa fa-refresh font24"></i></span>刷新</a>
+                            </li>
+                            <li>
+                                <a class="closecutab">
+                                    <span class="iconbg03"><i class="fa fa-remove font24"></i></span>关闭
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="bjui-pageHeader">
+                        <form data-toggle="ajaxsearch" method="post" >
+                            <div class="bjui-searchBar">
+                                <input type="hidden" name="limit" value="${limit}">
+                                <input type="hidden" name="start" value="${start}">
+                                &nbsp;&nbsp;
+                                <lable>省会名称：</lable>
+                                <input id="provinceName" name="provinceName" class="form-control" size="15" type="text" value="${filter.parameters.provinceName!}" />
+                                &nbsp;&nbsp;
+                                <lable>景点名称：</lable>
+                                <input id="name" name="name" class="form-control" size="15" type="text" value="${filter.parameters.name!}" />
+                                &nbsp;&nbsp;
+                                <lable>景点编码：</lable>
+                                <input id="code" name="code" class="form-control" size="15" type="text" value="${filter.parameters.code!}" />
+
+                                <button type="submit" class="btn-default" data-toggle="ajaxsearch" data-icon="search" id="travelSubmit">查询</button>&nbsp;
+                                <a class="btn btn-orange" href="javascript:;" onclick="drefresh();" data-icon="undo">清空</a>
+                            </div>
+
+                        </form>
+                    </div>
+
+                    <div>
+                    <div class="bjui-pageContent" style="top:102px; bottom: 0px; margin-top: 0px;">
+                        <table data-width="100%" data-nowrap="true" data-selected-multi="false"
+                               class="table table-bordered table-hover table-striped table-top">
+                            <thead>
+                            <tr>
+                                <th style="white-space:nowrap;" width="50"></th>
+                                <th style=" text-align:center; white-space:nowrap;" width="200">景点名称</th>
+                                <th style="text-align:center; white-space:nowrap;" width="200">景点编码</th>
+                                <th style="text-align:center; white-space:nowrap;" width="200">所在省份</th>
+                                <th style="text-align:center; white-space:nowrap;">景点等级</th>
+                                <th style="text-align:center; white-space:nowrap;">是否收费</th>
+                                <th style="text-align:center; white-space:nowrap;">添加时间</th>
+                                <th style="text-align:center; white-space:nowrap;">景点简介</th>
+                            </tr>
+                            </thead>
+                            <tbody id="travelListTbl">
+                            <#list entitys as entity>
+                            <tr >
+                                <td style="white-space:nowrap;" align="center">
+                                    <input type="checkbox" class="testChk" value="${entity.id!}" name="ids" data-toggle="icheck"
+                                           icheck-checked="changeEnabledButt('enabledButt_Travel', ${entity.status!})"
+                                           status="${entity.status!}" />
+                                </td>
+                                <td style="white-space:nowrap;" align="left" title='${entity.name!}'>
+                                    <a onClick="toEditTravelPage('view', '景点管理>查看', '${entity.id!}')" class="list-a">
+                                        ${entity.name!}
+                                    </a>
+                                </td>
+                                <td style="white-space:nowrap;" align="center">${entity.code!}</td>
+                                <td style="white-space:nowrap;" align="center">${entity.provinceName!}</td>
+                                <td style="white-space:nowrap;" align="center">${entity.level!}</td>
+                                <td style="white-space:nowrap;" align="center">
+                                    <#if entity.status??>
+                                        <#if entity.status == 1 ><div title="收费" class="label label-success">收费</div></#if>
+                                        <#if entity.status == 0 ><div title="免费" class="label label-danger">免费</div></#if>
+                                    </#if>
+                                </td>
+                                <td style="white-space:nowrap;" align="center">${(entity.localTime?string("yyyy-MM-dd"))!}</td>
+                                <td style="white-space:nowrap;" align="center">${entity.describe!}</td>
+
+                            </tr>
+                            </#list>
+                            </tbody>
+                        </table>
+                    </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<#include "../../../common/_page.html"/>

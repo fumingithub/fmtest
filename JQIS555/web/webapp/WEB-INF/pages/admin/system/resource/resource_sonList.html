@@ -1,0 +1,83 @@
+<#include "../../../common/_public.html"/>
+<#include "../../../common/_treegrid_async.html"/>
+<div class="bjui-pageHeader">
+    <form id="pagerForm" data-toggle="ajaxsearch" action="${ctx}/admin/system/resource!resourceSonList.do" method="post">
+        <div class="bjui-searchBar">
+            <input type="hidden" name="limit" value="${limit}">
+            <input type="hidden" name="start" value="${start}">
+            <input type="hidden" id="ztResourceId" name="ztResourceId" value="${filter.parameters.ztResourceId!}" />
+            &nbsp;&nbsp;
+            <lable>父级资源名称：</lable>
+            <input id="pName" class="form-control" size="15" type="text" value="" readonly="readonly" title="" />
+            &nbsp;&nbsp;
+            <lable>资源名称：</lable>
+            &nbsp;&nbsp;
+            <input id="displayName" name="displayName" class="form-control" size="15" type="text" value="${filter.parameters.displayName!}" />
+            &nbsp;&nbsp;
+            <lable>资源类型: </lable>
+            <select id="resourceType" name="resourceType" data-toggle="selectpicker" data-width="150">
+                <option selected="selected" value="">--请选择--</option>
+                <option value="0"
+                    <#if (filter.parameters.resourceType!)=='0'> selected="selected"</#if>
+                    >URL</option>
+                <option value="1"
+                    <#if (filter.parameters.resourceType!)=='1'> selected="selected"</#if>
+                    >菜单</option>
+                <option value="2"
+                    <#if (filter.parameters.resourceType!)=='2'> selected="selected"</#if>
+                    >按钮</option>
+            </select>
+            &nbsp;&nbsp;
+            <button type="submit" class="btn-default"  data-toggle="ajaxsearch" data-icon="search" id="resourceSearch">查询</button>&nbsp;
+            <a class="btn btn-orange" href="javascript:;" data-icon="undo" onclick="drefresh();">清空</a>
+        </div>
+    </form>
+</div>
+<div class="bjui-pageContent">
+
+    <table data-width="100%" data-toggle="tablefixed" data-nowrap="true" data-selected-multi="false"
+           class="table tree table-bordered table-hover table-striped table-top">
+        <thead>
+        <tr>
+            <th></th>
+            <th style="text-align:center" title="资源名称">资源名称</th>
+            <th style="text-align:center" title="资源代码">资源代码</th>
+            <th style="text-align:center" title="资源描述">资源描述</th>
+            <th style="text-align:center" title="父资源名称">父资源名称</th>
+            <th style="text-align:center" title="资源链接">资源链接</th>
+            <th style="text-align:center" title="资源类型">资源类型</th>
+        </tr>
+        </thead>
+        <tbody id="resourceListTable">
+        <#list entitys as resource>
+        <tr>
+            <td>
+                <input type="checkbox" name="ids" data-toggle="icheck" value="${resource.id}">
+            </td>
+            <td class="left" title='${resource.display!}'>
+                ${resource.display!}
+            </td>
+            <td class="left" title="${resource.code!}">
+                ${resource.code!}
+            </td>
+            <td class="left" title='${resource.description!}'>
+                ${resource.description!}
+            </td>
+            <td class="left" title='${resource.parentName!}'>
+                ${resource.parentName!}
+            </td>
+            <td class="left" title='${resource.url!}'>
+                ${resource.url!}
+            </td>            
+            <td class="center">
+               	<#if resource.type=="0"><div style='color:red'>URL</div></#if>
+               	<#if resource.type=="1"><div style='color:green'>菜单</div></#if>
+               	<#if resource.type=="2"><div style='color:blue'>按钮</div></#if>
+            </td>
+        </tr>
+        </#list>
+        </tbody>
+    </table>
+</div>
+<#include "resource_sonList_js.html"/>
+<#include "../../../common/_page.html"/>

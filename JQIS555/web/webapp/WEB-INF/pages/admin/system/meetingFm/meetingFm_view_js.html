@@ -1,0 +1,50 @@
+<script language="javascript" type="text/javascript">
+    /**
+     * 页面加载时的初始化方法
+     */
+    $(document).ready(function(){
+        /** 编辑和查看时，各类input控件展示不同效果 */
+        var _id = $("#types").val(); // 状态码：add-新增，edit-编辑，view-查看*
+        $("#disableReason").hide();
+        if (_id != null && _id != "" && _id != "undefined") {
+            if (_id == "view") {
+                $("table").find("input").each(function(){
+                    $(this).attr("readonly", "readonly");
+                });
+                $("table").find("textArea").each(function(){
+                    $(this).attr("readonly", "readonly");
+                });
+                $("table").find("select").each(function(){
+                    $(this).attr("disabled", "disabled");
+                });
+
+                var vs = $("#select_enable").val();
+                if(vs == '0') {
+                    $("#disableReason").show();
+                } else{
+                    $("#disableReason").hide();
+                }
+
+            }
+            if(_id == "edit"){
+                $("#entity_name").attr("readonly", false);
+                $("#entity_floor").attr("readonly", false);
+                $(".view").html("");
+            }
+        } else {
+            $(".view").html("");
+        }
+    });
+
+    /** 下拉框和文本框动态关联 **/
+    function enableChoose(){
+        //获取被选中的option标签
+        var vs = $("#select_enable").val();
+        if(vs == '0') {
+            $("#disableReason").show();
+        } else{
+            $("#disableReason").hide();
+        }
+    }
+
+</script>

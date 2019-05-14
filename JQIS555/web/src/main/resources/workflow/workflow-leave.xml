@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd"
+       default-lazy-init="false" default-autowire="byName">
+
+    <bean id="leaveDao" class="net.jqsoft.wf.leave.dao.LeaveDao">
+    </bean>
+
+    <bean id="leaveService" class="net.jqsoft.wf.leave.service.impl.LeaveService">
+        <property name="leaveDao" ref="leaveDao"/>
+        <property name="processName" value="${process.leave.name}"/>
+    </bean>
+</beans>

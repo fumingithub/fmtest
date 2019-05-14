@@ -1,0 +1,136 @@
+<#include "../common/_public.html"/>
+<#include "../common/_area.html"/>
+<#include "../common/_pinyin.html"/>
+<!-- <div class="bjui-pageHeader" style="background:#FFF;"> -->
+<!-- 	<div class="row" style="height:70px"> -->
+<!-- 		<div class="col-md-12"> -->
+<!-- 			<div class="office"> -->
+<!-- 				<ul class="offbtn"> -->
+<!-- 					<li><a id="lbtnSave" class="submit"><span class="iconbg04"><i -->
+<!-- 								class="fa fa-save font24"></i> -->
+<!-- 						</span>保存</a> -->
+<!-- 					</li> -->
+<!-- 					<li><a class="closecutab"><span class="iconbg03"><i -->
+<!-- 								class="fa fa-remove  font24"></i> -->
+<!-- 						</span>关闭</a> -->
+<!-- 					</li> -->
+<!-- 				</ul> -->
+<!-- 			</div> -->
+<!-- 		</div> -->
+<!-- 	</div> -->
+<!-- </div> -->
+<div class="bjui-pageContent">
+	<form id="form" action="">
+	<div style="margin:15px auto 0;">
+		<fieldset>
+			<legend>
+				<h3 class="listtitle" id="unitTitle">项目信息</h3>
+				<input type="hidden" name="id" value="${entity.id!}" />
+			</legend>
+			<table class="table table-condensed" width="100%">
+				<tbody>
+					
+					<tr>
+						<td class="right"><span style="color:red;">*</span>地区</td>
+						<td class="left"><input name="entity.area" id="areaname" maxlength="20"
+							type="text" data-rule="required" readonly="readonly" value="${entity.area!}"
+							<#if (isHaveChild!)=='1'>readonly="readonly"</#if> size="20" />
+						</td>
+					</tr>
+					<tr>	
+						<td class="right"><span style="color:red;">*</span>项目名称</td>
+						<td class="left"><input id="projectName"
+							name="entity.projectName" type="text" data-rule="required" readonly="readonly"  maxlength="25" onkeyup="getText(this)"
+							value="${entity.projectName!}" size="20" /></td>
+					</tr>
+					<tr>	
+						<td class="right"><span style="color:red;">*</span>项目url</td>
+						<td class="left"><input id="projectUrl"
+							name="entity.projectUrl" type="text" data-rule="required" readonly="readonly" maxlength="25" onkeyup="getText(this)"
+							value="${entity.projectUrl!}" size="20" /></td>
+					</tr>
+					<tr>	
+						<td class="right"><span style="color:red;">*</span>版本</td>
+						<td class="left"><input id="edition"
+							name="entity.edition" type="text" data-rule="required" readonly="readonly" maxlength="25" onkeyup="getText(this)"
+							value="${entity.edition!}" size="20" /></td>
+					</tr>
+					<tr>	
+						<td class="right"><span style="color:red;">*</span>用户名</td>
+						<td class="left"><input id="username"
+							name="entity.username" type="text" data-rule="required" readonly="readonly" maxlength="25" onkeyup="getText(this)"
+							value="${entity.username!}" size="20" /></td>
+					</tr>
+					<tr>	
+						<td class="right"><span style="color:red;">*</span>密码</td>
+						<td class="left"><input id="password"
+							name="entity.password" type="text" data-rule="required" readonly="readonly" maxlength="25" onkeyup="getText(this)"
+							value="${entity.password!}" size="20" /></td>
+					</tr>
+					<tr>	
+						<td class="right"><span style="color:red;">*</span>备注</td>
+						<td class="left"><input id="remarks"
+							name="entity.remarks" type="text" data-rule="required" readonly="readonly" maxlength="25" onkeyup="getText(this)"
+							value="${entity.remarks!}" size="20" /></td>
+					</tr>
+					
+						<tr>
+							<td class="right"  style="width: 130px">项目状态:</td>
+							<td class="left" colspan="3" readonly="readonly"><#if
+								entity.status == '1'>
+								<div title="启用" class="label label-success">启用</div></#if> <#if
+								entity.status == '0'>
+								<div title="禁用" class="label label-danger">禁用</div></#if>
+							</td>
+						</tr>
+				</tbody>
+			</table>
+		</fieldset>
+	</div>
+</form>
+</div>
+<!-- <div class="bjui-pageFooter"> -->
+<!--     <ul> -->
+<!--         <li> -->
+<!--             <button type="button" class="btn-close closecutab" data-icon="close">关闭</button> -->
+<!--         </li> -->
+<!--         <li> -->
+<!--             <button onclick="saveForm(this,'${ctx}/project/project!save.do','form')" class="btn-default" data-icon="save">保存</button> -->
+<!--         </li> -->
+<!--     </ul> -->
+<!-- </div> -->
+<script type="text/javascript">
+    function setInsStatus(flag,param){
+        if(flag){
+            $("#"+param).val("0");//正常
+        }else{
+            $("#"+param).val("1");//锁定
+        }
+    }
+    
+    function saveForm(obj, url, formId) {
+        var dataForms = $("#" + formId);
+        var $formFlag = dataForms.isValid();
+        if ($formFlag) {
+            $.ajax({
+                type : "POST",
+                url : url,
+                data : $("#" + formId).serialize(),
+                success : function(data) {
+                    var dataJson = eval('(' + data + ')');
+                    if (dataJson.statusCode == 300) {
+                        $(this).alertmsg('warn', dataJson.message);
+                    } else if (dataJson.statusCode == 200) {
+                        $(this).alertmsg('correct', dataJson.message);
+                        $("#projectSearchBtn").click();
+                        $(this).dialog("close", $.CurrentDialog);
+                        /* $(this).dialog("close", $.CurrentDialog);
+                        $("#userSearch").submit(); */
+                        
+                        
+                    }
+                }
+            })
+        }
+    };
+</script>

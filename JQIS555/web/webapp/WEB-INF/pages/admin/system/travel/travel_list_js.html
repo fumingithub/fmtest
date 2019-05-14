@@ -1,0 +1,303 @@
+﻿﻿<script language="javascript" type="text/javascript">
+
+    var TOP_ID = "0001"; // 最顶级组织机构编码
+    var TOP_NAME = ""; // 最顶级组织机构名称
+    var EVENT = null;
+
+
+    /**
+     * 页面加载时的初始化方法
+     */
+    $(document).ready(function(){
+
+        setTimeout(function () {
+            $(EVENT.target).bjuiajax('doLoad',
+                {
+                    url: "${ctx}/admin/system/travelfm!travelSonList.do?",
+                    target: "#sonTravelList",
+                    loadingmask: true
+                }
+            );
+            EVENT.preventDefault();
+        }, 200);
+    //
+    // /**
+    //  * 对返回数据进行预格式化处理
+    //  * @param treeId
+    //  * @param parentNode
+    //  * @param responseData
+    //  * @returns {Array}
+    //  */
+    // function filter(treeId, parentNode, responseData){
+    //     var arr = [];
+    //     if (responseData) {
+    //         if ("none" != responseData[0].rootId) {TOP_ID = responseData[0].rootId;}
+    //         if ("none" != responseData[0].rootName) {TOP_NAME = responseData[0].rootName;}
+    //         for(var i = 0; i < responseData.length; i++) {
+    //             arr[i] = {
+    //                 id: responseData[i].id,
+    //                 pid: responseData[i].parentId,
+    //                 name: responseData[i].name,
+    //                 isParent: true,
+    //                 url: "${ctx}/admin/system/travelfm!travelSonList.do?ztId=" + responseData[i].id,
+    //                 divid: "#sonTravelList"
+    //             }
+    //         }
+    //     }
+    //     return arr;
+    // }
+
+    // /**
+    //  * 点击前预处理函数
+    //  * @param treeId
+    //  * @param treeNode
+    //  * @param clickFlag
+    //  * @returns {boolean}
+    //  */
+    // function beforeClick(treeId, treeNode, clickFlag){
+    //     var zTree = $.fn.zTree.getZTreeObj(treeId);
+    //     zTree.checkNode(treeNode, !treeNode.checked, true);
+    //     return true;
+    // }
+
+//     /**
+//      * 节点点击时的回调函数
+//      * @param event
+//      * @param treeId
+//      * @param treeNode
+//      * @param clickFlag
+//      */
+//     function onClick(event, treeId, treeNode, clickFlag){
+// //        var zTreeObj = $.fn.zTree.getZTreeObj(treeId);
+// //        zTreeObj.expandNode(treeNode);
+//
+//         $("#parentId").val(treeNode.id);
+//         $("#ztId").val(treeNode.id);
+//         $("#sonPName").val(treeNode.name);
+//         $(event.target).bjuiajax('doLoad',
+//             {url: treeNode.url, target: treeNode.divid, loadingmask: true});
+//         event.preventDefault();
+//     }
+
+    /**
+     * 节点选中时的回调函数
+     * @param event
+     * @param treeId
+     * @param treeNode
+     * @param clickFlag
+     */
+    function onCheck(event, treeId, treeNode, clickFlag){
+
+    }
+
+    /**
+     * 异步失败时的回调函数
+     * @param event
+     * @param treeId
+     * @param treeNode
+     * @param XMLHttpRequest
+     * @param textStatus
+     * @param errorThrown
+     */
+    function onAsyncError(event, treeId, treeNode, XMLHttpRequest, textStatus, errorThrown){
+
+    }
+
+    /**
+     * 异步成功时的回调函数
+     * @param event
+     * @param treeId
+     * @param treeNode
+     * @param msg
+     */
+    function onAsyncSuccess(event, treeId, treeNode, msg){
+        if ("" == $("#" + treeId).html()) {
+            $("#" + treeId).text("无匹配的结果");
+        }
+        EVENT = event;
+    }
+
+    /**
+     * ztree加载dom对象的回调函数（可参考zTree官网API文档）
+     * @param event
+     * @param treeId
+     * @param treeNode
+     */
+    function zTreeOnNodeCreated(event, treeId, treeNode) {
+        var sysOrgName = $.trim($("#sysOrgName").val());
+        var treeObj = $.fn.zTree.getZTreeObj(treeId);
+
+        // 只有搜索参数不为空且该节点为父节点时才进行异步加载
+        if(sysOrgName != "" && treeNode.isParent){
+            treeObj.reAsyncChildNodes(treeNode, "refresh");
+        }
+        EVENT = event;
+    }
+
+
+        // 计算高度（自适应）
+        var height =  $("#sysOrgDiv").height();
+        var leftHeight = height - 10;
+        var rightHeight = height - 70;
+        $("#travelLeftDiv").height(leftHeight);
+        $("#travelRightDiv").height(rightHeight);
+    });
+
+    /**
+     *左侧树部门筛选
+     */
+    function queryOrg(){
+        var treeObj = $.fn.zTree.getZTreeObj("sysOrgTree");
+        var sysOrgName = $.trim($("#sysOrgName").val());
+        var node = treeObj.getNodeByParam("id", TOP_ID, null);
+        if(sysOrgName != ""){
+            sysOrgName = encodeURI(encodeURI(sysOrgName));
+            treeObj.setting.async.otherParam = ["sysOrgName", sysOrgName];
+        } else {
+            // 搜索参数为空时必须将参数数组设为空
+            treeObj.setting.async.otherParam = [];
+        }
+        treeObj.reAsyncChildNodes(node, "refresh");
+    }
+
+    /**
+     * 跳转到机构编辑页面
+     * @param edit
+     * @param title
+     * @param id
+     */
+    function toEditTravelPage(types, title, id) {
+
+        if (!id) {
+            id="";
+        }
+        if (!types) {
+            types="";
+        }
+
+        var url = ""; // 请求地址
+
+        if ("edit" == types) { // 编辑
+            if ($("#travelListTbl input:checked").length > 0) {
+                id = $("#travelListTbl input:checked").val();
+            } else {
+                $(this).alertmsg('warn', "请选中一条数据！");
+                return;
+            }
+        }
+
+        url ="${ctx}/admin/system/travelfm!edit.do?id=" + id + "&types=" + types;
+
+
+        var dialog_options = {
+            id: 'travel_edit',
+            title: title,
+            url: url,
+            width: 500,
+            height: 400,
+            fresh: true,
+            mask: true
+        };
+        $(this).dialog(dialog_options);
+    }
+
+    /**
+     * 异步保存数据并刷新zTree
+     */
+    function refreshTravelTree(formId){
+        var types = $("#types").val();
+        var dataForms = $("#" + formId);
+        var $formFlag = dataForms.isValid();
+        if ($formFlag) {
+            $.ajax({
+                type: "post",
+                data: $("#" + formId).serialize(),
+                url: "${ctx}/admin/system/travelfm!save.do",
+                success: function(data){
+                    var dataJson = eval('(' + data + ')');
+                    if (dataJson.statusCode == 300) {
+                        $(this).alertmsg('warn', dataJson.message);
+                    } else if (dataJson.statusCode == 200) {
+                        $(this).alertmsg('correct', dataJson.message);
+                        $(this).dialog("close", $.CurrentDialog);
+
+                            drefresh();
+
+                    }
+                }
+            });
+        }
+    }
+
+    /**
+     * 异步删除
+     */
+    function delTravel(obj) {
+        if ($("#travelListTbl input:checked").length > 0) {
+            var id = $("#travelListTbl input:checked").val();
+
+            $(obj).alertmsg("confirm", "确定要删除选中项吗？", {
+                okCall: function() {
+                    $.ajax({
+                        type: "POST",
+                        url: "${ctx}/admin/system/travelfm!delete.do?id=" + id,
+                        async: false,
+                        success: function (data) {
+
+                            var dataJson = eval('(' + data + ')');
+                            if (dataJson.statusCode == 300) {
+                                $(this).alertmsg('warn', dataJson.message);
+                            } else {
+                                $(this).alertmsg('correct', "删除成功！");
+                                $('#refresh').click();
+//                                drefresh();
+                            }
+                        }
+                    });
+                }
+            });
+        } else {
+            $(this).alertmsg('warn', "请选中一条数据！");
+            return;
+        }
+    }
+
+    /**
+     * 右侧列表刷新
+     */
+    function drefresh(){
+        $("#provinceName").val("");
+        $("#name").val("");
+        $("#code").val("");
+        $("#travelSubmit").submit();
+    }
+
+    /**
+     * 删除左右两端的空格
+     */
+    function doTrim(selObj){
+        var selected = $(selObj).find("option:selected");
+        selected.html($.trim(selected.text()));
+    }
+
+    function changeEnabledButt(id,isEnabled){
+        var disabledCSS = "<i class='fa fa-minus font24 iconbg01'></i>锁定";
+        var enabledCSS = "<i class='fa fa-check font24 iconbg02'></i>解锁";
+        if(isEnabled == "0"){
+            $("#"+id).html(disabledCSS);
+        }else if(isEnabled == "1"){
+            $("#"+id).html(enabledCSS);
+        }else{
+            $("#"+id).html(enabledCSS);
+        }
+    }
+
+    /**
+     * 页面加载初始化
+     */
+    $(function () {
+        var pName = $("#sonPName").val(); // 上级机构名称
+        $("#pName").val(pName);
+    });
+
+</script>

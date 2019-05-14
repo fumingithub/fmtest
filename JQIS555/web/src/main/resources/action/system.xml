@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+        "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+    <!--管理后台 -->
+    <package name="system" namespace="/admin/system" extends="ncms-default">
+
+		<!-- 资源管理 -->
+        <action name="resource" class="net.jqsoft.base.system.action.ResourceAction">
+            <result name="success" type="freemarker">/WEB-INF/pages/admin/system/resource/resource_list.html</result>
+            <result name="showchild" type="freemarker">/WEB-INF/pages/admin/system/resource/resource_list_child.html</result>
+        	<result name="input" type="freemarker">/WEB-INF/pages/admin/system/resource/resource_add.html</result>
+        	<result name="lookup" type="freemarker">/WEB-INF/pages/admin/system/resource/resource_lookup.html</result>
+        	<result name="assign" type="freemarker">/WEB-INF/pages/admin/system/resource/resource_assign.html</result>
+            <result name="resource_result" type="json"><param name="root">resourceList</param></result>
+            <result name="sonList" type="freemarker">/WEB-INF/pages/admin/system/resource/resource_sonList.html</result>
+        </action>
+        
+		<!-- 用户管理 -->
+        <action name="user" class="net.jqsoft.base.system.action.UserAction">
+            <result name="success" type="freemarker">/WEB-INF/pages/admin/system/user/user_list.html</result>
+            <result name="input" type="freemarker">/WEB-INF/pages/admin/system/user/user_edit.html</result>
+            <result name="viewuser" type="freemarker">/WEB-INF/pages/admin/system/user/user_view.html</result>
+            <result name="role" type="freemarker">/WEB-INF/pages/admin/system/user/user_role.html</result>
+     		<result name="showins" type="freemarker">/WEB-INF/pages/admin/system/user/user_hosp.html</result>
+     		<result name="passwordUI" type="freemarker">/WEB-INF/pages/admin/system/user/password_ui.html</result>
+     		<result name="json"  type="json">
+     			<param name="root">admin</param>
+     		</result>
+            <result name="sonList"  type="freemarker">/WEB-INF/pages/admin/system/user/user_sonList.html</result>
+            <result name="dialog"   type="freemarker">/WEB-INF/pages/admin/system/user/user_edit.html</result>
+        	<result name="orgchange" type="freemarker">/WEB-INF/pages/admin/system/user/user_edit_org.html</result>
+        </action>
+        <!-- 用户管理测试 -->
+        <action name="userTest" class="net.jqsoft.base.system.action.test.UserAction">
+            <result name="success" type="freemarker">/WEB-INF/pages/admin/system/user/user_list.html</result>
+            
+        </action>
+        <!-- 人员性质缴费管理 -->
+        <action name="payByPersonType"
+                class="net.jqsoft.base.system.action.PayByPersonTypeAction">
+            <result name="success" type="freemarker">/WEB-INF/pages/admin/system/payByPersonType/payByPersonType_list.html</result>
+            <result name="json" type="json">
+                <param name="root">map</param>
+            </result>
+        </action>
+		<!-- 角色管理 -->
+        <action name="role" class="net.jqsoft.base.system.action.RoleAction">
+            <result name="success" type="freemarker">/WEB-INF/pages/admin/system/role/role_list.html</result>
+        	<result name="input" type="freemarker">/WEB-INF/pages/admin/system/role/role_add.html</result>
+        	<result name="users" type="freemarker">/WEB-INF/pages/admin/system/role/role_users.html</result>
+        </action>
+
+        <!-- 系统参数管理 -->
+        <action name="config" class="net.jqsoft.base.system.action.ConfigAction">
+            <result name="success" type="freemarker">/WEB-INF/pages/admin/system/sysconfig/sysconfig_list.html</result>
+        	<result name="input" type="freemarker">/WEB-INF/pages/admin/system/sysconfig/sysconfig_add.html</result>
+            <result name="json" type="json">
+                <param name="root">flag</param>
+            </result>
+            <result name="json2" type="json">
+                <param name="root">map</param>
+            </result>
+        </action>
+        <!-- 医疗机构参数管理 -->
+        <action name="hospconfig" class="net.jqsoft.base.system.action.ConfigHospitalAction">
+            <result name="success" type="freemarker">/WEB-INF/pages/admin/system/hospconfig/hospconfig_list.html</result>
+        	<result name="input" type="freemarker">/WEB-INF/pages/admin/system/hospconfig/hospconfig_add.html</result>
+            <result name="json" type="json">
+                <param name="root">flag</param>
+            </result>
+            <result name="json2" type="json">
+                <param name="root">map</param>
+            </result>
+        </action>
+
+        <!-- 部门管理 -->
+         <action name="department" class="net.jqsoft.base.system.action.OrgAction">
+            <result name="success" type="freemarker">/WEB-INF/pages/admin/system/department/department_list.html</result>
+            <result name="showchild" type="freemarker">/WEB-INF/pages/admin/system/department/department_list_child.html</result>
+            <result name="input" type="freemarker">/WEB-INF/pages/admin/system/department/department_edit.html</result>
+            <result name="json" type="json">
+                <param name="root">entity</param>
+            </result>
+            <result name="deleteJson" type="json">
+                <param name="root">flat</param>
+            </result>
+            <result name="childUnit" type="json">
+                <param name="root">commList</param>
+            </result>
+        </action>
+        
+        <!-- 文件上传 -->
+        <action name="upload" class="net.jqsoft.base.system.action.UploadAction">
+            <result name="json" type="json">
+                <param name="root">map</param>
+            </result>
+            <result name="fileJson" type="json">
+                <param name="root">fileJson</param>
+            </result>
+            <result name="jsonStr" type="json">
+                <param name="root">jsonStr</param>
+            </result>
+            <result name="errList" type="json">
+                <param name="root">errList</param>
+            </result>            
+        </action>
+        <!-- 文件下载 -->
+        <action name="download" class="net.jqsoft.base.system.action.DownloadAction">
+        </action>
+        <action name="view" class ="net.jqsoft.base.system.action.ViewAction">
+        	<result name="view" type="freemarker">
+        		/WEB-INF/pages/admin/system/view/view.html
+        	</result>
+        </action>
+        
+        
+        <action name="cert" class ="net.jqsoft.standard.view.CertAction">
+        	 <result name="success" type="freemarker">
+        	 /WEB-INF/pages/admin/system/cert/cert_list.html
+        	 </result>
+        </action>
+
+        <!-- 组织机构管理 -->
+        <action name="sysorg" class="net.jqsoft.base.system.action.SysOrgAction">
+            <result name="success"  type="freemarker">/WEB-INF/pages/admin/system/sysorg/sysOrg_list.html</result>
+            <result name="result"   type="json"><param name="root">sysOrgList</param></result>
+            <result name="_result"  type="freemarker">/WEB-INF/pages/common/_result.html</result>
+            <result name="sonList"  type="freemarker">/WEB-INF/pages/admin/system/sysorg/sysOrg_sonList.html</result>
+            <result name="dialog"   type="freemarker">/WEB-INF/pages/admin/system/sysorg/sysOrg_view.html</result>
+            <result name="transfer" type="freemarker">/WEB-INF/pages/admin/system/sysorg/sysOrg_transfer.html</result>
+            <result name="code_select" type="freemarker">/WEB-INF/pages/admin/system/sysorg/sysOrg_codeSelect.html</result>
+        	<result name="grantauth" type="freemarker">/WEB-INF/pages/admin/system/sysorg/sysOrg_grantauth.html</result>
+        	<result name="ncms_result"  type="json"><param name="root">ncmsAreaDictList</param></result>
+        </action>
+
+        <!-- 旅游管理 -->
+        <action name="travelfm" class="net.jqsoft.base.system.action.TravelAction">
+            <result name="success" type="freemarker">/WEB-INF/pages/admin/system/travel/travel_list.html</result>
+            <result name="result"   type="json"><param name="root">travelList</param></result>
+            <result name="_result"  type="freemarker">/WEB-INF/pages/common/_result.html</result>
+            <result name="dialog"   type="freemarker">/WEB-INF/pages/admin/system/travel/travel_view.html</result>
+        </action>
+
+        <!-- 会议室管理fumin -->
+        <action name="meetingfm" class="net.jqsoft.base.meetingFm.action.MeetingFmAction">
+            <result name="success" type="freemarker">/WEB-INF/pages/admin/system/meetingFm/meetingFm_list.html</result>
+            <result name="result" type="json"><param name="root">MeetingFmList</param></result>
+            <result name="_result" type="freemarker">/WEB-INF/pages/common/_result.html</result>
+            <result name="dialog" type="freemarker">/WEB-INF/pages/admin/system/meetingFm/meetingFm_view.html</result>
+            <result name="disableReason" type="freemarker">/WEB-INF/pages/admin/system/meetingFm/meetingFm_disableReason.html</result>
+        </action>
+
+        <!--电梯管理fumin-->
+        <action name="elevatorfm" class="net.jqsoft.base.elevatorfm.action.ElevatorAction">
+            <result name="success" type="freemarker">/WEB-INF/pages/admin/fumin/elevator/elevator_list.html</result>
+            <result name="elevator_view" type="freemarker">/WEB-INF/pages/admin/fumin/elevator/elevator_view.html</result>
+        </action>
+        <!--故障申报-->
+        <action name="elevatorTroubleDeclarefm" class="net.jqsoft.base.elevatorfm.action.TroubleDeclareAction">
+            <result name="success" type="freemarker">/WEB-INF/pages/admin/fumin/elevator/troubleDeclare_list.html</result>
+            <result name="troubleDeclare_view" type="freemarker">/WEB-INF/pages/admin/fumin/elevator/troubleDeclare_view.html</result>
+            <result name="troubleDeclare_confirm" type="freemarker">/WEB-INF/pages/admin/fumin/elevator/troubleDeclare_confirm.html</result>
+            <result name="technicianOtherList" type="freemarker">/WEB-INF/pages/admin/fumin/elevator/troubleDeclare_technicianOtherList.html</result>
+
+        </action>
+        <!--维保记录-->
+        <action name="elevatorMaintenanceRecordfm" class="net.jqsoft.base.elevatorfm.action.MaintenanceRecordAction">
+            <result name="success" type="freemarker">/WEB-INF/pages/admin/fumin/elevator/maintenanceRecord_list.html</result>
+            <result name="maintenanceRecord_view" type="freemarker">/WEB-INF/pages/admin/fumin/elevator/maintenanceRecord_view.html</result>
+            <result name="maintenanceRecord_confirm" type="freemarker">/WEB-INF/pages/admin/fumin/elevator/maintenanceRecord_confirm.html</result>
+        </action>
+
+        <!-- 登录/登出日志 -->
+        <action name="loginlog" class="net.jqsoft.base.system.view.LoginLogAction">
+            <result name="success" type="freemarker">/WEB-INF/pages/system/loginlog/loginLog_list.html</result>
+            <result name="input" type="freemarker">/WEB-INF/pages/system/loginlog/loginLog_view.html</result>
+        </action>
+    </package>
+    
+    <package name="area" namespace="/admin/area" extends="ncms-default">
+    	<!-- 区域管理  -->
+         <action name="area" class="net.jqsoft.base.system.action.AreaAction">
+            <result name="success" type="freemarker">/WEB-INF/pages/admin/system/area/area_list.html</result>
+             <result name="result" type="freemarker">/WEB-INF/pages/common/_result.html</result>
+             <result name="json" type="json">
+                <param name="root">entity</param>
+            </result>
+             <result name="map" type="json">
+                <param name="root">map</param>
+            </result>
+            <result name="result" type="json">
+            	<param name="root">areaList</param>
+            </result>
+        </action>
+    </package>
+    
+    <package name="dict" namespace="/admin/dict" extends="ncms-default">
+    	<!-- 字典管理 -->
+        <action name="dict" class="net.jqsoft.base.system.action.DictAction">
+            <result name="success" type="freemarker">/WEB-INF/pages/admin/system/dict/dict_list.html</result>
+            <result name="edit" type="freemarker">/WEB-INF/pages/admin/system/dict/dict_edit.html</result>
+            <result name="dialog" type="freemarker">/WEB-INF/pages/admin/system/dict/dict_dialog.html</result>
+            <result name="dictdialog" type="freemarker">/WEB-INF/pages/admin/system/dict/dict_new_edit_dialog.html</result>
+            <result name="json" type="json">
+                <param name="root">gbCodeList</param>
+            </result>
+            <result name="entity" type="json">
+                <param name="root">entity</param>
+            </result>
+            <result name="childList" type="json">
+                <param name="root">dictItemList</param>
+            </result>
+            <result name="jsongrid" type="json">
+                <param name="root">dictMap</param>
+            </result>
+            <result name="map" type="json">
+                <param name="root">map</param>
+            </result>
+        </action>
+    </package>
+
+    
+        <!-- 多级字典管理 -->
+    <package name="dictmulti" namespace="/admin/dictmulti" extends="ncms-default">
+        <action name="dictmulti" class="net.jqsoft.base.system.action.DictMultiAction">
+            <result name="success" type="freemarker">/WEB-INF/pages/admin/system/dictmulti/dictmulti_list.html</result>
+            <result name="input" type="freemarker">/WEB-INF/pages/admin/system/dictmulti/dictmulti_edit.html</result>
+            <result name="addChild" type="freemarker">/WEB-INF/pages/admin/system/dictmulti/dictmulti_addchild.html</result>
+        </action>
+    </package>
+
+    <!-- 文本框+模糊搜索功能组件（信息安全体系-卫生资源注册-机构注册管理） -->
+    <package name="quick" namespace="/admin/quick" extends="ncms-default">
+        <action name="quick" class="net.jqsoft.base.system.action.UserAction">
+            <result name="success" type="json">
+                <param name="root">quicks</param>
+            </result>
+            <result name="drugEnty" type="json">
+                <param name="root">drugEnty</param>
+            </result>
+            <result name="hospital" type="json">
+                <param name="root">hospital</param>
+            </result>
+            <result name="hosp" type="json">
+                <param name="root">hosp</param>
+            </result>
+        </action>
+        <action name="quickDict" class="net.jqsoft.base.system.action.QuickDictAction">
+            <result name="success" type="json">
+                <param name="root">quicks</param>
+            </result>
+        </action>
+        <!-- 文件上传 -->
+        <action name="upload" class="net.jqsoft.base.system.action.UploadAction">
+            <result name="json" type="json">
+                <param name="root">map</param>
+            </result>
+            <result name="fileJson" type="json">
+                <param name="root">fileJson</param>
+            </result>
+            <result name="jsonStr" type="json">
+                <param name="root">jsonStr</param>
+            </result> 
+            <result name="errList" type="json">
+                <param name="root">errList</param>
+            </result>           
+        </action>
+		<!-- 附件管理 -->
+        <action name="attachment" class="net.jqsoft.base.system.view.AttachmentAction">
+            <result name="success" type="freemarker">/WEB-INF/pages/system/attachment/attachment_list.html</result>
+            <result name="input" type="freemarker">/WEB-INF/pages/system/attachment/attachment_view.html</result>
+        </action>
+    </package>
+
+</struts>

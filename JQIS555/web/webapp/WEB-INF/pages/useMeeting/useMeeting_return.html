@@ -1,0 +1,51 @@
+<#include "../common/_public.html"/>
+<div class="bjui-pageHeader" style="background:#FFF;">
+    <div class="row" style="height:70px">
+        <div class="col-md-6">
+            <div class="office">
+                <ul class="offbtn">
+                    <li> <a class="submit"><span class="iconbg04"><i class="fa fa-save font24"></i></span>保存</a> </li>
+                    <li><a class="closecutab"><span class="iconbg03"><i class="fa fa-remove  font24"></i></span>关闭</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="bjui-pageContent">
+    <form action="${ctx}/meetingroom/meeting/usemeeting!save.do" name="pagerform" method="post"
+          data-toggle="validate" data-alertmsg="true" data-isrefsh="false">
+        <div style="margin:15px auto 0; width:900px;">
+            <fieldset>
+                <legend>
+                    <h3 class="listtitle">归还会议室</h3>
+                    <input type="hidden" name="id" value="${entity.id!}" />
+                </legend>
+                <table class="table table-bordered" width="100%">
+                    <tbody>
+
+                    <tr>
+                        <td class="right width150"><span style="color: Red"></span>会议室名称</td>
+                        <td>${entity.name!}</td>
+                    </tr>
+
+                    <tr>
+                        <td class="right width150"><span style="color: Red"></span>使用人</td>
+                        <td>${entity.userName!}</td>
+                    </tr>
+                    <tr>
+                        <td class="right width150"><span style="color: Red"></span>使用时长</td>
+                        <td><input size="20" type="text" value="${entity.useTime!}" maxlength="25"
+                                   name="entity.useTime" /></td>
+                    </tr> <tr>
+                        <td class="right width150"><span style="color: Red"></span>使用日期</td>
+                        <td><input size="20" type="text" value="${entity.useDate!}" maxlength="25"
+                                   name="entity.useDate" /></td>
+                    </tr>
+
+                    </tbody>
+            </fieldset>
+
+        </div>
+    </form>
+</div>

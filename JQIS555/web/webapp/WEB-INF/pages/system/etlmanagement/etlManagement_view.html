@@ -1,0 +1,39 @@
+﻿<#include "../../common/_public.html"/>
+<div class="bjui-pageContent">
+	<form action="" id="pageform"  data-alertmsg="true" data-isrefsh="false">
+		<div style="margin:15px auto 0; width:800px;">
+			<fieldset>
+				<legend>
+					<h3 class="listtitle">Etl信息</h3>
+					<input type="hidden" name="id" value="${entity.id!}"/>
+					<input type="hidden" name="entity.equipmentId" value="${equipmentId!}" />					
+				</legend>
+				<table class="table table-condensed" width="100%">
+					<tbody>
+					<tr>
+						<td class="right" style="width: 130px">equipmentId</td>
+						<td class="left" colspan="3">
+							<input name="entity.equipmentId" type="text" data-rule="required" value="${entity.equipmentId!}" size="20" />
+						</td>
+					</tr>
+					<tr>
+						<td class="right" style="width: 130px">remarks</td>
+						<td class="left" colspan="3">
+							<input name="entity.remarks" type="text" data-rule="required" value="${entity.remarks!}" size="20" />
+						</td>
+					</tr>
+				</table>
+			</fieldset>
+		</div>
+	</form>
+</div>
+<div class="bjui-pageFooter">
+    <ul>
+        <li>
+            <button type="button" class="btn-close closecutab" data-icon="close">关闭</button>
+        </li>
+        <li>
+            <button onclick="saveForm(this,'${ctx}/system/etlmanagement!save.do','pageform')" class="btn-default" data-icon="save">保存</button>
+        </li>
+    </ul>
+</div>

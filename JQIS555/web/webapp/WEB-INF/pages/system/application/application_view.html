@@ -1,0 +1,65 @@
+﻿<#include "../../common/_public.html"/>
+<div class="bjui-pageContent">
+	<form action="" id="pageform"  data-alertmsg="true" data-isrefsh="false">
+		<div style="margin:15px auto 0;">
+			<fieldset>
+				<legend>
+					<h3 class="listtitle">应用信息</h3>
+					<input type="hidden" name="id" value="${entity.id!}"/>
+					<input type="hidden" name="entity.equipmentId" value="${equipmentId!}" />		
+				</legend>
+				<table class="table table-condensed" width="100%">
+					<tbody>
+					<tr>
+						<td class="right" style="width: 130px">jdk版本</td>
+						<td class="left" colspan="3">
+							<input name="entity.editionJdk" type="text" data-rule="required;length[~50]" value="${entity.editionJdk!}" size="20" />
+						</td>
+					</tr>
+					<tr>
+						<td class="right" style="width: 130px">应用URL</td>
+						<td class="left" colspan="3">
+							<input name="entity.applicationUrl" type="text" data-rule="required;length[~50]" maxlength="80" value="${entity.applicationUrl!}" size="20" />
+						</td>
+					</tr>
+				</table>
+			</fieldset>
+		</div>
+	</form>
+</div>
+<div class="bjui-pageFooter">
+    <ul>
+        <li>
+            <button type="button" class="btn-close closecutab" data-icon="close">关闭</button>
+        </li>
+        <li>
+            <button onclick="ApplicationsaveForm(this,'${ctx}/project/application!save.do','pageform')" class="btn-default" data-icon="save">保存</button>
+        </li>
+    </ul>
+</div>
+<script type="text/javascript">  
+    function ApplicationsaveForm(obj, url, formId) {
+        var dataForms = $("#" + formId);
+        var $formFlag = dataForms.isValid();
+        if ($formFlag) {
+            $.ajax({
+                type : "post",
+                url : url,
+                data : $("#" + formId).serialize(),
+                success : function(data) {
+                    var dataJson = eval('(' + data + ')');
+                    if (dataJson.statusCode == 300) {
+                        $(this).alertmsg('warn', dataJson.message);
+                    } else if (dataJson.statusCode == 200) {
+                        $(this).alertmsg('correct', dataJson.message);
+                     
+                        $(this).dialog("close", $.CurrentDialog);
+                         $(this).dialog("close", $.CurrentDialog);
+                        $("#applicationSearch").click();        
+                    }
+                }
+            })
+        }
+    };
+
+</script>

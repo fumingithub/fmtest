@@ -1,0 +1,66 @@
+<#include "../../../common/_public.html"/>
+<div class="bjui-pageContent">
+    <form data-callback="te" method="post" id="entrust_dialog" data-toggle="validate" data-alertmsg="false">
+        <input type="hidden" id="loginUserName" name="loginUserName" value="${loginUserName!}">
+        <table data-width="100%" data-nowrap="true" data-selected-multi="true"
+               class="table table-bordered table-hover table-striped table-top">
+            <thead>
+            <tr>
+                <th width="20"></th>
+                <th width="30">NO.</th>
+                <th width="180" style="text-align:center">
+                    <div class="list-col-VerifyNo">技师姓名</div>
+                </th>
+                <th class="list-col-HouseholdAddress" style="text-align:center">
+                    <div class="list-col-HouseholdAddress">技师电话</div>
+                </th>
+            </tr>
+            </thead>
+            <tbody id="technicianUserListTable">
+            <#list technicianUserList as user>
+            <#if loginUserName != '${user.userName}'>
+                <tr>
+                    <td>
+                        <input type="checkbox" name="ids" data-toggle="icheck" value="${user.id}"
+                               userName = "${user.userName}"
+                      />
+                    </td>
+                    <td class="center">${user_index+1+(start-1)*limit}</td>
+                    <td class="left">
+                        <div title='${user.userName!}'>${user.userName!}</div>
+                    </td>
+                    <td class="left">
+                        <div title="${user.mobiePhone!}"> ${user.mobiePhone!}</div>
+                    </td>
+                </tr>
+            </#if>
+            </#list>
+            </tbody>
+        </table>
+    </form>
+</div>
+<div class="bjui-pageFooter">
+    <ul>
+        <li>
+            <button type="button" class="btn-close closecutab" data-icon="close">关闭</button>
+        </li>
+        <li>
+            <button onClick="saveTechnicianUserList()" class="btn-default" data-icon="save">保存</button>
+        </li>
+    </ul>
+</div>
+
+<script>
+
+    function saveTechnicianUserList() {
+        //其他维保人字符串
+        var userName="";
+        $("#technicianUserListTable input:checked").each(function () {
+            userName +=  $(this).attr("userName") +'  ';
+        });
+        //回显
+        $("#entity_maintenanceorOther1").val(userName);
+        $("#entity_maintenanceorOther2").val(userName);
+        $(this).dialog("close", $.CurrentDialog);
+    }
+</script>

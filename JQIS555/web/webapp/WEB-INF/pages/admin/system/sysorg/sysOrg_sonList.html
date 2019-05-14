@@ -1,0 +1,81 @@
+﻿<#include "../../../common/_public.html"/>
+
+<div class="bjui-pageHeader">
+    <form id="pagerForm" data-toggle="ajaxsearch" method="post" action="${ctx}/admin/system/sysorg!orgSonList.do">
+        <div class="bjui-searchBar">
+            <input type="hidden" name="limit" value="${limit}">
+            <input type="hidden" name="start" value="${start}">
+            <input type="hidden" id="ztId" name="ztId" value="${filter.parameters.ztId!}" />
+            &nbsp;&nbsp;
+            <lable>上级部门：</lable>
+            <input id="pName" class="form-control" size="15" type="text"  readonly="readonly" />
+            &nbsp;&nbsp;
+            <lable>部门名称：</lable>
+            <input id="org_name" name="name" class="form-control" size="15" type="text" value="${filter.parameters.name!}" />
+            &nbsp;&nbsp;
+            <lable>部门代码：</lable>
+            <input id="code" name="code" class="form-control" size="15" type="text" value="${filter.parameters.code!}" />
+<!--             <button type="button" class="showMoreSearch" data-toggle="moresearch" data-name="custom" title="更多查询条件"> -->
+<!--                 <i class="fa fa-angle-double-down"></i> -->
+<!--             </button> -->
+            <!--<label>行政区划:</label>-->
+            <!--<input data-toggle="select2" size="20" name="input" data-url="${ctx}/admin/quick/quickDict!serachAreaDictAll.do" />-->
+            <button type="submit" class="btn-default" data-toggle="ajaxsearch" data-icon="search" id="sysOrgSubmit">查询</button>&nbsp;
+            <a class="btn btn-orange" href="javascript:;" onclick="drefresh();" data-icon="undo">清空</a>
+        </div>
+<!--         <div class="bjui-moreSearch"> -->
+            
+<!--             &nbsp;&nbsp;&nbsp;&nbsp; -->
+<!--             <lable>&nbsp;&nbsp;&nbsp;&nbsp;状态：</lable> -->
+<!--             <select id="status" name="status" data-toggle="selectpicker" data-width="150"> -->
+<!--                 <option selected="selected" value="">--请选择--</option> -->
+<!--                 <option value="0" -->
+<!--                     <#if (filter.parameters.status!)=='0'> selected="selected"</#if>>正常</option> -->
+<!--                 <option value="1" -->
+<!--                     <#if (filter.parameters.status!)=='1'> selected="selected"</#if>>锁定</option> -->
+<!--             </select> -->
+<!--         </div> -->
+    </form>
+</div>
+<div class="bjui-pageContent" style="top: 102px; bottom: 28px; margin-top: 0px;">
+
+    <table data-width="100%" data-nowrap="true" data-selected-multi="false"
+           class="table table-bordered table-hover table-striped table-top">
+        <thead>
+            <tr>
+                <th style="white-space:nowrap;" width="50"></th>
+                <th style="text-align:center; white-space:nowrap;" width="200">部门名称</th>
+                <th style="text-align:center; white-space:nowrap;" width="200">部门代码</th>
+                <th style="text-align:center; white-space:nowrap;" width="200">上级部门</th>
+                <th style="text-align:center; white-space:nowrap;">联系电话</th>
+<!--                 <th style="text-align:center; white-space:nowrap;">状态</th> -->
+            </tr>
+        </thead>
+        <tbody id="sysOrgListTbl">
+            <#list entitys as entity>
+                <tr >
+                    <td style="white-space:nowrap;" align="center"><input type="checkbox" class="testChk" value="${entity.id!}" name="ids" data-toggle="icheck" icheck-checked="changeEnabledButt('enabledButt_sysOrg', ${entity.status!})" status="${entity.status!}" /> </td>
+                    <td style="white-space:nowrap;" align="left" title='${entity.name!}'>
+                        <a onClick="toEditOrgPage(4, '部门管理>查看', '${entity.id!}', 'view')" class="list-a">
+                            <#if entity.isParent == "1">
+                                &nbsp;&nbsp;&nbsp;${entity.name!}
+                            <#else>
+                                ${entity.name!}
+                            </#if>
+                        </a>
+                    </td>
+                    <td style="white-space:nowrap;" align="center">${entity.code!}</td>
+                    <td style="white-space:nowrap;" align="center">${entity.parentName!}</td>
+                    <td style="white-space:nowrap;" align="center">${entity.telephone!}</td>
+<!--                     <td style="white-space:nowrap;" align="center"> -->
+<!--                         <#if entity.status == '0'><div title="正常" class="label label-success">正常</div></#if> -->
+<!--                         <#if entity.status == '1'><div title="锁定" class="label label-danger">锁定</div></#if> -->
+<!--                     </td> -->
+                </tr>
+            </#list>
+        </tbody>
+    </table>
+</div>
+
+<#include "../../../common/_page.html"/>
+<#include "sysOrg_sonList_js.html"/>

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap
+        PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+        "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="LoginLog">
+    <typeAlias alias="LoginLog" type="net.jqsoft.base.system.domain.LoginLog" />
+
+    <resultMap id="LoginLogMap" class="LoginLog">
+        <result property="id" column="id"/>
+        <result property="userId" column="USER_ID"/>
+        <result property="userName" column="USER_NAME"/>
+        <result property="realName" column="REAL_NAME"/>
+        <result property="loginIp" column="LOGIN_IP"/>
+        <result property="loginTime" column="LOGIN_TIME"/>
+        <result property="type" column="TYPE"/>
+    </resultMap>
+
+    <select id="getAll" resultMap="LoginLogMap">
+        SELECT * FROM LOGIN_LOG
+    </select>
+    <select id="get" parameterClass="String" resultMap="LoginLogMap">
+        <![CDATA[
+           	   SELECT * FROM LOGIN_LOG WHERE id = #id:String#
+         ]]>
+    </select>
+    <insert id="insert" parameterClass="LoginLog">
+        <![CDATA[
+        INSERT INTO LOGIN_LOG(
+        ID,
+        USER_ID,
+        USER_NAME,
+        REAL_NAME,
+        LOGIN_IP,
+        LOGIN_TIME,
+        TYPE
+        ) values(
+                #id#,
+                #userId#,
+                #userName#,
+                #realName#,
+                #loginIp#,
+                #loginTime#,
+                #type#
+             )
+		]]>
+    </insert>
+    <update id="update" parameterClass="LoginLog">
+        <![CDATA[
+			UPDATE LOGIN_LOG ]]>
+			<dynamic prepend="SET">
+
+            <isNotEmpty  property="userId" prepend=",">
+                <![CDATA[
+					USER_ID = #userId:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="userName" prepend=",">
+                <![CDATA[
+					USER_NAME = #userName:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="realName" prepend=",">
+                <![CDATA[
+					REAL_NAME = #realName:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="loginIp" prepend=",">
+                <![CDATA[
+					LOGIN_IP = #loginIp:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="loginTime" prepend=",">
+                <![CDATA[
+					LOGIN_TIME = #loginTime:DateTime#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="type" prepend=",">
+                <![CDATA[
+					TYPE = #type:String#
+				]]>
+            </isNotEmpty >
+        </dynamic>
+        <dynamic prepend="WHERE">
+            <![CDATA[
+					id = #id:String#
+				]]>
+        </dynamic>
+    </update>
+    <delete id="deleteById" parameterClass="String">
+        <![CDATA[
+        DELETE FROM demo where id = #id:String#
+     ]]>
+    </delete>
+    <select id="count" resultClass="int">
+        SELECT COUNT(1) FROM LOGIN_LOG
+    </select>
+    <select id="select" resultMap="LoginLogMap"  parameterClass="java.util.HashMap">
+        SELECT * FROM LOGIN_LOG
+    </select>
+
+</sqlMap>

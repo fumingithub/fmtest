@@ -1,0 +1,179 @@
+﻿﻿﻿<#include "../../../common/_public.html"/>
+<#include "meetingFm_list_js.html"/>
+
+<div class="bjui-pageContent" id="meetingFmDiv">
+    <div class="clearfix">
+        <div style="overflow:hidden; border-left: 1px #c3ced5 solid;">
+                <form id="pagerForm" data-toggle="ajaxsearch" method="post"
+                      action="${ctx}/admin/system/meetingfm.do">
+                    <!-- 功能按钮 -->
+                    <div class="office">
+                        <ul class="offbtn">
+                            <li>
+                                <a onclick="meetingEdit('add','会议室管理>新增','')"
+                                   title="新增" id="meetingFm_add"
+                                   data-xternal="true">
+                                    <span class="fa fa-plus-square font24 iconbg03"></span>新增
+                                </a>
+                            </li>
+                            <li>
+                                <a onclick="meetingEdit('edit','会议室管理>编辑','')"
+                                   id="meetingFm_edit" title="编辑" data-xternal="true">
+                                    <span class="fa fa-edit font24 iconbg02"></span>编辑
+                                </a>
+                            </li>
+                            <li>
+                                <a  onclick="meetingDelete(this)" data-xternal="true">
+                                    <span class="fa fa-trash font24 iconbg01"></span>删除
+                                </a>
+                            </li>
+                            <li>
+                                <a onclick="meetingApply(this)" data-xternal="true">
+                                    <span class="fa fa-shirtsinbulk  font24 iconbg03"></span>申请
+                                </a>
+                            </li>
+                            <li>
+                                <a onclick="meetingReturn(this)" data-xternal="true">
+                                    <span  class="fa fa-file-text-o font24 iconbg02"></span>归还
+                                </a>
+                            </li>
+                            <li>
+                                <a  onclick="meetingChangeEnable(this)" data-xternal="true" id="meetingFm_changeEnable">
+                                    <span class='fa fa-check font24 iconbg02'></span>启用
+                                </a>
+                            </li>
+                            <li><span class="ttt"></span></li>
+                            <li>
+                                <a id="refresh" data-toggle="reloadsearch" data-target="#bjui-pageContent" data-icon="search">
+                                    <span class="fa fa-refresh font24 iconbg02"></span>刷新</a>
+                            </li>
+                            <li>
+                                <a class="closecutab">
+                                    <span class="fa fa-remove font24 iconbg03"> </span>关闭
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- 查询区域 -->
+                    <div class="bjui-pageHeader" style="height:100%; overflow-y:hidden; margin: auto 0px;">
+                        <form data-toggle="ajaxsearch" method="post" >
+                            <div class="bjui-searchBar">
+                                <input type="hidden" name="limit" value="${limit}">
+                                <input type="hidden" name="start" value="${start}">
+                                &nbsp;&nbsp;
+                                <lable>会议室名称：</lable>
+                                <input id="meetingName" name="name" class="form-control" size="10" type="text" value="${filter.parameters.name!}" />
+                                &nbsp;&nbsp;
+                                <lable>所在楼层：</lable>
+                                <input id="meetingfloor" name="floor"  class="easyui-numberbox" size="10" type="text" value="${filter.parameters.floor!}" data-rule="integer"/>
+                                <span class="filederror"></span>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <lable>投影仪：</lable>
+                                <select id="projector" name="projector" data-toggle="selectpicker"  data-width="100" size="15" type="text" class="">
+                                    <option selected="selected" value="">--请选择--</option>
+                                    <option value="1"<#if (filter.parameters.projector!)=='1'> selected="selected"</#if>>有</option>
+                                    <option value="0"<#if (filter.parameters.projector!)=='0'> selected="selected"</#if>>无</option>
+                                </select>
+                            </br><!--强制换行-->
+                                 &nbsp;&nbsp;
+                                 <lable>可容纳人数：</lable>
+                                 <select id="people" name="people" data-toggle="selectpicker"  data-width="100" size="15" type="text">
+                                     <option selected="selected" value="">--请选择--</option>
+                                     <option value="1"<#if (filter.parameters.people!)=='1'> selected="selected"</#if>>10人以下</option>
+                                     <option value="2"<#if (filter.parameters.people!)=='2'> selected="selected"</#if>>10人~30人</option>
+                                      <option value="3"<#if (filter.parameters.people!)=='3'> selected="selected"</#if>>30到~50人</option>
+                                 </select>
+                                   &nbsp;&nbsp;
+                                 <lable>使用状态：</lable>
+                                 <select id="status" name="status" data-toggle="selectpicker" data-width="100" size="15" type="text">
+                                         <option selected="selected" value="">--请选择--</option>
+                                         <option value="1"<#if (filter.parameters.status!)=='1'> selected="selected"</#if>>使用中</option>
+                                        <option value="2"<#if (filter.parameters.status!)=='2'> selected="selected"</#if>>空闲</option>
+                                  </select>
+                                  &nbsp;&nbsp;
+                                 <lable>启用状态：</lable>
+                                 <select id="enable" name="enable" data-toggle="selectpicker" data-width="100" type="text">
+                                        <option selected="selected" value="">--请选择--</option>
+                                         <option value="0"<#if (filter.parameters.enable!)=='0'> selected="selected"</#if>>禁用</option>
+                                      <option value="1" <#if (filter.parameters.enable!)=='1'> selected="selected"</#if>>启用</option>
+                                 </select>
+                                  &nbsp;&nbsp;
+                                 <button type="submit" class="btn-default" data-toggle="ajaxsearch" data-icon="search" id="meetingFmSubmit">查询</button>&nbsp;
+                                 <a class="btn btn-orange" href="javascript:;" onclick="drefresh();" data-icon="undo">重置</a>
+                             </div>
+
+                        </form>
+                    </div>
+                    <!-- 列表数据 -->
+                    <div>
+                        <div class="bjui-pageContent" style="top: 126px; bottom: 0px; margin-top: 0px;">
+                            <table data-width="100%" data-toggle="tablefixed" data-nowrap="true" data-selected-multi="false"
+                                   class="table table-bordered table-hover table-striped table-top">
+                                <thead>
+                                <tr >
+                                    <th style="white-space:nowrap;" width="50"></th>
+                                    <th style="text-align:center; white-space:nowrap;" width="200">会议室名称</th>
+                                    <th style="text-align:center; white-space:nowrap;" width="100">所在楼层</th>
+                                    <th style="text-align:center; white-space:nowrap;" width="100">可容纳人数</th>
+                                    <th style="text-align:center; white-space:nowrap;">投影仪</th>
+                                    <th style="text-align:center; white-space:nowrap;">使用状态</th>
+                                    <th style="text-align:center; white-space:nowrap;">是否启用</th>
+                                    <th style="text-align:center; white-space:nowrap;">备注</th>
+                                </tr>
+                                </thead>
+                                <tbody id="meetingFmListTbl">
+                                <#list entitys as entity>
+                                <tr >
+                                    <td style="white-space:nowrap;" align="center">
+                                        <input type="checkbox" class="testChk" value="${entity.id!}"
+                                               name="ids" data-toggle="icheck"
+                                               icheck-checked = changeCheckPositionStatus('meetingFm_changeEnable',"${entity.enable!}")
+                                               status = "${entity.status!}"
+                                               enable = "${entity.enable!}"
+                                               floor = "${entity.floor!}"
+                                               roomName = "${entity.name!}"
+                                               disableReason = "${entity.disableReason!}"/>
+                                    </td>
+                                    <td style="white-space:nowrap;" align="left" title='${entity.name!}'>
+                                        <a onClick = "meetingEdit('view', '会议室管理>查看', '${entity.id!}')" class="list-a">${entity.name!}</a>
+                                    </td>
+                                    <td style="white-space:nowrap;" align="center" title="${entity.floor!}楼">${entity.floor!}楼</td>
+                                    <td style="white-space:nowrap;" align="center">
+                                        <#if entity.people??>
+                                            <#if entity.people == "1" ><div title="10人以下" >10人以下</div></#if>
+                                            <#if entity.people == "2" ><div title="10人~30人" >10人~30人</div></#if>
+                                            <#if entity.people == "3" ><div title="30人~50人" >30人~50人</div></#if>
+                                        </#if>
+                                    </div>
+                                    <td style="white-space:nowrap;" align="center">
+                                        <#if entity.projector??>
+                                            <#if entity.projector == "0" ><div title="无" class="label label-danger">无</div></#if>
+                                            <#if entity.projector == "1" ><div title="有" class="label label-success">有</div></#if>
+                                        </#if>
+                                    </td>
+                                    <td style="white-space:nowrap;" align="center">
+                                        <#if entity.status??>
+                                            <#if entity.status == "1" ><div title="使用" class="label label-danger">使用中</div></#if>
+                                            <#if entity.status == "2" ><div title="空闲" class="label label-success">空闲</div></#if>
+                                        </#if>
+                                    </td>
+                                    <!--是否启用-->
+                                    <td style="white-space:nowrap;" align="center">
+                                        <#if entity.enable??>
+                                            <#if entity.enable == "0" ><div title="禁用" class="label label-danger">禁用</div></#if>
+                                              <#if entity.enable == "1" ><div title="启用" class="label label-success">启用</div></#if>
+                                         </#if>
+                                    </td>
+                                    <td style="white-space:nowrap;" align="center" title="${entity.reference!}">${entity.reference!}</td>
+                                </tr>
+                                </#list>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </form>
+
+        </div>
+    </div>
+</div>
+<#include "../../../common/_page.html"/>

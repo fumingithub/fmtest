@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap
+        PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+        "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="Role">
+    <typeAlias alias="Role" type="net.jqsoft.base.system.domain.Role" />
+    <resultMap id="RoleMap" class="Role">
+          <result property="id" column="id"/>
+          <result property="code" column="CODE"/>
+          <result property="name" column="NAME"/>
+          <result property="areaId" column="AREA_ID"/>
+          <result property="proleId" column="PROLE_ID"/>
+          <result property="remark" column="REMARK"/>
+    </resultMap>
+    
+    <resultMap id="RoleMap2" class="Role">
+          <result property="id" column="id"/>
+          <result property="code" column="CODE"/>
+          <result property="name" column="NAME"/>
+          <result property="areaId" column="AREA_ID"/>
+          <result property="proleId" column="PROLE_ID"/>
+          <result property="remark" column="REMARK"/>
+          <result property="parentName" column="PARENT_NAME"/>
+    </resultMap>
+    
+    <resultMap id="RoleMap3" class="Role">
+          <result property="id" column="id"/>
+          <result property="code" column="CODE"/>
+          <result property="name" column="NAME"/>
+          <result property="areaId" column="AREA_ID"/>
+          <result property="proleId" column="PROLE_ID"/>
+          <result property="remark" column="REMARK"/>
+          <result property="areaName" column="area_NAME"/>
+    </resultMap>
+    
+    <sql id="sel-tj-common">
+    	<dynamic>
+    		<isNotEmpty prepend=" and " property="areaId">
+    		t.area_id in (select t.code from sys_area t 
+    		start with t.code=#areaId# connect by prior t.code=t.p_code)
+    		</isNotEmpty>
+    		<isNotEmpty prepend=" and " property="name">t.name like '%' || #name# || '%'</isNotEmpty>
+    		<isNotEmpty prepend=" and " property="code">t.code like '%' || #code# || '%'</isNotEmpty>
+    	</dynamic>
+    </sql>
+    
+    <select id="count" resultClass="int">
+    	SELECT COUNT(*) FROM SYS_ROLE t where 1=1
+    	<include refid="sel-tj-common"/>
+    	START WITH t.PROLE_ID IS NULL CONNECT BY PRIOR t.ID=t.PROLE_ID
+    </select>
+    <select id="select" resultMap="RoleMap2">
+    	select t.*,p.name PARENT_NAME from SYS_ROLE t left join SYS_ROLE p on t.prole_id=p.id
+    	where 1=1 
+    	<include refid="sel-tj-common"/>
+    	 START WITH t.PROLE_ID IS NULL CONNECT BY PRIOR t.ID=t.PROLE_ID
+    </select>
+    <select id="get" parameterClass="String" resultMap="RoleMap3">
+    	select r.*,a.name area_NAME from SYS_ROLE r
+    	left join sys_area a on r.area_id=a.code
+		WHERE r.ID = #id#
+    </select>
+
+	<insert id="insert" parameterClass="Role">
+        <![CDATA[
+        INSERT INTO SYS_ROLE(
+		id,
+        CODE,
+        NAME,
+        AREA_ID,
+        PROLE_ID,
+        REMARK
+        ) values(
+	    #id#,
+                #code#,
+                #name#,
+                #areaId#,
+                #proleId#,
+                #remark#
+             )
+		]]>
+    </insert>
+    <update id="update" parameterClass="Role">
+        <![CDATA[
+			UPDATE SYS_ROLE ]]>
+			<dynamic prepend="SET">
+
+            <isNotEmpty  property="code" prepend=",">
+                <![CDATA[
+					CODE = #code:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="name" prepend=",">
+                <![CDATA[
+					NAME = #name:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="areaId" prepend=",">
+                <![CDATA[
+					AREA_ID = #areaId:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="proleId" prepend=",">
+                <![CDATA[
+					PROLE_ID = #proleId:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="remark" prepend=",">
+                <![CDATA[
+					REMARK = #remark:String#
+				]]>
+            </isNotEmpty >
+        </dynamic>
+        <dynamic prepend="WHERE">
+            <![CDATA[
+					id = #id#
+				]]>
+        </dynamic>
+    </update>
+
+    <!-- 通过ID删除 SYS_ROLE表-->
+    <delete id="deleteById" parameterClass="String">
+        <![CDATA[
+        DELETE FROM SYS_ROLE where id = #id:String#
+     ]]>
+    </delete>
+    <!-- 通过ID删除关联表 userRole-->
+    <delete id="deleteUserRole" parameterClass="String">
+        <![CDATA[
+        DELETE FROM SYS_AUTH WHERE ROLE_ID = #id:VARCHAR#
+     ]]>
+    </delete>
+    <!-- 通过ID删除关联表 -->
+    <delete id="deleteAuth" parameterClass="String">
+        <![CDATA[
+        DELETE FROM SYS_PERMISSION WHERE ROLE_ID = #id:VARCHAR#
+     ]]>
+    </delete>
+    
+    <!-- 根据用户ID查询角色-->
+    <select id="queryRoleByUserId" parameterClass="String" resultClass="Role">
+    	<![CDATA[
+    		SELECT SR.*, (CASE WHEN USER_ID IS NULL THEN 0 ELSE 1 END) isCheck 
+    		FROM SYS_ROLE SR LEFT JOIN SYS_AUTH SA ON SR. ID = SA.ROLE_ID
+    		 AND SA.USER_ID = #id#
+    	]]>
+    </select>    
+    
+    <!-- 根据用户名查询角色-->
+    <select id="queryRoleByUserName" parameterClass="String" resultMap="RoleMap">
+    	<![CDATA[
+    		SELECT SR.*
+	        FROM SYS_ROLE SR,SYS_AUTH SA,SYS_USER su
+	        where sr.id=sa.role_id and sa.user_id=su.id
+	         AND su.user_name = #userName#
+    	]]>
+    </select>
+    
+    <!-- 根据角色id查询直接下级角色-->
+    <select id="queryRoleByRoleId" parameterClass="String" resultMap="RoleMap">
+    	<![CDATA[
+    		SELECT SR.* FROM SYS_ROLE SR where sr.prole_id=#id#
+    	]]>
+    </select>    
+</sqlMap>

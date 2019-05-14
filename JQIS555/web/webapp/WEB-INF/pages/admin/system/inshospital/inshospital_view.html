@@ -1,0 +1,345 @@
+﻿<#include "../../../common/_public.html"/>
+<#include "../../../common/_area.html"/>
+<#include "../../../common/_pinyin.html"/>
+<div class="bjui-pageHeader" style="background:#FFF;">
+	<div class="row" style="height:70px">
+		<div class="col-md-12">
+			<div class="office">
+				<ul class="offbtn">
+					<li><a onclick="saveInfo()"><span class="iconbg04"><i
+								class="fa fa-save font24"></i>
+						</span>保存</a>
+					</li>
+					<li><a class="closecutab"><span class="iconbg03"><i
+								class="fa fa-remove  font24"></i>
+						</span>关闭</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="bjui-pageContent">
+	<form action="${ctx}/admin/ins/inshospital!save.do" name="pagerform" 
+		id="frm_inshospital" method="post"
+		data-toggle="validate" data-alertmsg="true" data-isrefsh="false">
+		<div style="margin:15px auto 0; width:800px;">
+			<fieldset>
+				<legend>
+					<h3 class="listtitle">医疗机构信息</h3>
+					<input type="hidden" name="id" value="${(entity.id)!}"/>
+					<input type="hidden" name="type" value="${type!}"/>
+				</legend>
+				<table class="table table-condensed" width="100%">
+					<tbody>
+					 <tr>
+                        <td class="right" style="width: 130px"><span style="color:red;">*</span>所属区域</td>
+                        <td >
+                            <input name="entity.areaId" id="inshosp_area_tree_areaId" type="hidden" value="<#if !(entity.areaId)??>${areaId!}<#else>${(entity.areaId!)}</#if>"/>
+                            <input type="text" name="areaName" data-rule="required" data-tree="#inshosp_area_tree" 
+                                value="<@pcarea id='${(entity.areaId)!}'/>" data-toggle="selectztree" size="20" readonly="true"/>
+                            <#if (isHaveChild!)!='1'>
+                            <ul id="inshosp_area_tree" class="ztree hide" data-toggle="ztree" data-expand-all="false" 
+                                      data-check-enable="true" data-chk-style="radio" data-radio-type="all" 
+                                      data-on-check="areaNodeCheck" data-on-click="areaNodeClick">
+                                    <@area parentCode="${(parentInsHospital.areaId)!}">
+                                    <#list areaList as area>
+                                        <li data-id="${area.code!}" data-pid="${area.parentCode!}" data-tabid="${area.code!}">${area.name}</li>
+                                    </#list>
+                                    </@area>
+                            </ul>
+                            </#if>
+                        </td>
+						 <td class="right" style="width: 130px">机构标志</td>
+						 <td class="left" >
+							 <input type="hidden" name="entity.isVillage" value="${entity.isVillage}"/>
+							 <#if entity.isVillage == 0 >
+							 	<div title="医疗机构" class="label label-success">医&nbsp;疗&nbsp;机&nbsp;构</div>
+							 </#if>
+							 <#if entity.isVillage == 1 >
+								 <div title="村室" class="label label-primary">村&nbsp;&nbsp;&nbsp;室</div>
+							 </#if>
+						 </td>
+
+                    </tr>
+					<tr>
+						<td class="right" style="width: 130px"><span style="color:red;">*</span>机构编码</td>
+						<td class="left">
+							<input name="entity.code" maxlength="18" <#if (isHaveChild!)=='1'>readonly="readonly"</#if> type="text" data-rule="required,code" value="${entity.code!}" size="20" />
+						</td>
+						<td class="right" style="width: 130px"><span style="color:red;">*</span>机构名称</td>
+						<td class="left">
+							<input name="entity.name" type="text" maxlength="25" data-rule="required" onkeyup="getText(this)" value="${entity.name!}" size="20" />
+						</td>
+					</tr>
+					<tr>
+						<td class="right" style="width: 130px">父机构名称</td>
+						<td class="left">
+							<input name="entity.parentId" type="hidden" value="${(parentInsHospital.id)!}" /> 
+							<input id="parentId" value="${(parentInsHospital.name)!}" size="20" type="text" readonly="true"/>
+						</td>
+						<td class="right" style="width: 130px">主办（管）单位</td>
+						<td class="left" data-change-hosp="">
+							<#include "../../../common/show_hosp.html"/>
+						</td>
+					</tr>
+					<tr>
+						<td class="right" style="width: 130px">医院级别</td>
+						<td class="left">
+							<select data-area="INS_LEVEL" name="entity.insLevel" data-toggle="selectpicker" data-width="100">
+								<option selected="selected" value="">--请选择--</option>
+								<@dictitem pcode="INS_LEVEL" areaId="${entity.areaId!}">
+									<#list dictItemList as dict>
+										<option value="${dict.itemCode!}" <#if "${entity.insLevel!}"=="${dict.itemCode!}">selected="selected"</#if>>${dict.name!}</option>
+									</#list>
+								</@dictitem>
+						    </select>
+							<select data-area="INS_GRADER" name="entity.insGrader" data-toggle="selectpicker" data-width="90">
+								<option selected="selected" value="">--请选择--</option>
+								<@dictitem pcode="INS_GRADER" areaId="${entity.areaId!}">
+									<#list dictItemList as dict>
+										<option value="${dict.itemCode!}" <#if "${entity.insGrader!}"=="${dict.itemCode!}">selected="selected"</#if>>${dict.name!}</option>
+									</#list>
+								</@dictitem>
+						    </select>
+						</td>
+						<td class="right" style="width: 130px"><span style="color:red;">*</span>医疗机构性质</td>
+						<td class="left">
+							<select data-area="HOSPITAL_PROPERTY" name="entity.hospitalProperty" data-toggle="selectpicker" data-rule="required" data-width="200">
+								<option selected="selected" value="">--请选择--</option>
+								<@dictitem pcode="HOSPITAL_PROPERTY" areaId="${entity.areaId!}">
+									<#list dictItemList as dict>
+										<option value="${dict.itemCode!}" <#if "${entity.hospitalProperty!}"=="${dict.itemCode!}">selected="selected"</#if>>${dict.name!}</option>
+									</#list>
+								</@dictitem>
+						    </select>
+						</td>
+					</tr>
+					<tr>
+						<td class="right" style="width: 130px"><span style="color:red;">*</span>新农合定点级别</td>
+						<td>
+							<select data-area="ORG_LEVEL" name="entity.usePriceLevel" data-toggle="selectpicker" data-rule="required" data-width="200">
+								<option selected="selected" value="">--请选择--</option>
+								<@dictitem pcode="ORG_LEVEL" areaId="${entity.areaId!}">
+									<#list dictItemList as dict>
+										<option value="${dict.itemCode!}" <#if "${entity.usePriceLevel!}"=="${dict.itemCode!}">selected="selected"</#if>>${dict.name!}</option>
+									</#list>
+								</@dictitem>
+						    </select>
+						</td>
+						<td class="right"><span style="color:red;">*</span>简称</td>
+						<td>
+							<input name="entity.pinyin" pinyin maxlength="25"
+								type="text" data-rule="required" value="${entity.pinyin!}"
+								size="20" />
+						</td>
+					</tr>
+					<tr>
+						<td class="right" style="width: 130px">协议情况</td>
+						<td colspan="3">
+							<input type="radio" name="entity.protocol" id="protocol1" value="协议定点" <#if "${entity.protocol!}"=="协议定点">checked</#if> data-label="协议定点">
+							&nbsp;&nbsp;<input type="radio" name="entity.protocol" id="protocol2" value="非协议" <#if "${entity.protocol!}"=="非协议">checked</#if> data-label="非协议">
+						</td>
+					</tr>
+					<tr>
+						<td class="right" style="width: 130px">申报定点类型</td>
+						<td class="left">
+							<select data-area="DESIGNATE_TYPE" name="entity.applyFixType" data-toggle="selectpicker" data-width="200">
+								<option selected="selected" value="">--请选择--</option>
+								<@dictitem pcode="DESIGNATE_TYPE" areaId="${entity.areaId!}">
+									<#list dictItemList as dict>
+										<option value="${dict.itemCode!}" <#if "${entity.applyFixType!}"=="${dict.itemCode!}">selected="selected"</#if>>${dict.name!}</option>
+									</#list>
+								</@dictitem>
+						    </select>
+						</td>
+						<td class="right" style="width: 130px">批准定点类型</td>
+						<td class="left">
+							<select data-area="DESIGNATE_TYPE" name="entity.approveFixType" data-toggle="selectpicker" data-width="200">
+								<option selected="selected" value="">--请选择--</option>
+								<@dictitem pcode="DESIGNATE_TYPE" areaId="${entity.areaId!}">
+									<#list dictItemList as dict>
+										<option value="${dict.itemCode!}" <#if "${entity.approveFixType!}"=="${dict.itemCode!}">selected="selected"</#if>>${dict.name!}</option>
+									</#list>
+								</@dictitem>
+						    </select>
+						</td>
+					</tr>
+					<tr>
+						<td class="right" style="width: 130px">类型</td>
+						<td class="left">
+							<select name="entity.hospitalType" data-toggle="selectpicker" data-width="200">
+								<option selected="selected" value="">--请选择--</option>
+								<option <#if "${entity.hospitalType!}"=="综合">selected="selected"</#if>>综合</option>
+								<option <#if "${entity.hospitalType!}"=="专科">selected="selected"</#if>>专科</option>
+						    </select>
+						</td>
+						<td class="right" style="width: 130px"><span style="color:red;">*</span>定点类型</td>
+						<td class="left">
+							<select name="entity.fixType" data-toggle="selectpicker" data-rule="required" data-width="200">
+								<option <#if "${entity.fixType!}"=="0">selected="selected"</#if> value="0">正常</option>
+								<option <#if "${entity.fixType!}"=="1">selected="selected"</#if> value="1">取消定点</option>
+								<option <#if "${entity.fixType!}"=="2">selected="selected"</#if> value="2">取消建制</option>
+						    </select>
+						</td>
+					</tr>
+					<tr>
+						<td class="right" style="width: 130px"><span style="color:red;">*</span>通讯地址</td>
+						<td colspan="3">
+							<input name="entity.address" type="text" maxlength="25" data-rule="required" value="${entity.address!}" size="20" />
+						</td>
+					</tr>
+					<tr>
+						<td class="right" style="width: 130px">邮政编码</td>
+						<td class="left">
+							<input name="entity.postcode" type="text" data-rule="postcode" value="${entity.postcode!}" size="20" />
+						</td>
+						<td class="right" style="width: 130px"><span style="color:red;">*</span>电话号码</td>
+						<td class="left">
+							<input name="entity.telephone" type="text" data-rule="required,mobile" value="${entity.telephone!}" size="20" />
+						</td>
+					</tr>
+					<tr>
+						<td class="right" style="width: 130px"><span style="color:red;">*</span>电子邮箱</td>
+						<td class="left">
+							<input name="entity.email" type="text" data-rule="required,email" value="${entity.email!}" size="20" />
+						</td>
+						<td class="right" style="width: 130px"><span style="color:red;">*</span>开业/成立时间</td>
+						<td class="left">
+							<input type="hidden" id="hidOpenTime" name="entity.openTime" />
+							<input type="text" id="txtOpenTime" data-rule="required,date" data-toggle="datepicker" 
+								data-max-date="${.now?date}"
+								<#if entity.openTime??>value="${(entity.openTime*1000)?number_to_date}"</#if> size="20" />
+						</td>
+					</tr>
+					<tr>
+						<td class="right" style="width: 130px"><span style="color:red;">*</span>法定代表人</td>
+						<td class="left">
+							<input name="entity.legalPerson" type="text" maxlength="25" data-rule="required" value="${entity.legalPerson!}" size="20" />
+						</td>
+						<td class="right" style="width: 130px"><span style="color:red;">*</span>注册资金（万元）</td>
+						<td class="left">
+							<input name="entity.regCapital" type="text" maxlength="8" data-rule="required,number" value="${entity.regCapital!}" size="20" />
+						</td>
+					</tr>
+					<tr>
+						<td class="right" style="width: 130px">农合联系人</td>
+						<td class="left">
+							<input name="entity.linkName" type="text" maxlength="25" value="${entity.linkName!}" size="20" />
+						</td>
+						<td class="right" style="width: 130px">传真</td>
+						<td class="left">
+							<input name="entity.fax" type="text" data-rule="tel" value="${entity.fax!}" size="20" />
+						</td>
+					</tr>
+					<tr>
+						<td class="right" style="width: 130px"><span style="color:red;">*</span>人员数</td>
+						<td colspan="3">
+							<input name="entity.countPerson" type="text" maxlength="6" data-rule="required,digits" value="${entity.countPerson!}" size="20" />
+						</td>
+
+
+					</tr>
+					<tr>
+						<td class="right" style="width: 130px">主任医师人数</td>
+						<td class="left">
+							<input name="entity.countDoctorPerson" type="text" maxlength="6" data-rule="digits" value="${entity.countDoctorPerson!}" size="20" />
+						</td>
+						<td class="right" style="width: 130px">副主任医师人数</td>
+						<td class="left">
+							<input name="entity.countFudoctorPerson" type="text" maxlength="6" data-rule="digits" value="${entity.countFudoctorPerson!}" size="20" />
+						</td>
+					</tr>
+					<tr>
+						<td class="right" style="width: 130px">下设卫生所个数</td>
+						<td class="left">
+							<input name="entity.countClinic" type="text" maxlength="3" data-rule="digits" value="${entity.countClinic!}" size="20" />
+						</td>
+						<td class="right" style="width: 130px">编制床位数</td>
+						<td class="left">
+							<input name="entity.countBed" type="text" maxlength="4" data-rule="digits" value="${entity.countBed!}" size="20" />
+						</td>
+					</tr>
+					<tr>
+						<td class="right" style="width: 130px">实有床位数</td>
+						<td class="left">
+							<input name="entity.countFactBed" type="text" maxlength="4" data-rule="digits" value="${entity.countFactBed!}" size="20" />
+						</td>
+						<td class="right" style="width: 130px">诊疗科室数</td>
+						<td class="left">
+							<input name="entity.countOffice" type="text" maxlength="4" data-rule="digits" value="${entity.countOffice!}" size="20" />
+						</td>
+					</tr>
+
+					 <tr>
+						 <td class="right" style="width: 130px">开户银行名称</td>
+						 <td class="left">
+							 <input name="entity.bankName" type="text" maxlength="15" value="${entity.bankName!}" size="20" />
+						 </td>
+						 <td class="right" style="width: 130px">开户名</td>
+						 <td class="left">
+							 <input name="entity.bankUserName" type="text" maxlength="6"  value="${entity.bankUserName!}" size="20" />
+						 </td>
+					 </tr>
+
+					<tr>
+
+						<td class="right" style="width: 130px">开户行账号</td>
+						<td class="left">
+							<input name="entity.bankAccount" type="text" maxlength="20"  value="${entity.bankAccount!}" size="20" />
+						</td>
+
+						<td class="right">状态</td>
+						<td colspan="3">
+							<div data-toggle="switch" style="z-index: 0;" data-on-label="启用" data-off-label="禁用" data-onchange="setHospStatus" data-onparam="hospStatus">
+								<input type="hidden" id="hospStatus" name="entity.status" value="${entity.status?default('0')}">
+                               	<input type="checkbox" <#if !(entity.status)??||"${(entity.status)!}"=="0"> checked="checked"</#if>/>
+							</div>
+						</td>
+					</tr>
+				</tbody>
+				</table>
+			</fieldset>
+		</div>
+	</form>
+</div>
+<div class="bjui-pageFooter">
+    <ul>
+        <li>
+            <button type="button" class="btn-close closecutab" data-icon="close">关闭</button>
+        </li>
+        <li>
+            <button type="button" onclick="saveInfo()" class="btn-default" data-icon="save">保存</button>
+        </li>
+    </ul>
+</div>
+<script type="text/javascript">
+<!--
+$(function(){
+    $.CurrentNavtab.find("input:radio").adorn({cancel:true});//{icon:false}
+});
+
+function setHospStatus(flag,param){
+    if(flag){
+        $("#"+param).val("0");//正常
+    }else{
+        $("#"+param).val("1");//锁定
+    }
+}
+
+_n("#isVillage").change(
+		function(){
+			if($(this).val()=="1"){
+				$("#parentId").attr("readonly",false);
+				$("#parentId").selectpicker('refreash');//刷新页面
+			}else{
+				$("#parentId").attr("readonly",true);
+				$("#parentId").selectpicker('refreash');//刷新页面
+
+			}
+		}
+)
+
+//-->
+</script>
+<#include "inshospital_view_js.html"/>

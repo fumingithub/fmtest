@@ -1,0 +1,52 @@
+@charset "utf-8";
+/* CSS Document */
+
+*{margin:0;padding:0;}
+body{color:#666; font-size:12px;font-family:"微软雅黑"; background:#DFF2FC;}
+a{ color:#666; text-decoration:none; border:0;}
+a:hover{text-decoration:none; border:0;}
+a {outline: none;}
+a:active {star:expression(this.onFocus=this.blur());}
+:focus { outline:0;}
+img{border:0}
+li{list-style:none}
+.clear{ clear:both;}
+span{ display:block;}
+
+
+/*登录注册页面*/
+.header{ width:1000px; height:100px; margin:0 auto;}
+.logo{ width:auto; height:auto; margin-top:25px; margin-left:95px; float:left; font-size:40px; color:#379EF3; font-weight:bold;}
+.logo a{ color:#379EF3;}
+.content{ width:100%; height:auto; position:absolute; top:100px; z-index:999;}
+.mcon{ width:1000px; height:auto; margin:0 auto; position:relative;}
+.CLogin{ width:279px; height:284px; background:url(../images/login_03.png) no-repeat; float:right; margin-top:85px; margin-right:80px;}
+.CLogin ul{ width:230px; height:auto; margin:30px 24px 0 24px; float:left;}
+.CLogin ul li{ width:226px; height:32px; border:2px solid #B3B5B5; margin-top:35px;}
+.CLogin ul li .sp{ width:35px; height:32px; border-right:1px solid #B3B5B5; float:left;}
+.CLogin ul li .sp1{ background:url(../images/login_04.png) no-repeat center;}
+.CLogin ul li .sp2{ background:url(../images/login_05.png) no-repeat center;}
+.CLogin ul li .st{ width:190px; height:32px; float:left;}
+.CLogin ul li .st input{ width:180px; height:32px; margin:0 5px; border:0; background:none; line-height:32px\9;}
+.CLogin dl{ width:230px; height:auto; float:left; margin-left:100px; margin-top:15px;}
+.CLogin dl dd{ width:auto; height:auto; margin-top:5px; *margin-top:1px; margin-left:4px; *margin-left:0px; float:left;}
+.CLogin dl dt{ width:auto; height:auto; font-size:14px; color:#2E67A0; margin-left:4px; float:left;}
+.CLogin button{ width:119px; height:29px; background:url(../images/login_btn.png) no-repeat; border:0; cursor:pointer; margin-left:88px; margin-top:10px;}
+/*登录注册页面滚动banner开始*/
+.slide-index {position:relative; min-width:1000px; width:auto; height:520px; overflow:hidden}
+.slide-index .slides {min-width:1000px; width:auto; height:520px}
+.slide-index .slide {position:relative; min-width:1000px; float:left; height:520px}
+.slide-index .image {z-index: 1; position: absolute}
+.slide-index .button {width: 138px; display: none}
+.slide-index .control {z-index:40; position: absolute; text-align: center; width: 100%; bottom:0; height: 19px; cursor: pointer}
+.slide-index .control a{background-image:url(../images/login_p1.png); filter: alpha(opacity=60); width: 14px; display: inline-block; background-repeat: no-repeat; height: 13px; cursor: pointer; margin-right: 6px; opacity: 0.6}
+.slide-index .control a:hover {background-image:url(../images/login_p2.png); filter: alpha(opacity=100); opacity: 1}
+.slide-index .control a.active {background-image:url(../images/login_p2.png); filter: alpha(opacity=100); opacity: 1}
+.autoMaxWidth {position: relative; height: 232px; overflow: hidden}
+/*登录注册页面滚动banner结束*/
+.footer{ width:1000px; height:auto; margin:32px auto 0 auto; text-align:center;}
+.footer ul{ width:1000px; height:auto;}
+.footer ul li{ display:inline-block; zoom:1; *display:inline; margin:0 30px; color:#000;}
+.footer ul li span{ color:#10609B; display:inline-block;}
+.footer ul li a{ color:#10609B;}
+.footer ul li a:hover{ color:#f00;}

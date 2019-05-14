@@ -1,0 +1,70 @@
+<script type="text/javascript">
+    $(function(){
+        $.ajax({
+            async : false,
+            type:"POST",
+            url : "${ctx}/admin/readCard/readCard!readCard.do",
+            success : function(data){
+                $('#readCard_type').remove();
+                $('OBJECT#CVR_IDCard').remove();
+                if(data.type == "602B8A77-2C86-4652-8D95-6F99E8779F73"){
+                        _n('div.bjui-pageContent').after('<OBJECT'+
+                        ' classid="clsid:602B8A77-2C86-4652-8D95-6F99E8779F73"'+
+                        ' codebase="${ctx}/Cab/ICReadProj.cab#version=2,1,0,0"'+
+                        ' width=0'+
+                        ' height=0'+
+                        ' align=center'+
+                        ' hspace=0'+
+                        ' vspace=0'+
+                        ' id = CVR_IDCard></OBJECT>'+
+                        '<input type="hidden" id="readCard_type" value="602B8A77-2C86-4652-8D95-6F99E8779F73"/>');
+                }
+            }
+        });
+    });
+    function readCard(){
+        var $person;
+        var $type = $("#readCard_type").val();
+        if($type == "602B8A77-2C86-4652-8D95-6F99E8779F73"){
+            $person = huaxu_fdx3s();
+        }
+        if($person.cardNo == ""){
+            _n().alertmsg('error','无法识别您的身份证！');
+            return false;
+        }
+        return $person;
+    }
+    function huaxu_fdx3s(){
+        if(!(window.ActiveXObject|| "ActiveXObject" in window)){
+            _n().alertmsg('error','请使用IE浏览器!');
+            return false;
+        }
+        CVR_IDCard.user_name="";
+        CVR_IDCard.Sex="";
+        CVR_IDCard.Nation="";
+        CVR_IDCard.Birthday="";
+        CVR_IDCard.Addr="";
+        CVR_IDCard.IDCode="";
+        CVR_IDCard.Dep="";
+        CVR_IDCard.ValidTime="";
+        CVR_IDCard.NewAddr="";
+        var strReadResult=CVR_IDCard.DoReadIDCard();
+        if(strReadResult == 2){
+            _n().alertmsg('error','请检查您的读卡器线路！');
+            return false;
+        }
+        var $cardNo=CVR_IDCard.IDCode;
+        var $name=CVR_IDCard.IDName;
+        var $sex = "";
+        if(CVR_IDCard.Sex=="男"){
+            $sex = "1";
+        }
+        if(CVR_IDCard.Sex=="女"){
+            $sex= "2";
+        }
+        var $birthday=CVR_IDCard.Birthday;
+        var $address=CVR_IDCard.Addr;
+        var $obj = {"cardNo":$cardNo,"name":$name,"sex":$sex,"birthday":$birthday,"address":$address};
+        return $obj;
+    }
+</script>

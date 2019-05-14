@@ -1,0 +1,60 @@
+<#include "../common/_public.html"/>
+<#include "../common/leave_js.html"/>
+<div class="bjui-pageContent">
+    <form action="${ctx}/admin/leave/leave!saveAndEdit.do" method="post"
+          data-toggle="validate" data-alertmsg="true" data-isrefsh="false">
+        <div style="margin:15px auto 0; width:800px;">
+            <fieldset>
+                <legend>
+                    <h3 class="listtitle" id="unitTitle">请假信息</h3>
+                    <input type="hidden" name="id" value="${entity.id!}" />
+                </legend>
+                <table class="table table-condensed" width="100%">
+                    <tbody>
+                    <td class="right"><span style="color: #ff0000;">*</span>请假开始时间:</td>
+                    <td class="left">
+                        <input name="leaveStartTime" id="leaveStartTime"  data-rule="required,date" data-max-date="#leaveEndTime"   data-min-date="${.now?date}" class="form-control" size="15" type="text" data-toggle="datepicker" width="70" value="${(entity.leaveStartTime?string('yyyy-MM-dd'))!}"/>
+                    </td>
+                    </tr>
+                    <tr>
+                        <td class="right"><span style="color: #ff0000;">*</span>请假结束时间:</td>
+                        <td class="left">
+                            <input name="leaveEndTime" id="leaveEndTime"  data-rule="required,date" data-min-date="#leaveStartTime"  class="form-control" size="15" type="text" data-toggle="datepicker" width="70" value="${(entity.leaveEndTime?string('yyyy-MM-dd'))!}"/>
+                        </td></tr>
+                    <tr>
+                        <td class="right">请假原因:</td>
+                        <td class="left">
+                            <input name="entity.leaveReason" type="text" maxlength="15"
+                                   value="${entity.leaveReason!}"
+                                   size="15" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="right">备注:</td>
+                        <td class="left" colspan="3">
+                            <textarea rows="2" cols="15"  name="entity.remark"maxlength="85" value="${entity.remark!}" >${entity.remark!}</textarea>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </fieldset>
+        </div>
+    </form>
+</div>
+<div class="bjui-pageFooter">
+    <ul>
+        <li>
+            <button type="button" class="btn-close closecutab" data-icon="close">关闭</button>
+        </li>
+
+        <#if !view>
+        <li>
+            <button onclick="saveInfo()" class="btn-default" data-icon="save">保存</button>
+        </li>
+        </#if>
+    </ul>
+
+
+</div>
+</html>
+

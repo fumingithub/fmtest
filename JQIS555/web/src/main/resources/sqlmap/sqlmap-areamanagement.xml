@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap
+        PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+        "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="AreaManagement">
+    <typeAlias alias="AreaManagement" type="net.jqsoft.base.system.domain.AreaManagement" />
+
+    <resultMap id="AreaManagementMap" class="AreaManagement">
+
+                <result property="id" column="ID"/>
+                <result property="areaName" column="AREA_NAME"/>
+                <result property="areaCode" column="AREA_CODE"/>
+                <result property="equipmentId" column="EQUIPMENT_ID"/>
+                <result property="serverName" column="SERVER_NAME"/>
+                <result property="isDel" column="IS_DEL" />
+                <result property="creator" column="CREATOR"/>
+                <result property="createName" column="CREATE_NAME"/>
+                <result property="createTime" column="CREATE_TIME"/>
+                <result property="updator" column="UPDATOR"/>
+                <result property="updatorName" column="UPDATOR_NAME"/>
+                <result property="updateTime" column="UPDATE_TIME"/>
+                <result property="remarks" column="REMARKS"/>
+
+    </resultMap>
+
+    <select id="getAll" resultMap="AreaManagementMap">
+        SELECT * FROM AREA_MANAGEMENT
+    </select>
+    <select id="get" parameterClass="String" resultMap="AreaManagementMap">
+        <![CDATA[
+           	   SELECT * FROM AREA_MANAGEMENT WHERE ID=#id:String#
+         ]]>
+    </select>
+    <insert id="insert" parameterClass="AreaManagement">
+        <![CDATA[
+        INSERT INTO AREA_MANAGEMENT(
+        ID,
+        AREA_NAME,
+        AREA_CODE,
+        EQUIPMENT_ID,
+        SERVER_NAME,
+        IS_DEL,
+        CREATOR,
+        CREATE_NAME,
+        CREATE_TIME,
+        UPDATOR,
+        UPDATOR_NAME,
+        UPDATE_TIME,
+        REMARKS
+        ) values(
+                #id#,
+                #areaName#,
+                #areaCode#,               
+                #equipmentId#,
+                #serverName#,
+                #isDel#,
+                #creator#,
+                #createName#,
+                #createTime#,
+                #updator#,
+                #updatorName#,
+                #updateTime#,
+                #remarks#
+             )
+		]]>
+    </insert>
+    <update id="update" parameterClass="AreaManagement">
+        <![CDATA[
+			UPDATE AREA_MANAGEMENT ]]>
+			<dynamic prepend="SET">
+
+            <isNotEmpty  property="areaName" prepend=",">
+                <![CDATA[
+					AREA_NAME = #areaName:String#
+				]]>
+            </isNotEmpty >
+            
+            <isNotEmpty  property="isDel" prepend=",">
+                <![CDATA[
+					IS_DEL = #isDel:String#
+				]]>
+            </isNotEmpty >
+            
+            <isNotEmpty  property="areaCode" prepend=",">
+                <![CDATA[
+					AREA_CODE = #areaCode:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="equipmentId" prepend=",">
+                <![CDATA[
+					EQUIPMENT_ID = #equipmentId:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="serverName" prepend=",">
+                <![CDATA[
+					SERVER_NAME = #serverName:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="creator" prepend=",">
+                <![CDATA[
+					CREATOR = #creator:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="createName" prepend=",">
+                <![CDATA[
+					CREATE_NAME = #createName:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="createTime" prepend=",">
+                <![CDATA[
+					CREATE_TIME = #createTime:DateTime#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="updator" prepend=",">
+                <![CDATA[
+					UPDATOR = #updator:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="updatorName" prepend=",">
+                <![CDATA[
+					UPDATOR_NAME = #updatorName:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="updateTime" prepend=",">
+                <![CDATA[
+					UPDATE_TIME = #updateTime:DateTime#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="remarks" prepend=",">
+                <![CDATA[
+					REMARKS = #remarks:String#
+				]]>
+            </isNotEmpty >
+        </dynamic>
+        <dynamic prepend="WHERE">
+            <![CDATA[
+					id = #id:int#
+				]]>
+        </dynamic>
+    </update>
+    <!--删除域信息信息-->
+	<update id="delDomainInfo" parameterClass="java.util.HashMap">
+		UPDATE AREA_MANAGEMENT SET IS_DEL = '1'
+		<dynamic prepend="WHERE">
+			<![CDATA[
+                ID = #id#
+            ]]>
+		</dynamic>
+	</update>
+    <delete id="deleteById" parameterClass="String">
+        <![CDATA[
+        DELETE FROM AREA_MANAGEMENT where ID=#id:String#
+     ]]>
+    </delete>
+    <sql id="domainSearch">
+		<dynamic>
+		    <isNotEmpty prepend=" AND " property="isDel">IS_DEL
+				like '%' || #isDel# || '%' </isNotEmpty>
+			<isEmpty prepend=" AND " property="isDel">IS_DEL
+				='0' </isEmpty>
+		    <isNotEmpty prepend=" AND " property="domianId">EQUIPMENT_ID
+				like '%' || #domianId# || '%' </isNotEmpty>
+			<isNotEmpty prepend=" AND " property="areaName">AREA_NAME
+				like '%' || #areaName# || '%' </isNotEmpty>
+		</dynamic>
+	</sql>
+    <select id="count" resultClass="int">
+        SELECT COUNT(*) FROM AREA_MANAGEMENT WHERE 1=1
+        <include refid="domainSearch"/>
+    </select>
+    <select id="select" resultMap="AreaManagementMap"  parameterClass="java.util.HashMap">
+        SELECT * FROM AREA_MANAGEMENT WHERE 1=1
+        <include refid="domainSearch"/>
+    </select>
+
+</sqlMap>

@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap
+        PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+        "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="SysOrg">
+    <typeAlias alias="SysOrg" type="net.jqsoft.base.system.domain.SysOrg" />
+
+    <resultMap id="SysOrgMap" class="SysOrg">
+        <result property="id" column="ID"/>
+        <result property="code" column="CODE"/>
+        <result property="name" column="NAME"/>
+        <result property="areaId" column="AREA_ID"/>
+        <result property="parentId" column="PARENT_ID"/>
+        <result property="address" column="ADDRESS"/>
+        <result property="telephone" column="TELEPHONE"/>
+        <result property="email" column="EMAIL"/>
+        <result property="status" column="STATUS"/>
+        <result property="authAreaCode" column="AUTH_AREA_CODE"/>
+    </resultMap>
+
+    <resultMap id="SysOrgMapForSelect" class="SysOrg">
+        <result property="id" column="ID"/>
+        <result property="code" column="CODE"/>
+        <result property="name" column="NAME"/>
+        <result property="areaId" column="AREA_ID"/>
+        <result property="parentId" column="PARENT_ID"/>
+        <result property="address" column="ADDRESS"/>
+        <result property="telephone" column="TELEPHONE"/>
+        <result property="email" column="EMAIL"/>
+        <result property="status" column="STATUS"/>
+        <result property="authAreaCode" column="AUTH_AREA_CODE"/>
+
+        <result property="isParent" column="IS_PARENT"/>
+        <result property="parentName" column="PARENT_NAME"/>
+    </resultMap>
+
+    <resultMap id="SysOrgMapForZTree" class="SysOrg">
+        <result property="id" column="ID"/>
+        <result property="code" column="CODE"/>
+        <result property="name" column="NAME"/>
+        <result property="areaId" column="AREA_ID"/>
+        <result property="parentId" column="PARENT_ID"/>
+        <result property="address" column="ADDRESS"/>
+        <result property="telephone" column="TELEPHONE"/>
+        <result property="email" column="EMAIL"/>
+        <result property="status" column="STATUS"/>
+        <result property="authAreaCode" column="AUTH_AREA_CODE"/>
+
+        <result property="rootId" column="ROOT_ID"/>
+        <result property="rootName" column="ROOT_NAME"/>
+    </resultMap>
+
+    <select id="getAllSysOrg" resultMap="SysOrgMap">
+        SELECT * FROM SYS_ORG
+    </select>
+
+    <!-- 获取所有机构集合，用于zTree加载 -->
+    <select id="getAll" resultMap="SysOrgMap">
+        SELECT * FROM SYS_ORG ORG WHERE ORG.STATUS = '0'
+        <dynamic>
+            <isEmpty property="parentId" prepend=" AND "><![CDATA[ ORG.PARENT_ID IS NULL ]]></isEmpty>
+            <isNotEmpty property="parentId" prepend=" AND "><![CDATA[ ORG.PARENT_ID = #parentId# ]]></isNotEmpty>
+        </dynamic>
+        ORDER BY ORG.CODE ASC
+    </select>
+
+    <select id="get" parameterClass="String" resultMap="SysOrgMap">
+        <![CDATA[
+                 SELECT * FROM SYS_ORG WHERE ID = #id:String#
+         ]]>
+    </select>
+
+    <insert id="insert" parameterClass="SysOrg">
+        <![CDATA[
+        INSERT INTO SYS_ORG(
+        ID,
+        CODE,
+        NAME,
+        AREA_ID,
+        PARENT_ID,
+        ADDRESS,
+        TELEPHONE,
+        EMAIL,
+        STATUS,
+        AUTH_AREA_CODE
+        ) VALUES (
+                #id#,
+                #code#,
+                #name#,
+                #areaId#,
+                #parentId#,
+                #address#,
+                #telephone#,
+                #email#,
+                #status#,
+                #authAreaCode#
+             )
+        ]]>
+    </insert>
+
+    <update id="update" parameterClass="SysOrg">
+        <![CDATA[
+            UPDATE SYS_ORG ]]>
+            <dynamic prepend="SET">
+
+            <isNotEmpty  property="code" prepend=",">
+                <![CDATA[
+                    CODE = #code:String#
+                ]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="name" prepend=",">
+                <![CDATA[
+                    NAME = #name:String#
+                ]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="areaId" prepend=",">
+                <![CDATA[
+                    AREA_ID = #areaId:String#
+                ]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="parentId" prepend=",">
+                <![CDATA[
+                    PARENT_ID = #parentId:String#
+                ]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="address" prepend=",">
+                <![CDATA[
+                    ADDRESS = #address:String#
+                ]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="telephone" prepend=",">
+                <![CDATA[
+                    TELEPHONE = #telephone:String#
+                ]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="email" prepend=",">
+                <![CDATA[
+                    EMAIL = #email:String#
+                ]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="status" prepend=",">
+                <![CDATA[
+                    STATUS = #status:String#
+                ]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="authAreaCode" prepend=",">
+                <![CDATA[
+                    AUTH_AREA_CODE = #authAreaCode:String#
+                ]]>
+            </isNotEmpty >
+        </dynamic>
+
+        <dynamic prepend="WHERE">
+            <![CDATA[
+                ID = #id:String#
+            ]]>
+        </dynamic>
+    </update>
+
+    <delete id="deleteById" parameterClass="String">
+        <![CDATA[
+        DELETE FROM SYS_ORG WHERE ID = #id:String#
+     ]]>
+    </delete>
+
+    <sql id="selectByConditions">
+        <dynamic>
+            <isNotEmpty prepend=" AND " property="name">
+                ORG.NAME LIKE '%' || #name# || '%'
+            </isNotEmpty>
+            <isNotEmpty prepend=" AND " property="code">
+                ORG.CODE LIKE '%' || #code# || '%'
+            </isNotEmpty>
+            <isNotEmpty prepend=" AND " property="status">
+                ORG.STATUS = #status#
+            </isNotEmpty>
+        </dynamic>
+    </sql>
+
+    <select id="count" resultClass="int">
+        SELECT COUNT(1) FROM SYS_ORG ORG WHERE ORG.STATUS IN (0, 1)
+        <isNotEmpty property="ztId">
+            <![CDATA[
+              AND (ORG.PARENT_ID = #ztId# OR ORG.ID = #ztId#)
+            ]]>
+        </isNotEmpty>
+
+        <!--<isNotEmpty property="ztAreaId">-->
+            <!--<![CDATA[-->
+              <!--AND ORG.AREA_ID = #ztAreaId#-->
+            <!--]]>-->
+        <!--</isNotEmpty>-->
+        <include refid="selectByConditions"/>
+    </select>
+
+    <select id="select" resultMap="SysOrgMapForSelect" parameterClass="java.util.HashMap">
+        SELECT 
+                <isNotEmpty property="ztId">
+                    <![CDATA[
+                       DECODE(ORG.PARENT_ID, #ztId#, '1', '0') IS_PARENT,
+                    ]]>
+                </isNotEmpty>
+                <isEmpty property="ztId">
+                    <![CDATA[
+                       DECODE(ORG.PARENT_ID, NULL, '0', '1') IS_PARENT,
+                    ]]>
+                </isEmpty>
+                <!--'0' IS_PARENT,-->
+               (SELECT NAME FROM SYS_ORG WHERE ID = ORG.PARENT_ID) PARENT_NAME,
+               ORG.*
+          FROM SYS_ORG ORG
+         WHERE ORG.STATUS IN (0, 1)
+        <isNotEmpty property="ztId">
+            <![CDATA[
+              AND (ORG.PARENT_ID = #ztId# OR ORG.ID = #ztId#)
+            ]]>
+        </isNotEmpty>
+        <include refid="selectByConditions"/>
+        ORDER BY IS_PARENT
+    </select>
+
+    <!-- 根据父级机构编码查询子机构集合 -->
+    <select id="getSysOrgListByParentId" resultMap="SysOrgMapForZTree" parameterClass="java.util.HashMap">
+        SELECT
+        <dynamic>
+            <isNotEmpty property="sysOrgName"><![CDATA[ DISTINCT ]]></isNotEmpty>
+        </dynamic>
+        <dynamic>
+            <isEmpty property="parentId">
+              <isEmpty property="filterOrgId">
+                  ORG.ID ROOT_ID,
+                  ORG.NAME ROOT_NAME,
+              </isEmpty>
+              <isNotEmpty property="filterOrgId">
+                  <![CDATA[
+                      #filterOrgId# ROOT_ID,
+                      (SELECT NAME FROM SYS_ORG WHERE ID = #filterOrgId#) ROOT_NAME,
+                  ]]>
+              </isNotEmpty>
+            </isEmpty>
+            <isNotEmpty property="parentId">
+                'none' ROOT_ID,
+                'none' ROOT_NAME,
+            </isNotEmpty>
+        </dynamic>
+        ORG.* FROM SYS_ORG ORG WHERE ORG.STATUS = '0'
+        <dynamic>
+            <isEmpty property="parentId">
+                <isEmpty property="filterOrgId" prepend=" AND ">
+                    <![CDATA[ ORG.PARENT_ID IS NULL ]]>
+                </isEmpty>
+                <isNotEmpty property="filterOrgId" prepend=" AND ">
+                    <![CDATA[ ORG.ID = #filterOrgId# ]]>
+                </isNotEmpty>
+            </isEmpty>
+            <isNotEmpty property="parentId" prepend=" AND "><![CDATA[ ORG.PARENT_ID = #parentId# ]]></isNotEmpty>
+            <isNotEmpty property="sysOrgName">
+                <![CDATA[
+                   START WITH ORG.NAME LIKE '%' || #sysOrgName# || '%' AND ORG.STATUS = '0'
+                  CONNECT BY PRIOR ORG.PARENT_ID = ORG.ID
+                ]]>
+            </isNotEmpty>
+            <isNotEmpty property="transferOrgId" prepend=" AND ">
+                <![CDATA[
+                    ORG.CODE NOT IN
+                       (SELECT CODE
+                          FROM SYS_ORG
+                         WHERE PARENT_ID = #transferOrgId#)
+                   AND ORG.ID != #transferOrgId#
+                ]]>
+            </isNotEmpty>
+        </dynamic>
+        ORDER BY ORG.CODE ASC
+    </select>
+
+    <!-- 根据机构编码查询是否有下级 -->
+    <select id="hasSonSysOrgById" resultMap="SysOrgMap" parameterClass="java.util.HashMap">
+        <![CDATA[
+          SELECT * FROM SYS_ORG ORG WHERE ORG.STATUS IN (0, 1) AND ORG.PARENT_ID = #id#
+        ]]>
+    </select>
+
+    <!-- 根据机构编码更新所有下级机构的启用标识状态 -->
+    <update id="updateStatusById" parameterClass="java.util.HashMap">
+        UPDATE SYS_ORG ORG
+           SET ORG.STATUS = #status#
+         WHERE ORG.ID IN (SELECT ID
+                              FROM SYS_ORG
+                             START WITH ID = #id# AND ORG.STATUS IN (0, 1)
+                            CONNECT BY PRIOR ID = PARENT_ID)
+    </update>
+
+    <!-- 根据组织机构编码查询一条记录 -->
+    <select id="getInfoByCode" resultMap="SysOrgMap" parameterClass="java.util.HashMap">
+        <![CDATA[
+          SELECT * FROM SYS_ORG ORG WHERE ORG.CODE = #code#
+        ]]>
+    </select>
+    
+    <!-- 根据授权区划编码查询记录 -->
+    <select id="queryByAuthAreaCode" resultClass="String" parameterClass="String">
+        <![CDATA[
+          SELECT NAME FROM SYS_ORG ORG WHERE ORG.AUTH_AREA_CODE = #authAreaCode#
+        ]]>
+    </select>
+    
+    <!-- 根据机构id更新授权-->
+    <update id="updateAuthAreaCodeById" parameterClass="java.util.HashMap">
+    	UPDATE SYS_ORG ORG
+           SET ORG.AUTH_AREA_CODE = #authAreaCode#
+         WHERE ORG.ID = #id#
+    </update>
+    
+    <!-- 根据当前组织机构获取组织机构路径 如：大庆市-大同区。。。。。-->
+	<select id="getOrgPath" resultMap="SysOrgMap" parameterClass="java.util.HashMap">
+    	SELECT * FROM SYS_ORG  START WITH ID= #id:String# CONNECT BY ID =  PRIOR  PARENT_ID 
+	</select>
+	
+	<!-- 取消组织机构授权 -->
+	<update id="cancelAuth" parameterClass="java.util.HashMap">
+    	UPDATE SYS_ORG ORG 
+           SET ORG.AUTH_AREA_CODE = ''
+         WHERE ORG.ID = #id#
+    </update>
+</sqlMap>

@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap
+        PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+        "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="TroubleDeclare">
+    <typeAlias alias="TroubleDeclare" type="net.jqsoft.base.elevatorfm.domain.TroubleDeclare"/>
+
+    <resultMap id="TroubleDeclareMap" class="TroubleDeclare">
+        <result property="id" column="ID"/>
+        <result property="elevatorId" column="ELEVATOR_ID"/>
+        <result property="declareTime" column="DECLARE_TIME"/>
+        <result property="declareName" column="DECLARE_NAME"/>
+        <result property="declareTel" column="DECLARE_TEL"/>
+        <result property="troubleStatus" column="TROUBLE_STATUS"/>
+        <result property="troubleType" column="TROUBLE_TYPE"/>
+        <result property="troubleDescribe" column="TROUBLE_DESCRIBE"/>
+        <result property="confirmor" column="CONFIRMOR"/>
+        <result property="confirmorName" column="CONFIRMOR_NAME"/>
+        <result property="confirmorTime" column="CONFIRMOR_TIME"/>
+        <result property="confirmorContent" column="CONFIRMOR_CONTENT"/>
+        <result property="technicianId" column="TECHNICIAN_ID"/>
+        <result property="technicianName" column="TECHNICIAN_NAME"/>
+        <result property="technicianTel" column="TECHNICIAN_TEL"/>
+        <result property="isDel" column="IS_DEL"/>
+        <result property="creator" column="CREATOR"/>
+        <result property="creatorName" column="CREATOR_NAME"/>
+        <result property="creatorTime" column="CREATOR_TIME"/>
+        <result property="updator" column="UPDATOR"/>
+        <result property="updatorName" column="UPDATOR_NAME"/>
+        <result property="updatorTime" column="UPDATOR_TIME"/>
+        <result property="deleter" column="DELETER"/>
+        <result property="deleterName" column="DELETER_NAME"/>
+        <result property="deleterTime" column="DELETER_TIME"/>
+    </resultMap>
+
+     <resultMap id="technicianUserMap" class="User">
+        <result property="userName" column="USER_NAME"/>
+         <result property="mobiePhone" column="MOBIE_PHONE"/>
+        <result property="id" column="ID"/>
+    </resultMap>
+
+    <!--编辑、查看时，根据id获得数据-->
+    <select id="get" parameterClass="String" resultMap="TroubleDeclareMap">
+        <![CDATA[
+        SELECT * FROM TROUBLE_DECLARE_FM WHERE ID = #id:String#
+        ]]>
+    </select>
+
+    <!--查询时，模糊查询-->
+    <sql id="selectByConditions">
+        <dynamic>
+            <isNotEmpty prepend="AND" property="declareTime">
+                TROUBLE_DECLARE_FM.DECLARE_TIME LIKE '%' || #declareTime# || '%'
+            </isNotEmpty>
+
+            <isNotEmpty prepend=" AND " property="starttime">
+                <![CDATA[to_date(to_char(TROUBLE_DECLARE_FM.DECLARE_TIME,'yyyy-MM-dd'),'yyyy-MM-dd') >= to_date(#starttime#,'yyyy-MM-dd')]]>
+            </isNotEmpty>
+            <isNotEmpty prepend=" AND " property="endtime">
+                <![CDATA[to_date(to_char(TROUBLE_DECLARE_FM.DECLARE_TIME,'yyyy-MM-dd'),'yyyy-MM-dd') <= to_date(#endtime#,'yyyy-MM-dd')]]>
+            </isNotEmpty>
+            <isNotEmpty prepend="AND" property="troubleStatus">
+                TROUBLE_DECLARE_FM.TROUBLE_STATUS LIKE '%' || #troubleStatus# || '%'
+            </isNotEmpty>
+            <isNotEmpty prepend="AND" property="troubleType">
+                TROUBLE_DECLARE_FM.TROUBLE_TYPE LIKE '%' || #troubleType# || '%'
+            </isNotEmpty>
+            <isNotEmpty prepend="">
+                <![CDATA[
+              order by TROUBLE_DECLARE_FM.CREATOR_TIME  DESC
+            ]]>
+            </isNotEmpty>
+        </dynamic>
+    </sql>
+
+    <!--分页和数据列表显示-->
+    <select id="select" resultMap="TroubleDeclareMap" parameterClass="java.util.HashMap">
+        SELECT * FROM TROUBLE_DECLARE_FM  where TROUBLE_DECLARE_FM.IS_DEL = '0' and ELEVATOR_ID = #id:String#
+        <isNotEmpty property="">
+            <![CDATA[
+              AND (order by TROUBLE_DECLARE_FM.CREATOR_TIME DESC )
+            ]]>
+        </isNotEmpty>
+        <include refid="selectByConditions"/>
+
+    </select>
+    <select id="count" resultClass="int">
+        SELECT count(*) FROM TROUBLE_DECLARE_FM  where TROUBLE_DECLARE_FM.IS_DEL = '0' and ELEVATOR_ID = #id:String#
+        <include refid="selectByConditions"/>
+    </select>
+
+    <!--电梯故障申报新增-->
+    <insert id="insert" parameterClass="TroubleDeclare">
+        <![CDATA[
+        INSERT INTO TROUBLE_DECLARE_FM (
+         ID,
+         ELEVATOR_ID,
+         DECLARE_TIME,
+         DECLARE_NAME,
+         DECLARE_TEL,
+         TROUBLE_STATUS,
+         TROUBLE_TYPE,
+         TROUBLE_DESCRIBE,
+         CONFIRMOR,
+         CONFIRMOR_NAME,
+         CONFIRMOR_TIME,
+         CONFIRMOR_CONTENT,
+         TECHNICIAN_ID,
+         TECHNICIAN_NAME,
+         TECHNICIAN_TEL,
+         IS_DEL,
+         CREATOR,
+         CREATOR_NAME,
+         CREATOR_TIME,
+         UPDATOR,
+         UPDATOR_NAME,
+         UPDATOR_TIME,
+         DELETER,
+         DELETER_NAME,
+         DELETER_TIME
+        ) VALUES(
+                #id#,
+                #elevatorId#,
+                #declareTime#,
+                #declareName#,
+                #declareTel#,
+                #troubleStatus#,
+                #troubleType#,
+                #troubleDescribe#,
+                #confirmor#,
+                #confirmorName#,
+                #confirmorTime#,
+                #confirmorContent#,
+                #technicianId#,
+                #technicianName#,
+                #technicianTel#,
+                #isDel#,
+                #creator#,
+                #creatorName#,
+                #creatorTime#,
+                #updator#,
+                #updatorName#,
+                #updatorTime#,
+                #deleter#,
+                #deleterName#,
+                #deleterTime#
+        )
+        ]]>
+    </insert>
+
+    <!--故障申报信息编辑-->
+    <update id="update" parameterClass="TroubleDeclare">
+        <![CDATA[
+            UPDATE TROUBLE_DECLARE_FM
+        ]]>
+        <dynamic prepend="SET">
+            <isNotEmpty property="elevatorId" prepend=",">
+                <![CDATA[
+                    ELEVATOR_ID = #elevatorId:String#]]>
+            </isNotEmpty>
+            <isNotEmpty property="declareTime" prepend=",">
+                <![CDATA[
+                    DECLARE_TIME = #declareTime:DATE#]]>
+            </isNotEmpty>
+            <isNotEmpty property="declareName" prepend=",">
+                <![CDATA[
+                    DECLARE_NAME = #declareName:String#]]>
+            </isNotEmpty>
+            <isNotEmpty property="declareTel" prepend=",">
+                <![CDATA[
+                    DECLARE_TEL = #declareTel:String#]]>
+            </isNotEmpty>
+            <isNotEmpty property="troubleStatus" prepend=",">
+                <![CDATA[
+                    TROUBLE_STATUS = #troubleStatus:String#]]>
+            </isNotEmpty>
+            <isNotEmpty property="troubleType" prepend=",">
+                <![CDATA[
+                    TROUBLE_TYPE = #troubleType:String#]]>
+            </isNotEmpty>
+            <isNotEmpty property="troubleDescribe" prepend=",">
+                <![CDATA[
+                    TROUBLE_DESCRIBE = #troubleDescribe:String#]]>
+            </isNotEmpty>
+            <isNotEmpty property="confirmor" prepend=",">
+                <![CDATA[
+                    CONFIRMOR = #confirmor:String#]]>
+            </isNotEmpty>
+            <isNotEmpty property="confirmorName" prepend=",">
+                <![CDATA[
+                    CONFIRMOR_NAME = #confirmorName:String#]]>
+            </isNotEmpty>
+            <isNotEmpty property="confirmorTime" prepend=",">
+                <![CDATA[
+                    CONFIRMOR_TIME = #confirmorTime:String#]]>
+            </isNotEmpty>
+
+            <isNotEmpty property="confirmorContent" prepend=",">
+                <![CDATA[
+                    CONFIRMOR_CONTENT = #confirmorContent:String#]]>
+            </isNotEmpty>
+            <isNotEmpty property="technicianId" prepend=",">
+                <![CDATA[
+                    TECHNICIAN_ID = #technicianId:String#]]>
+            </isNotEmpty>
+            <isNotEmpty property="technicianName" prepend=",">
+                <![CDATA[
+                    TECHNICIAN_NAME = #technicianName:String#]]>
+            </isNotEmpty>
+            <isNotEmpty property="technicianTel" prepend=",">
+                <![CDATA[
+                    TECHNICIAN_TEL = #technicianTel:String#]]>
+            </isNotEmpty>
+            <isNotEmpty property="updator" prepend=",">
+                <![CDATA[
+                    UPDATOR = #updator:String#]]>
+            </isNotEmpty>
+            <isNotEmpty property="updatorName" prepend=",">
+                <![CDATA[
+                    UPDATOR_NAME = #updatorName:String#]]>
+            </isNotEmpty>
+            <isNotEmpty property="updatorTime" prepend=",">
+                <![CDATA[
+                    UPDATOR_TIME = #updatorTime:String#]]>
+            </isNotEmpty>
+
+        </dynamic>
+        <dynamic prepend="WHERE">
+            <![CDATA[
+                ID = #id:String#
+            ]]>
+        </dynamic>
+    </update>
+
+    <!--逻辑删除电梯故障申报信息-->
+    <update id="localDeleteTroubleDeclare" parameterClass="TroubleDeclare">
+        <![CDATA[ UPDATE TROUBLE_DECLARE_FM]]>
+        <dynamic prepend="SET">
+            <isNotEmpty property="deleter" prepend=",">
+                <![CDATA[ DELETER = #deleter# ]]>
+            </isNotEmpty>
+            <isNotEmpty property="deleterName" prepend=",">
+                <![CDATA[ DELETER_NAME = #deleterName# ]]>
+            </isNotEmpty>
+            <isNotEmpty property="deleterTime" prepend=",">
+                <![CDATA[ DELETER_TIME = #deleterTime# ]]>
+            </isNotEmpty>
+            <isNotEmpty property="isDel" prepend=",">
+                <![CDATA[ IS_DEL = #isDel# ]]>
+            </isNotEmpty>
+        </dynamic>
+        <dynamic prepend="WHERE">
+                <![CDATA[ ID = #id# ]]>
+        </dynamic>
+    </update>
+
+    <!--更新故障状态-->
+    <update id="updateTroubleStatus" parameterClass="java.util.HashMap">
+        <![CDATA[ UPDATE TROUBLE_DECLARE_FM]]>
+        <dynamic prepend="SET">
+            <isNotEmpty  property="troubleStatus" prepend=",">
+                <![CDATA[ TROUBLE_STATUS = #troubleStatus:String# ]]>
+            </isNotEmpty >
+        </dynamic>
+        <dynamic prepend="WHERE">
+            <![CDATA[ ID = #id# ]]>
+        </dynamic>
+    </update>
+
+    <!--物业确认故障申报信息-->
+    <update id="confirmTroubleDeclare" parameterClass="TroubleDeclare">
+        <![CDATA[
+            UPDATE TROUBLE_DECLARE_FM
+        ]]>
+        <dynamic prepend="SET">
+            <isNotEmpty property="confirmor" prepend=",">
+                <![CDATA[
+                    CONFIRMOR = #confirmor:String#]]>
+            </isNotEmpty>
+            <isNotEmpty property="confirmorName" prepend=",">
+                <![CDATA[
+                    CONFIRMOR_NAME = #confirmorName:String#]]>
+            </isNotEmpty>
+            <isNotEmpty property="confirmorTime" prepend=",">
+                <![CDATA[
+                    CONFIRMOR_TIME = #confirmorTime:String#]]>
+            </isNotEmpty>
+
+            <isNotEmpty property="confirmorContent" prepend=",">
+                <![CDATA[
+                    CONFIRMOR_CONTENT = #confirmorContent:String#]]>
+            </isNotEmpty>
+            <isNotEmpty property="technicianId" prepend=",">
+                <![CDATA[
+                    TECHNICIAN_ID = #technicianId:String#]]>
+            </isNotEmpty>
+            <isNotEmpty property="technicianName" prepend=",">
+                <![CDATA[
+                    TECHNICIAN_NAME = #technicianName:String#]]>
+            </isNotEmpty>
+            <isNotEmpty property="technicianTel" prepend=",">
+                <![CDATA[
+                    TECHNICIAN_TEL = #technicianTel:String#]]>
+            </isNotEmpty>
+            <isNotEmpty property="troubleStatus" prepend=",">
+                <![CDATA[
+                    TROUBLE_STATUS = #troubleStatus:String#]]>
+            </isNotEmpty>
+        </dynamic>
+        <dynamic prepend="WHERE">
+            <![CDATA[ ID = #id# ]]>
+        </dynamic>
+    </update>
+    <!--获得技师数据集合-->
+    <select id="getTechnicianUserList" resultMap="technicianUserMap">
+        select * from sys_user where ID in
+        (SELECT USER_ID FROM SYS_AUTH WHERE ROLE_ID =
+        (SELECT ID FROM SYS_ROLE WHERE CODE = 'jsfm'))
+    </select>
+</sqlMap>

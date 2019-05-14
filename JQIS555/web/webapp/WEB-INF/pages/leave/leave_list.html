@@ -1,0 +1,83 @@
+<#include "../common/_public.html"/>
+<#include "../common/leave_js.html"/>
+<div class="bjui-pageHeader">
+    <form id="pagerForm" data-toggle="ajaxsearch" method="post" action="${ctx}/admin/leave/leave.do">
+        <div class="office">
+            <ul class="offbtn">
+                <li><a data-toggle="dialog" title="新增" id="leave_add"
+                        onclick="toEdit(this,'${ctx}/admin/leave/leave!toSaveAndEdit.do')"
+                      ><span class="iconbg01"> <i
+                        class="fa fa-file-text-o font24"></i></span>新增</a></li>
+
+
+                <li><a data-toggle="dialog"
+                        onclick="toEdit(this,'${ctx}/admin/leave/leave!toSaveAndEdit.do?id={#bjui-selected}')"
+                        title="编辑" id="leave_edit"><span class="iconbg02"> <i
+                        class="fa fa-edit  font24"></i></span>编辑</a></li>
+
+                <li><a onClick="toDelete('${ctx}/admin/leave/leave!delete.do',this)"><span class="iconbg03">
+				    <i class="fa fa-trash font24"></i></span>删除</a>
+                </li>
+
+                <!--<li><a  data-url="${ctx}/admin/leave/leave!delete.do?id={#bjui-selected}" data-toggle="doajax" data-xternal="true" data-isrefsh="true"-->
+                        <!--data-confirm-msg="确定要删除选中项吗？"><span class="iconbg03">-->
+				    <!--<i class="fa fa-trash font24"></i></span>删除</a></li>-->
+
+                <li><a data-external="false" data-toggle="dialog"
+                       onclick="toView(this,'${ctx}/admin/leave/leave!toSaveAndEdit.do?id={#bjui-selected}&view=true')">
+                <span class="iconbg04"><i class="fa fa-search font24"></i></span>查看</a></li>
+                </a></li>
+
+                <li><span class="ttt"></span></li>
+                <li><a id="refresh" data-toggle="reloadsearch"
+                       data-target="#bjui-pageContent" data-icon="search"><span class="iconbg02">
+				    <i class="fa fa-refresh font24"></i></span>刷新</a></li>
+                <li><a class="closecutab"><span class="iconbg03">
+			        <i class="fa fa-remove  font24"></i></span>关闭</a>
+                </li>
+            </ul>
+        </div>
+        <div class="bjui-searchBar">
+            <input type="hidden" name="limit" value="${limit}">
+            <input type="hidden" name="start" value="${start}">
+
+            <label>人员姓名:</label>
+            <input name="userName" class="form-control" size="15" type="text" value="${filter.parameters.userName!}" />
+            <button type="submit" class="btn-default" data-toggle="ajaxsearch" data-icon="search">查询</button>
+            &nbsp; <a class="btn btn-orange" href="javascript:;" onclick="$(this).navtab('reloadForm', true);" data-icon="undo">清空</a>
+        </div>
+    </form>
+</div>
+<div class="bjui-pageContent">
+    <table data-width="100%" data-nowrap="true" data-selected-multi="true"
+           class="table table-bordered table-hover table-striped table-top"
+           data-toggle="tablefixed">
+        <thead>
+        <tr>
+            <th width="20"></th>
+            <th width="50">NO.</th>
+            <th width="50">姓名</th>
+            <th width="100">请假开始时间</th>
+            <th width="100">请假结束时间</th>
+            <th width="100">请假天数</th>
+            <th width="100">请假原因</th>
+        </tr>
+        </thead>
+        <tbody id="leaveTable">
+        <#list entitys as entity>
+            <tr>
+                <td class="center"><input type="checkbox"  value="${entity.id}" name="ids" data-toggle="icheck"/></td>
+                <td class="center">${entity_index+1+(start-1)*limit}</td>
+                <td class="left">
+                    ${entity.userName!}
+                </td>
+                <td class="left">${(entity.leaveStartTime?string("yyyy-MM-dd"))!}</td>
+                <td class="left">${(entity.leaveEndTime?string("yyyy-MM-dd"))!}</td>
+                <td class="center">${entity.leaveDays!}</td>
+                <td class="left">${entity.leaveReason!}</td>
+            </tr>
+        </#list>
+        </tbody>
+    </table>
+</div>
+<#include "../common/_page.html"/>

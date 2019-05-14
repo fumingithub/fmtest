@@ -1,0 +1,37 @@
+<#include "../../../common/_public.html"/>
+<#include "meetingFm_list_js.html" />
+<div class="bjui-pageContent">
+    <form action="" id='disableReason' method="post" data-toggle="validate" data-alertmsg="true" data-isrefsh="false" data-closedia="true">
+        <div style="margin:15px auto 0; width:800px;">
+            <fieldset>
+                <legend>
+                    <h3 id="unitTitle">禁用信息</h3>
+                    <input   name="id" value="${entity.id!}" />
+                </legend>
+                <table class="table table-condensed" width="100%">
+                    <tbody>
+                    <tr>
+                        <td class="right"> 禁用原因:</td>
+                        <td class="left" colspan="3">
+                            <textarea id="disableReason111" rows="4" cols="60" name="entity.disableReason" maxlength="100">${entity.disableReason!}</textarea>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </fieldset>
+        </div>
+    </form>
+</div>
+<div class="bjui-pageFooter">
+    <ul>
+        <li>
+            <button type="button" class="btn-close closecutab" data-icon="close" >关闭</button>
+        </li>
+        <li>
+            <button onclick="disableReasonSave('disableReason')" class="btn-default" data-icon="save">保存</button>
+        </li>
+    </ul>
+
+
+</div>
+</html>

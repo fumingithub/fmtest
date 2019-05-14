@@ -1,0 +1,100 @@
+﻿<script language="javascript" type="text/javascript">
+function showResourceChild(e,pid) {
+	var asyncParam = {"parentId":pid};
+	showTreegridChild(e,pid,"resourceListTable","${ctx}/admin/system/resource!showchild.do",asyncParam);
+}
+
+	function view(obj,id,url,title,checkState) {
+	    var checkbox = $("#resourceListTable :checkbox:checked");
+	    if (checkbox.length == 0) {
+	    	$(this).alertmsg('info','请选择要操作的数据！');
+	        return false;
+	    }else if (checkbox.length > 1) {
+	        $(this).alertmsg('info',"只能选择一条数据！");
+	        return false;
+	    } else {
+	    	$(obj).navtab({id:id, url:url, title:title});
+	    	/*
+	    	if (checkState) {
+	    		var data={"applyForId":checkbox.val()};
+				$.ajax({
+		            type:"POST",
+		            url: "${ctx}/admin/apply/applyfor!getApplyById.ext",
+		            data:data,
+		            dataType:"json",
+		            async : false,
+					success : function(data) {
+						if (data != undefined && data != null && data.state*1 > 0 && data.state*1 != 21 && data.state*1 != 41) {
+							$(this).alertmsg('warn'," 已经提交审核的数据不能编辑！");
+					        return false;
+						} else {
+						    if (url != null && url != '') {
+						    	$(obj).navtab({id:id, url:url, title:title});
+						    }
+						}
+					}
+				});
+			} else {
+			    if (url != null && url != '') {
+			    	$(obj).navtab({id:id, url:url, title:title});
+			    }
+			}
+	    	*/
+	    }
+	    return false;
+	}
+
+/**
+ * 跳转到资源编辑页面
+ * @param obj 当前a标签控件
+ * @param editType 类型 1：新增，2：编辑（修改）
+ */
+function addResource(obj, editType) {
+
+    var parentId = $("#resource_parentId").val(); // 父级资源id
+    var url = ""; // 请求地址
+    var $id = ""; // 当前选中的id
+
+    if (editType == 2) {
+        if ($("#resourceListTable input:checked").length > 0) {
+            $id = $("#resourceListTable input:checked").val();
+        } else {
+            $(obj).alertmsg('warn', "请选中一条数据！");
+            return;
+        }
+    }
+
+    if (editType == 1) {
+        url = "${ctx}/admin/system/resource!edit.do?parentId=" + parentId + "&editType=" + editType;
+    } else {
+        url = "${ctx}/admin/system/resource!edit.do?id=" + $id + "&editType=" + editType;
+    }
+
+    var dialog_options = {
+        id: obj.id,
+        url: url,
+        fresh: true,
+        width: 700,
+        height: 500,
+        mask: true,
+        title: obj.title
+    }
+    $(obj).dialog(dialog_options);
+}
+
+    /**
+     * 清空操作
+     */
+    function drefresh(){
+        $("#displayName, #resourceType").val("");
+        $("#resourceSearch").submit();
+    }
+
+    /**
+     * 页面加载初始化
+     */
+    $(function () {
+        var pName = $("#resource_sonPName").val(); // 父级资源名称
+        $("#pName").val(pName).attr("title", pName);
+    });
+</script>

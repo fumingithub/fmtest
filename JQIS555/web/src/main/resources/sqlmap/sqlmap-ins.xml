@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap
+        PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+        "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="Org">
+    <typeAlias alias="Ins" type="net.jqsoft.base.system.domain.Org"/>
+    <resultMap id="InsMap" class="Ins">
+        <result property="id" column="id"/>
+        <result property="code" column="CODE"/>
+        <result property="name" column="NAME"/>
+        <result property="parentId" column="PARENT_ID"/>
+        <result property="address" column="ADDRESS"/>
+        <result property="telephone" column="TELEPHONE"/>
+        <result property="email" column="EMAIL"/>
+        <result property="areaId" column="AREA_ID"/>
+        <result property="status" column="STATUS"/>
+    </resultMap>
+    
+    <resultMap id="InsMap1" class="Ins">
+        <result property="id" column="id"/>
+        <result property="code" column="CODE"/>
+        <result property="name" column="NAME"/>
+        <result property="parentId" column="PARENT_ID"/>
+        <result property="address" column="ADDRESS"/>
+        <result property="telephone" column="TELEPHONE"/>
+        <result property="email" column="EMAIL"/>
+        <result property="areaId" column="AREA_ID"/>
+        <result property="status" column="STATUS"/>
+        
+    </resultMap>
+    
+    <resultMap id="InsMap2" class="Ins">
+        <result property="id" column="id"/>
+        <result property="code" column="CODE"/>
+        <result property="name" column="NAME"/>
+        <result property="parentId" column="PARENT_ID"/>
+        <result property="address" column="ADDRESS"/>
+        <result property="telephone" column="TELEPHONE"/>
+        <result property="email" column="EMAIL"/>
+        <result property="areaId" column="AREA_ID"/>
+        <result property="status" column="STATUS"/>
+        
+        <result property="isHaveChild" column="isHaveChild"/>
+    </resultMap>
+    <select id="getAll" resultMap="InsMap">
+        SELECT * FROM SYS_ORG
+    </select>
+    <select id="get" parameterClass="String" resultMap="InsMap">
+        <![CDATA[
+           	   SELECT u.*
+           	   FROM SYS_ORG u
+           	   WHERE  id=#id:String#
+           	   
+        ]]>
+    </select>
+    <insert id="insert" parameterClass="Ins">
+        <![CDATA[
+        INSERT INTO SYS_ORG(
+	    ID,
+        CODE,
+        NAME,
+        PARENT_ID,
+        ADDRESS,
+        TELEPHONE,
+        EMAIL,
+        AREA_ID,
+        status
+        ) values(
+	    #code#,
+                #code#,
+                #name#,
+                #parentId#,
+                #address#,
+                #telephone#,
+                #email#,
+                #areaId#,
+                #status#
+             )
+
+
+        ]]>
+    </insert>
+    <update id="update" parameterClass="Ins">
+        <![CDATA[
+			UPDATE SYS_ORG ]]>
+        <dynamic prepend="SET">
+
+            <isNotEmpty property="code" prepend=",">
+                <![CDATA[
+					CODE = #code:String#
+				]]>
+            </isNotEmpty>
+
+            <isNotEmpty property="name" prepend=",">
+                <![CDATA[
+					NAME = #name:String#
+				]]>
+            </isNotEmpty>
+
+            <isNotEmpty property="parentId" prepend=",">
+                <![CDATA[
+					PARENT_ID = #parentId:String#
+				]]>
+            </isNotEmpty>
+
+
+
+
+            <isNotEmpty property="address" prepend=",">
+                <![CDATA[
+					ADDRESS = #address:String#
+				]]>
+            </isNotEmpty>
+
+
+            <isNotEmpty property="telephone" prepend=",">
+                <![CDATA[
+					TELEPHONE = #telephone:String#
+				]]>
+            </isNotEmpty>
+
+            <isNotEmpty property="email" prepend=",">
+                <![CDATA[
+					EMAIL = #email:String#
+				]]>
+            </isNotEmpty>
+
+            <isNotEmpty property="areaId" prepend=",">
+                <![CDATA[
+					AREA_ID = #areaId:String#
+				]]>
+            </isNotEmpty>
+
+
+
+
+
+            
+            <isNotEmpty property="status" prepend=",">
+                <![CDATA[
+					status = #status#
+				]]>
+            </isNotEmpty>
+        </dynamic>
+        <dynamic prepend="WHERE">
+            <![CDATA[
+					ID = #id#
+				]]>
+        </dynamic>
+    </update>
+    
+    <sql id="sel-tj-common"> 
+    	<dynamic prepend="WHERE">
+    		<isPropertyAvailable property="flag">
+	        	<isNotEmpty property="name" prepend=" and ">name like '%' || #name# || '%'</isNotEmpty>
+	        	<isNotEmpty property="code" prepend=" and ">code like '%' || #code# || '%'</isNotEmpty>
+        	</isPropertyAvailable>
+        	<isNotPropertyAvailable property="flag">
+        		PARENT_ID IS NULL
+        	</isNotPropertyAvailable>
+        </dynamic>
+    </sql>
+
+    <select id="count" resultClass="int">
+        SELECT COUNT(*) FROM SYS_ORG
+        <include refid="sel-tj-common"/>
+    </select>
+    <select id="select" resultMap="InsMap2" parameterClass="java.util.HashMap">
+        SELECT v.*,(select count(*) from SYS_ORG a where v.id=a.parent_id) isHaveChild  
+        FROM SYS_ORG v
+        <include refid="sel-tj-common"/>
+    </select>
+    <delete id="deleteById" parameterClass="java.util.HashMap">
+        <![CDATA[
+		update SYS_ORG set status=1 where id= #id:String#
+    	 ]]>
+    </delete>
+    
+    <!-- 根据父id查询所有子机构 -->
+	<select id="getUnitByParentId" resultMap="InsMap" parameterClass="java.util.HashMap">
+		 select u.* from SYS_ORG u where 1=1
+		 <dynamic>
+			<isNotEmpty prepend=" AND " property="areaId">
+				area_id in (select t.code from sys_area t
+				start with t.code=#areaId# connect by prior t.code=t.p_code)
+			</isNotEmpty>
+		</dynamic>
+		 start with 
+		 <dynamic>
+		 	<isEmpty property="parentId">u.parent_id is null</isEmpty>
+           	<isNotEmpty property="parentId">u.parent_id in ($parentId$)</isNotEmpty>
+		 </dynamic>
+		  connect by prior u.id = u.parent_id
+	</select>
+	
+	<select id="getUnitByCode" resultClass="Ins" parameterClass="java.util.HashMap" >
+		select id, code, name, parent_id parentId,
+		 address,  telephone, email, area_id areaId,
+status from SYS_ORG where code = #code:String#
+		<dynamic>
+			<isNotEmpty prepend=" AND " property="id">id != #id:String#</isNotEmpty>
+		</dynamic>
+	</select>
+	
+	<select id="getUnitByPcode" resultMap="InsMap2" parameterClass="java.util.HashMap">
+		  SELECT v.*,(select count(*) from SYS_ORG a where a.id=v.parent_id) isHaveChild
+		  FROM SYS_ORG v WHERE parent_id = #pid#
+	</select>
+</sqlMap>

@@ -1,0 +1,154 @@
+<#include "../../../common/_public.html"/>
+<div class="bjui-pageContent">
+    <form action="${ctx}/admin/system/elevatorMaintenanceRecordfm!maintenanceRecordSave.do" id="pageform" data-isrefsh="true">
+        <input class="hidden"  id="types" name="types" value="${types!}">
+        <input class="hidden"  id="iId" name="id" value="${(entity.id)!}"/>
+        <input class="hidden"  id="isDelMaintenanceView"   value="${(entity.isDel)!}"/>
+        <input class="hidden"  id="maintenanceStatus"  name="maintenanceStatus" value="${(entity.maintenanceStatus)!}"/>
+        <div style="margin:15px auto 0;">
+            <fieldset>
+                <legend>
+                    <h3 class="listtitle">维保记录</h3>
+                </legend>
+                <table class="table table-condensed">
+                    <tbody>
+                    <tr colspan="4" class="confirmThree">
+                        <td class="right" ><span style="color:red">*</span>技师姓名：</td>
+                        <td class="left" >
+                            <input id="entity_technicianName" name="entity.technicianName"title="${(entity.technicianName)!}" type="text" data-rule="required;length[~50]"size="18"
+                            <#if (types!) == 'add'> value="${loginUserName!}"
+                            <#else > value="${(entity.technicianName)!}"
+                            </#if>readonly
+                        </td>
+                        <td class="right" ><span style="color:red">*</span>手机号：</td>
+                        <td class="left" >
+                            <input id="entity_maintenanceorTel" name="entity.technicianTel" type="text" data-rule="required;mobilePhone"
+                                   value="${(entity.technicianTel)!}" title="${(entity.technicianTel)!}" size="15"  />
+                        </td>
+                    </td>
+                    <tr class="confirmThree">
+                        <td class="right" ><span style="color:red">*</span>维保时间:</td>
+                        <td class="left" >
+                            <input id="entity_maintenanceorTime" name="entity.maintenanceorTime" type="text" data-pattern="yyyy-MM-dd HH:mm:ss"
+                                   data-rule="required"size="18"data-max-date="${.now?date}"readonly
+                                   data-toggle="datepicker"
+                                   value="${((entity.maintenanceorTime)?string('yyyy-MM-dd HH:mm:ss'))!}"
+                                   title="${((entity.maintenanceorTime)?string('yyyy-MM-dd HH:mm:ss'))!}"  />
+                        </td>
+                        <td class="right" ><span style="color:red">*</span>维保类型：</td>
+                        <td class="left" >
+                            <select data-clear="" name="entity.maintenanceType" id="entity_maintenanceType" data-toggle="selectpicker" data-width="150" data-rule="required">
+                                <option value="" >--请选择--</option>
+                                <option value= '1'  <#if (entity.maintenanceType)! == '1' >selected="selected"</#if>>维修 </option>
+                            <option value= '2'  <#if (entity.maintenanceType)! == '2' >selected="selected"</#if>>保养</option>
+                        </select>
+                        </td>
+                    </tr>
+                    <tr colspan="4" class="confirmThree">
+                        <td class="right" >其他维保人：</td>
+                        <td class="left" colspan="3">
+                            <input id="entity_maintenanceorOther2" name="entity.maintenanceorOther" type="text" data-rule="length[~50]"
+                                   value="${(entity.maintenanceorOther)!}" title="${(entity.maintenanceorOther)!}" size="52"
+                                   onclick="toEditOtherTechnician(this)"/>
+                        </td>
+
+                    </tr>
+                    <tr colspan="4" class="confirmThree">
+                        <td class="right" ><span style="color:red">*</span>维保内容：</td>
+                        <td class="left" colspan="3" >
+                                    <textarea  name="entity.maintenanceorContent" type="text"
+                                               data-rule="required;length[0~500]" style="width:520px; height:60px">${(entity.maintenanceorContent)!}</textarea>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </fieldset>
+        </div>
+    </form>
+</div>
+<div class="bjui-pageFooter">
+    <ul>
+        <li>
+            <button type="button" class="btn-close closecutab" data-icon="close" id="closePages">关闭</button>
+        </li>
+        <li
+        <#if types??>
+            <#if types == "view">
+                hidden="true"
+            </#if>
+        </#if>>
+        <button type="button" class="btn-default" data-icon="save" onclick="technicianMaintenanceSave('pageform');">保存</button>
+        </li>
+    </ul>
+</div>
+
+<script>
+    /**
+     * 页面加载时初始化方法
+     */
+    $(document).ready(function () {
+
+        /**新增、编辑、查看页面状态控制**/
+        var pageType = $("#types").val();
+        if(pageType != null && pageType!="" && pageType!= "undefined" ){
+            if (pageType == "view" || pageType == "view1"){
+                $("table").find("input").each(function () {
+                    $(this).attr("readonly","readonly");
+                });
+                $("table").find("textArea").each(function () {
+                    $(this).attr("readonly","readonly");
+                });
+                $("table").find("select").each(function () {
+                    $(this).attr("disabled","disabled");
+                });
+            }else {
+                $(".view").html("");
+            }
+        }
+        //判断是否被删除
+        if  ($("#isDelMaintenanceView").val() == '1'){
+            $(this).alertmsg('warn', '当前数据已被删除，请刷新页面！');
+            $("#closePages").click();
+        }
+    });
+
+    /**保存数据并刷新**/
+    function technicianMaintenanceSave(formId ) {
+        var dataForms = $("#" + formId);
+        var $formFlag = dataForms.isValid();
+        var myPermission = $("#myPermission").val();
+        if ($formFlag) {
+            $.ajax({
+                type: "post",
+                data: $("#" + formId).serialize(),
+                url: "${ctx}/admin/system/elevatorMaintenanceRecordfm!maintenanceRecordSave.do?myPermission=" + myPermission,
+                success: function(data){
+                    var dataJson = eval('(' + data + ')');
+                    if (dataJson.statusCode == 300) {
+                        $(this).alertmsg('warn', dataJson.message);
+                    } else if (dataJson.statusCode == 200) {
+                        $(this).alertmsg('correct', dataJson.message);
+                        $(this).dialog("close", $.CurrentDialog);
+                        $("#refresh_maintenanceRecord").click();
+                        $("#refresh_elevator").click();
+                    }
+                }
+            });
+        }
+    }
+
+    /**添加其他维保人**/
+    function toEditOtherTechnician(obj){
+        var dialog_options = {
+            id:'technicianOtherList',
+            url:"${ctx}/admin/system/elevatorTroubleDeclarefm!addTechnicianOtherList.do",
+            fresh:true,
+            width:500,
+            height:500,
+            mask:true,
+            title:'技师列表'
+        }
+        $(obj).dialog(dialog_options)
+    }
+
+</script>

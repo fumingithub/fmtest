@@ -1,0 +1,23 @@
+﻿<script language="javascript" type="text/javascript">
+    //打开审核窗口${ctx}/admin/system/user!queryrole.ext
+    function saveRoleList() {
+       var checkbox = $("#userRoleTable :checkbox:checked");
+       var roleIds = "";
+       if (checkbox.length > 0) {
+	       for (var i = 0; i < checkbox.length; i++) {
+	       		roleIds = roleIds + checkbox[i].value + ",";
+	       }
+	       roleIds = roleIds.substring(0, roleIds.length - 1);
+       }
+       $("#roleIds").val(roleIds);
+       	$.ajax({
+	       type: "POST",
+	       url: "${ctx}/admin/system/user!saveuserrole.do",
+	       data: $("#entrust_dialog").serialize(), // serializes the form's elements.
+	       success: function(data){
+		       $(this).alertmsg('correct',"保存成功！");
+		       $(this).dialog("close", $.CurrentDialog);
+	       }
+		});
+    }
+</script>

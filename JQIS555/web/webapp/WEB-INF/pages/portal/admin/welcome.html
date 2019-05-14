@@ -1,0 +1,46 @@
+<#include "../../common/_public.html"/>
+<style>
+@media all and (min-width: 640px) {
+}
+@media screen and (max-width: 1440px) {
+
+}
+</style>
+<link rel="stylesheet" type="text/css" href="${ctx}/BJUI/themes/css/style_welcome.css"/>
+	<div class="content">
+    	<div class="desk">
+        	<div class="desk-title"><i class="fa fa-desktop"></i>我的工作平台</div>
+            <div class="desk-con">
+            	<div class="deskCLeft">
+                	<div><a style="cursor:pointer" data-toggle="dialog" data-width="500" data-height="400" 
+                	 data-url="${ctx}/admin/system/user!editloginuser.do?id=${(user.id)!}"
+                	 data-id="user-edit" title="点击修改个人信息" data-title="个人信息修改"><img src="${ctx}/images/ptphoto.png"/></a></div>
+                </div>
+                <div class="deskCenWZ">
+                    <div style="margin-top: 10px;font-size:1.2em;color: #000000">姓名：</div>
+                    <div style="width:150px;margin-top: 15px;font-size:1.15em;color: #777">${user.realName}</div>
+                    <div style="margin-top: 25px;font-size:1.2em;color: #000000">所属机构：</div>
+                    <div style="width:800px;margin-top: 15px;font-size:1.15em;color: #777"><@pcorg id="${user.insId!}"/></div>
+                </div>
+                <div class="deskCRight" >
+                	<ul>
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+       <div class="desk">
+        	<div >
+            	<div class="procl-title"><i class="fa fa-bullhorn"></i><span class="s-t">通知公告</span><span class="more"><a style="cursor:pointer;" data-toggle="navtab" data-id="shouye_tongzhi" data-url="${ctx}/admin/notice/notice.do" data-title="我的通知">更多>></a></span></div>
+                <ul class="modnews" style="cursor:pointer;">
+				<#list noticeList as notice>
+					<li>
+					<img style="height: 30px;margin-left: 0px;"src="${ctx}/BJUI/themes/css/img/xtlogo.png">
+					<a style="font-size:1.1em;" data-toggle="dialog" data-width="950" data-height="500" data-title="通知公告-查看" data-id="news_view" data-url="${ctx}/admin/notice/notice!viewpage.do?entity.id=${notice.id}" >${notice.title}</a>
+					</li>
+				</#list>
+				
+            </ul>
+            </div>
+    </div>

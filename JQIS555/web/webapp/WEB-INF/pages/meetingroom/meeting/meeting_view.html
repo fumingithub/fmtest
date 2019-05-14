@@ -1,0 +1,113 @@
+<#include "../../common/_public.html"/>
+<div class="bjui-pageContent">
+    <form action=""  id="editpagerform" name="pagerform">
+        <div style="margin:15px auto 0; ">
+            <fieldset>
+                <legend>
+                    <h3 class="listtitle">会议室信息</h3>
+                    <input type="hidden" name="id" value="${entity.id!}" />
+                </legend>
+                <table class="table table-condensed" width="100%">
+                    <tbody>
+                        <tr>
+                            <td class="right" style="width: 130px">会议室名称:</td>
+                            <td class="left" colspan="3" readonly="readonly">
+                                ${entity.name!}
+                            </td>
+                            <td class="right" style="width: 130px">WIFI:</td>
+                            <td class="left" colspan="3" readonly="readonly">
+                                 <#if entity.haveWifi??>
+                                      <#if entity.haveWifi=="0"><div style="color: red;">无</div></#if>
+                                      <#if entity.haveWifi=="1"><div>有</div></#if>
+                                 </#if>     
+                            </td>   
+                        </tr>
+                        <tr>
+                            <td class="right" style="width: 130px">会议室位置</td>
+                            <td class="left" colspan="3" readonly="readonly">
+                                ${entity.location!}
+                            </td>
+                            <td class="right" style="width: 130px">麦克风:</td>
+                            <td class="left" colspan="3" readonly="readonly">
+                                 <#if entity.haveMicrophone??>
+                                      <#if entity.haveMicrophone=="0"><div style="color: red;">无</div></#if>
+                                      <#if entity.haveMicrophone=="1"><div>有</div></#if>
+                                 </#if>    
+                            </td>   
+                        </tr>
+                        <tr>
+                            <td class="right" style="width: 130px">会议室型号:</td>
+                            <td class="left" colspan="3" readonly="readonly">
+                                <#if entity.meetingSize??>
+                                     <#if entity.meetingSize=="0"><div>大型会议厅(可容纳30人以上)</div></#if>
+                                     <#if entity.meetingSize=="1"><div>中型会议厅(可容纳20-30人)</div></#if>
+                                     <#if entity.meetingSize=="2"><div>小型会议厅(可容纳10人以内)</div></#if>
+                                </#if>       
+                            </td>
+                            <td class="right" style="width: 130px">投影仪:</td>
+                            <td class="left" colspan="3" readonly="readonly">
+                                 <#if entity.haveProjector??>
+                                      <#if entity.haveProjector=="0"><div style="color: red;">无</div></#if>
+                                      <#if entity.haveProjector=="1"><div>有</div></#if>
+                                 </#if>       
+                            </td>   
+                        </tr>
+                        <tr>
+                            <td class="right" style="width: 130px">使用状态:</td>
+                            <td class="left" colspan="3" readonly="readonly">
+                                <#if entity.inUse??>
+                                     <#if entity.inUse=="0"><div>否</div></#if>
+                                     <#if entity.inUse=="1"><div>是</div></#if>
+                                </#if>
+                            </td>
+                            <td class="right" style="width: 130px">电脑:</td>
+                            <td class="left" colspan="3" readonly="readonly">
+                                 <#if entity.haveComputer??>
+                                      <#if entity.haveComputer=="0"><div style="color: red;">无</div></#if>
+                                      <#if entity.haveComputer=="1"><div>有</div></#if>
+                                 </#if>       
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="right" style="width: 130px">会议室类型:</td>
+							<td class="left" colspan="3" readonly="readonly"><#if
+								entity.type??> <#if entity.type=="0">
+								<div>圆桌型</div></#if> <#if entity.type=="1">
+								<div>课桌型</div></#if> <#if entity.type=="2">
+								<div>U型</div></#if> <#if entity.type=="3">
+								<div>椭圆型</div></#if> <#if entity.type=="4">
+								<div>长方型</div></#if> <#if entity.type=="5">
+								<div>其他</div></#if> </#if>
+							</td>
+							<td class="right"  style="width: 130px">会议室状态:</td>
+							<td class="left" colspan="3" readonly="readonly"><#if
+								entity.status == '1'>
+								<div title="启用" class="label label-success">启用</div></#if> <#if
+								entity.status == '0'>
+								<div title="禁止" class="label label-danger">禁止</div></#if>
+							</td>
+						</tr>
+						<tr>
+						    <td class="right"  style="width: 130px">更新人:</td>
+						    <td class="left" colspan="3" readonly="readonly">${entity.updatorName!}</td>
+						    <td class="right"  style="width: 130px">更新时间:</td>
+						    <td class="left" colspan="3" readonly="readonly"><input name="entity.updateTime" type="text" readonly="true"  value="${(entity.updateTime?string("yyyy-MM-dd HH:mm:ss"))!''}" size="20" /></td>
+						</tr>
+						<tr>
+						    <td class="right"  style="width: 130px">创建人:</td>
+						    <td class="left" colspan="3" readonly="readonly">${entity.creatorName!}</td>
+						    <td class="right"  style="width: 130px">创建时间:</td>
+						    <td class="left" colspan="3" readonly="readonly"><input name="entity.createTime" type="text" readonly="true"  value="${(entity.createTime?string("yyyy-MM-dd HH:mm:ss"))!''}" size="20" /></td>
+						</tr>
+                        <tr>
+                        <td class="right" style="width: 130px">备注：</td>
+                        <td class="left" colspan="7">
+                            <input name="entity.remark" type="text" data-rule="" value="${entity.remark!}" size="65" readonly="readonly"/>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </fieldset>
+        </div>
+    </form>
+</div>

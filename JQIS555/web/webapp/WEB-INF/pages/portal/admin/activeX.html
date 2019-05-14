@@ -1,0 +1,123 @@
+<#include "../../common/_public.html"/>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>ActiveX安装和说明</title>
+    <link href="/Images/ActiveX/activexhelp.css" rel="stylesheet" />
+</head>
+<body>
+    <form id="form1" runat="server">
+    <table border="0" align="center" cellpadding="0" cellspacing="0">
+        <tr>
+            <td style="padding-right: 20px;">
+                <h2 style="text-align: center; line-height: 25px;">
+                    ActiveX控件安装指南</h2>
+                <hr />
+                <div style="line-height: 25px; padding: 5px; margin-left: 20px;">
+                    <strong>使用系统中统计报表,身份证读卡器,指纹仪等工具，需要安装ActiveX控件。<br />
+                    </strong>1、<a href="#1">什么是ActiveX控件？</a><br />
+                    2、<a href="#2">如果我没有安装控件会有什么现象？</a><br />
+                    3、<a href="#3">如何自动安装控件？</a><br />
+                    4、<a href="#4">如何手动安装控件？</a><br />
+                    5、<a href="#5">为什么我正确操作还是无法安装，或是安装后也无法正常使用？</a>
+                </div>
+                <ol id="1">
+                    <span class="STYLE1"><strong>什么是ActiveX控件？</strong></span>
+                    <li>ActiveX插件以前也叫做OLE控件或OCX控件，它是一些软件组件或对象，可以将其插入到WEB网页或其它应用程序中。
+                        <br />
+                    </li>
+                </ol>
+                <ol id="2">
+                    <span class="STYLE1"><strong>如果我没有安装控件会有什么现象？</strong></span>
+                    <li>为了保障您账户的安全，如果您使用的是IE浏览器，我们会自动提示您安装。如果没有正确安装，会不能使用身份证读卡器或指纹仪或者报表数据加载不出来等等现象.
+                    </li>
+                    <li>这时候您只要按照我们的提示，下载安装我们的安全控件并刷新，就可以正常使用了。
+                        <br />
+                    </li>
+                </ol>
+                <ol id="3">
+                    <span class="STYLE1"><strong>如何自动安装控件？</strong></span>
+                    <li>如果您使用的是IE浏览器在此页面上面会弹出窗口，这时候您只要按照下面的步骤安装就可以了： </li>
+                    <li>第一步：点击“单击此处”<br />
+                        <br />
+                        <img src="/Images/ActiveX/ti.jpg" width="577" /><br />
+                        <br />
+                        提醒：请不要关闭此提示框，否则，您就不能正常安装我们的插件了！<br />
+                    </li>
+                    <li>第二步：选择“安装ActiveX控件”：<br />
+                        <br />
+                        <img src="/Images/ActiveX/choise.gif" width="224" /><br />
+                        <br />
+                        提醒：选择并点击“安装ActiveX控件”，我们保证选择此控件对您的计算机没有任何风险！<br />
+                    </li>
+                    <li>第三步：弹出如下图所示安全警告窗口，选择“安装”<br />
+                        <br />
+                        <img src="/Images/ActiveX/insactivex.jpg" width="476" /><br />
+                        <br />
+                        如果您的网络忙，安装可能会花几分钟时间，请稍等片刻!完成后您就可以登录交易系统了。
+                        <br />
+                    </li>
+                </ol>
+                <ol id="4">
+                    <span class="STYLE1"><strong>如何手动安装控件？</strong></span>
+                    <li>您也可以下载软件包进行控件安装：<br />
+                        数据报表控件:<a href="/CAB/griectl.cab" target="_blank">点击下载</a><br />
+                        指纹仪控件包:<a href="/CAB/JFngAtx.cab" target="_blank">点击下载</a> </li>
+                    <li>第一步：鼠标右键点击软件包进行解压。<br />
+                        <br />
+                        <img src="/Images/ActiveX/sdaz1.jpg" width="310" /><br />
+                        <br />
+                    </li>
+                    <li>第二步：打开解压后文件夹，右键点击inf后缀名的文件，选择<span class="STYLE1">安装。</span><br />
+                        <br />
+                        <img src="/Images/ActiveX/sdaz2.jpg" width="405" /><br />
+                        <br />
+                    </li>
+                    <li>第三步：等待安装进程完成。<br />
+                        <br />
+                        <img src="/Images/ActiveX/sdaz3.jpg" width="392" />
+                        <br />
+                        <br />
+                        完成后您就可以登录交易系统了。<br />
+                        <br />
+                    </li>
+                </ol>
+                <ol id="5">
+                    <p class="STYLE1">
+                        <strong>为什么我按上面的操作还是无法安装，或是安装后也无法正常使用？</strong>
+                    </p>
+                    <p>
+                        <img src="/Images/ActiveX/install.jpg" width="466" /></p>
+                    <div style="color: red; padding-left: 0px;">
+                        请下载"浏览器设置操作视频"参考设置</div>
+                    <a href="/浏览器设置.wmv" target="_blank">点击下载操作视频</a>
+                </ol>
+                <br />
+                <div style="padding-left: 20px;">
+                    <strong>经过以上操作，您现在可以正常使用系统了！<br />
+                        祝您工作顺利！</strong>
+                </div>
+            </td>
+        </tr>
+    </table>
+    <div>
+        <% if (SystemFlag.Contains("DB"))
+           { %>                
+        <object classid="clsid:35515A76-3049-4D2A-8457-FD83173037E9" name="finger" width="256"
+            height="288" id="finger" accesskey="a" tabindex="0" title="finger" codebase="/CAB/JFngAtx.cab#version=1,0,1,1">
+        </object>        
+        <object classid="clsid:1BE74AA9-4AC8-4936-88D6-CD2B3FB54569" name="JFngStr" width="0"
+            height="0" id="JFngStr" codebase="/CAB/JFngAtx.cab#version=1,0,0,0">
+        </object>
+        <% } %>
+        <object id="Report" height="0" classid="CLSID:50CA95AF-BDAA-4C69-A9C6-93E1136E68BC"
+            codebase="/CAB/griectl.cab#Version=5,5,11,518">
+        </object>
+        <object id="SynCardOcx1" height="0" classid="4B3CB088-9A00-4D24-87AA-F65C58531039"
+            codebase="/CAB/SynCardOcx.cab#Version=1,0,0,1">
+        </object>
+    </div>
+    </form>
+</body>
+</html>

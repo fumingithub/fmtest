@@ -1,0 +1,153 @@
+<#include "../../common/_public.html"/>
+<#include "meeting_edit_js.html"/>
+<div class="bjui-pageContent">
+	<form action="" id="editpagerform" name="pagerform">
+		<div style="margin: 15px auto 0;">
+			<fieldset>
+				<legend>
+					<h3 class="listtitle">会议室信息</h3>
+					<input type="hidden" name="id" value="${entity.id!}" />
+				</legend>
+				<table class="table table-condensed" width="100%">
+					<tbody>
+						<tr>
+							<td class="right" style="width: 130px; height: 40px"><span
+								style="color: red;">*</span>会议室名称:</td>
+							<td class="left" colspan="3"><input name="entity.name"
+								maxlength="25" type="text" data-rule="required"
+								value="${entity.name!}" size="20" /></td>
+							<td class="right" style="width: 130px; height: 40px">WIFI:</td>
+							<td class="left" colspan="3"><select id="wifi"
+								name="entity.haveWifi" data-rule="required"
+								style="width: 100px; height: 24px; line-height: 24px;">
+									<option selected="selected" class="caret" value="">--请选择--</option>
+									<option value="0"<#if
+										(entity.haveWifi!)=="0"> selected="selected"</#if> >无</option>
+									<option value="1"<#if
+										(entity.haveWifi!)=="1"> selected="selected"</#if> >有</option>
+							</select></td>
+						</tr>
+						<tr>
+							<td class="right" style="width: 130px; height: 40px"><span
+								style="color: red;">*</span>会议室位置</td>
+							<td class="left" colspan="3"><input name="entity.location"
+								type="text" data-rule="required" maxlength="25"
+								value="${entity.location!}" size="20" /></td>
+							<td class="right" style="width: 130px; height: 40px">麦克风:</td>
+							<td class="left" colspan="3"><select id="microphone"
+								name="entity.haveMicrophone" data-rule="required"
+								style="width: 100px; height: 24px; line-height: 24px;">
+									<option selected="selected" class="caret" value="">--请选择--</option>
+									<option value="0"<#if
+										(entity.haveMicrophone!)=="0"> selected="selected"</#if> >无</option>
+									<option value="1"<#if
+										(entity.haveMicrophone!)=="1"> selected="selected"</#if> >有</option>
+							</select></td>
+						</tr>
+						<tr>
+							<td class="right" style="width: 130px; height: 40px"><span
+								style="color: red;">*</span>会议室型号:</td>
+							<td class="left" colspan="3">
+							    <select id="meetingSize"name="entity.meetingSize" data-rule="required" style="width: 200px; height: 24px; line-height: 24px;">
+									<option selected="selected" class="caret" value="">--请选择--</option>
+									<option value="0"<#if
+										(entity.meetingSize!)=="0"> selected="selected"</#if>
+										>大型会议厅(可容纳30人以上)</option>
+									<option value="1"<#if
+										(entity.meetingSize!)=="1"> selected="selected"</#if>
+										>中型会议厅(可容纳20-30人)</option>
+									<option value="2"<#if
+										(entity.meetingSize!)=="2"> selected="selected"</#if>
+										>小型会议厅(可容纳10人以内)</option>
+							    </select>
+							</td>
+							<td class="right" style="width: 130px; height: 40px">投影仪:</td>
+							<td class="left" colspan="3"><select id="projector"
+								name="entity.haveProjector" data-rule="required"
+								style="width: 100px; height: 24px; line-height: 24px;">
+									<option selected="selected" class="caret" value="">--请选择--</option>
+									<option value="0"<#if
+										(entity.haveProjector!)=="0"> selected="selected"</#if> >无</option>
+									<option value="1"<#if
+										(entity.haveProjector!)=="1"> selected="selected"</#if> >有</option>
+							</select></td>
+						</tr>
+						<tr>
+						    <td class="right" style="width: 130px; height: 40px"><span
+								style="color: red;">*</span>会议室状态:</td>
+							<td class="left" colspan="3"><select data-clear=""
+								name="entity.status" id="status" data-rule="required"
+								data-toggle="selectpicker" data-width="200">
+									<option value="">-请选择-</option>
+									<option value="0"<#if
+										(entity.status!)== '0' >selected="selected"</#if>>维修</option>
+									<option value="1"<#if
+										(entity.status!)== '1' >selected="selected"</#if>>可用</option>
+							</select></td>
+							<td class="right" style="width: 130px; height: 40px">电脑:</td>
+							<td class="left" colspan="3"><select id="computer"
+								name="entity.haveComputer" data-rule="required"
+								style="width: 100px; height: 24px; line-height: 24px;">
+									<option selected="selected" class="caret" value="">--请选择--</option>
+									<option value="0"<#if
+										(entity.haveComputer!)=="0"> selected="selected"</#if> >无</option>
+									<option value="1"<#if
+										(entity.haveComputer!)=="1"> selected="selected"</#if> >有</option>
+							</select></td>
+						</tr>
+						<tr>
+							<td class="right" style="width: 130px; height: 40px"><span
+								style="color: red;">*</span>会议室类型:</td>
+							<td class="left" colspan="3"><select data-clear=""
+								name="entity.type" id="type" data-rule="required"
+								data-toggle="selectpicker" data-width="200">
+									<option value="">-请选择-</option>
+									<option value="0"<#if
+										(entity.type!)=='0'>selected="selected"</#if>>圆桌型</option>
+									<option value="1"<#if
+										(entity.type!)=='1'>selected="selected"</#if>>课桌型</option>
+									<option value="2"<#if
+										(entity.type!)=='2'>selected="selected"</#if>>U型</option>
+									<option value="3"<#if
+										(entity.type!)=='3'>selected="selected"</#if>>椭圆型</option>
+									<option value="4"<#if
+										(entity.type!)=='4'>selected="selected"</#if>>长方型</option>
+									<option value="5"<#if
+										(entity.type!)=='5'>selected="selected"</#if>>其他</option>
+							</select></td>
+							<td class="right" style="width: 130px; height: 40px"><span
+								style="color: red;">*</span>是否可使用:</td>
+							<td class="left" colspan="3"><select data-clear=""
+								name="entity.inUse" id="inUse" data-rule="required"
+								data-toggle="selectpicker" data-width="200">
+									<option value="">-请选择-</option>
+									<option value="0"<#if
+										(entity.inUse!)== '0' >selected="selected"</#if>>不可使用</option>
+									<option value="1"<#if
+										(entity.inUse!)== '1' >selected="selected"</#if>>可使用</option>
+							</select></td>
+						</tr>
+						<tr>
+							<td class="right" style="width: 130px; height: 40px">备注：</td>
+							<td class="left" colspan="7"><input name="entity.remark"
+								type="text" data-rule="" value="${entity.remark!}" size="62" />
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</fieldset>
+		</div>
+	</form>
+</div>
+<div class="bjui-pageFooter">
+	<ul>
+		<li>
+			<button type="button" class="btn-close closecutab" data-icon="close">关闭</button>
+		</li>
+		<li<#if types??><#if types == "view">hidden="true"</#if></#if>>
+			<button
+				onclick="saveInfo(this,'${ctx}/meetingroom/meeting/meeting!save.do','editpagerform')"
+				class="btn-default" data-icon="save">保存</button>
+		</li>
+	</ul>
+</div>

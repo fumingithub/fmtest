@@ -1,0 +1,85 @@
+<#include "../../../common/_public.html"/>
+<div class="bjui-pageHeader">
+ <form id="pagerForm" data-toggle="ajaxsearch" action="${ctx}/project/Authority.do" method="post">
+ <div class="office">
+			<ul class="offbtn">
+ 			<@auth name="PROJECT_INFO_AUTHORITY">
+                <#if hasPermission>
+					<li><a
+					onclick="toGrantProAndServ(this,'${ctx}/project/Authority!serverAssign.do?selectUserId={#bjui-selected}')"
+					title="授权" id="resource_assign"><span class="iconbg02">
+							<i class="fa fa-shirtsinbulk font24"></i>
+					</span>授权</a></li>
+				</#if>
+            </@auth>
+				<li><span class="ttt"></span></li>
+                <li> <a id="refresh" data-toggle="reloadsearch" data-target="#bjui-pageContent" data-icon="search" ><span class="fa fa-refresh font24 iconbg02"></span>刷新</a> </li>
+              <li> <a  onclick="AuthoritycloseDialogAndRefresh(this);" class="a-close closecutab"><span class="iconbg03"><i class="fa fa-remove  font24"></i></span>关闭</a> </li>
+     </ul>
+		</div>
+	  <div class="bjui-searchBar">
+      <input type="hidden" name="limit" value="${limit}">
+      <input type="hidden" name="start" value="${start}">
+<!--       <input type="" id="sysuserproid"  value="${entity.sysuserproid!}"> -->
+      	 <label>&nbsp;登录账号：</label>
+         <input id="userNameId" name="userName" class="form-control" size="15" type="text" value="${filter.parameters.userName!}" />
+          <label>&nbsp;用户姓名：</label>
+          <input id="realNameId" name="realName" class="form-control" size="15" type="text" value="${filter.parameters.realName!}" />
+			<button id="user_search" type="submit" class="btn-default"  data-toggle="ajaxsearch" data-icon="search" id="projectSearchBtn">查询</button>&nbsp;
+		 <a class="btn btn-orange" href="javascript:;" onclick="$(this).navtab('reloadForm', true);" data-icon="undo">清空</a>
+     </div>
+	</form>
+</div>
+<div class="bjui-pageContent">
+    <table data-width="100%" data-nowrap="true" data-selected-multi="false"
+           class="table table-bordered table-hover table-striped table-top min-width">
+        <thead>
+        <tr>
+            <th width="1%"></th>
+            <th width="30">NO.</th>
+            <th class="list-col-VerifyNo" style="text-align:center">
+                <div class="list-col-VerifyNo">登录账号</div>
+            </th>
+            <th class="list-col-HouseholdAddress" style="text-align:center">
+                <div class="list-col-HouseholdAddress">用户姓名</div>
+            </th>
+        </tr>
+        </thead>
+        <tbody id="roleUserTable">
+        <#list entitys as entity>
+        <tr>
+            <td><input type="checkbox" value="${entity.id}" name="ids"
+					data-toggle="icheck">
+			</td>
+            <td class="center">${entity_index+1+(start-1)*limit}</td>
+            <td class="center">
+                <div title='${entity.userName!}'>${entity.userName!}</div>
+            </td>
+            <td class="center">
+                <div title="${entity.realName!}"> ${entity.realName!}</div>
+            </td>
+        </tr>
+        </#list>
+        </tbody>
+    </table>
+</div>
+<#include "../../../common/_page.html"/>
+<script type="text/javascript">
+    function toGrantProAndServ(obj,url){
+    	var title = obj.title;
+    	var dialog_options = {
+    		id: 'project-dialog-edit',
+    		url: url,
+    		fresh: false,
+    		width: 500,
+    		height: 500,
+    		mask: true,
+    		title: title,
+    		isrefshpar:true
+    	}
+    	$(obj).dialog(dialog_options)
+    }
+    function AuthoritycloseDialogAndRefresh(obj) {
+        $(obj).dialog("close", $.CurrentDialog);
+    }
+</script>

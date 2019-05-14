@@ -1,0 +1,61 @@
+<#include "../../../common/_public.html"/>
+<#include "../../../common/_area.html"/>
+
+<div class="bjui-pageContent">
+	<form id="form"  name="pagerform">
+		<div style="margin:15px auto 0; width:900px;">
+			<fieldset>
+				<legend>
+					<h3 class="listtitle">公告查看</h3>
+					<input id="cateId" type="hidden" name="id" value="${entity.id!}" />
+				</legend>
+				<table class="table table-bordered" width="100%">
+					<tbody>
+						<tr>
+							<td class="right width150">标题</td>
+							<td><input size="40" type="text" value="${entity.title!}" maxlength="150" name="entity.title" readonly/></td>
+						</tr>						
+						<tr>
+							<td class="right width150">副标题</td>
+							<td><input size="40" type="text" value="${entity.subTitle!}" maxlength="150" name="entity.subTitle" readonly/></td>
+						</tr>
+						<tr>
+							<td class="right width150">作者</td>
+							<td><input size="40" type="text" value="${entity.author!}" name="entity.author" maxlength="25" readonly/></td>
+						</tr>						
+					
+					   <tr>
+							<td class="right width150">发布时间</td>
+							<td>
+								<#if entity.releaseTime??>	
+						          <input size="40" type="text" value="${entity.releaseTime?string("yyyy-MM-dd HH:mm:ss")}" name="entity.releaseTime" maxlength="25" readonly/>
+						          <#else>	
+						           <input size="40" type="text" value="未发布" name="entity.releaseTime" maxlength="25" readonly/>  		  	
+						      </#if>
+					   </tr>
+							
+						<tr>
+							<td class="right width150">公告内容</td>
+							<td class="left" colspan="3">
+							    <textarea name="entity.context" rows="9" cols="60" maxlength="2000" 
+									data-toggle="kindeditor" data-items=" editor.hideMenu(); editor.readonly(true); " >
+									    ${entity.context!}</textarea>
+							</td>
+						</tr>
+						<tr>
+							<td class="right width150">备注</td>
+							<td><input size="40" type="text" value="${entity.remark!}" name="entity.remark" maxlength="25" readonly/></td>
+						</tr>	
+					</tbody>
+				</table>
+			</fieldset>
+		</div>
+	</form>
+</div>
+<div class="bjui-pageFooter">
+    <ul>
+        <li>
+            <button type="button" class="btn-close closecutab" data-icon="close">关闭</button>
+        </li>
+    </ul>
+</div>

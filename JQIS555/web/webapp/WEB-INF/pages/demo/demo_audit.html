@@ -1,0 +1,181 @@
+<#include "../common/_public.html"/>
+<div class="bjui-pageContent">
+<form action="" data-isrefsh="false" id="pageform">
+<div style="margin:15px auto 0; ">
+<fieldset style="float: left;width: 50%">
+    <legend id="title" style="font-size:16px;">上个版本</legend>
+    <table class="table table-condensed" width="100%">
+        <tbody>
+			
+        <tr>
+            <td class="right" style="width: 130px">项目编码：</td>
+            <td class="left" >
+                <input id="entity_code" readonly="readonly" name="entity.code" type="text" data-rule="required;length[~50]" value="AAAA0001" size="20" />
+            </td>  
+        </tr>
+        </tr>   
+            <td class="right" style="width: 130px">项目名称：</td>
+            <td class="left">
+                <input id="entity_name" style="border-color: red;background: #d83b01;color: white;"   readonly="readonly" name="entity.name" type="text" data-rule="required;length[~100]" value="普通门诊费 " size="20" />
+            </td>
+        </tr>
+        <tr>
+			<td class="right" style="width: 130px">标准来源：</td>
+            <td id="source" class="left" >
+               <input name="entity.source"  readonly="readonly" type="text" data-rule="required" size="20" value="国家标准" >
+            </td>
+        </tr>
+        </tr>
+            <td class="right" style="width: 130px">单位：</td>
+            <td class="left" >
+                <input name="entity.unit"  readonly="readonly" type="text" data-rule="length[~20]" value="次" size="20" />
+            </td>  
+      </tr>
+        <tr>
+        	<td class="right" style="width: 130px">助记码</td>
+            <td class="left" >
+                <input name="entity.mnemonicCode"  readonly="readonly" type="text" data-rule="" value="ptmzzcf" size="20" />
+            </td>
+        </tr>
+        <tr>
+            <td class="right" style="width: 130px">备注1：</td>
+            <td class="left">
+                <input name="entity.remark"  readonly="readonly" type="text" data-rule="" value="" size="20" />
+            </td>     
+        </tr>
+        </tr> 
+            <td class="right" style="width: 130px">备注2：</td>
+            <td class="left" >
+                <input name="entity.remark2"  readonly="readonly"  type="text" data-rule="" value="" size="20" />
+            </td>
+        </tr>
+
+        <tr>
+            <td class="right" style="width: 130px">备注3：</td>
+            <td class="left" >
+                <input name="entity.remark3"  readonly="readonly" type="text" data-rule="" value="" size="20" />
+            </td>
+        </tr>
+        <tbody>
+    </table>
+</fieldset>
+<fieldset style="float: left;width: 50%" >
+    <legend id="title" style="font-size:16px;">本次变更</legend>
+    <table class="table table-condensed">
+        <tbody>
+			
+        <tr>
+            <td class="right" style="width: 130px">项目编码：</td>
+            <td class="left" >
+                <input id="entity_code" readonly="readonly" name="entity.code" type="text" data-rule="required;length[~50]" value="AAAA0001" size="20" />
+            </td>    
+        </tr>
+        </tr>      
+            <td class="right" style="width: 130px">项目名称：</td>
+            <td class="left" >
+                <input style="border-color: red;background: #d83b01;color: white;"  id="entity_name"  readonly="readonly" name="entity.name" type="text" data-rule="required;length[~100]" value="普通门诊诊察费 " size="20" />
+            </td>
+        </tr>
+        <tr>
+			<td class="right" style="width: 130px">标准来源：</td>
+            <td id="source" class="left" >
+               <input name="entity.source"  readonly="readonly" type="text" data-rule="required" size="20" value="国家标准" >
+            </td>    
+        </tr>
+        </tr> 
+            <td class="right" style="width: 130px">单位：</td>
+            <td class="left" >
+                <input name="entity.unit"  readonly="readonly" type="text" data-rule="length[~20]" value="次" size="20" />
+            </td>  
+      </tr>
+        <tr >
+        	<td class="right" style="width: 130px">助记码</td>
+            <td class="left">
+                <input name="entity.mnemonicCode"  readonly="readonly" type="text" data-rule="" value="ptmzzcf" size="20" />
+            </td>
+        </tr>
+        <tr>
+            <td class="right" style="width: 130px">备注1：</td>
+            <td class="left">
+                <input name="entity.remark"  readonly="readonly" type="text" data-rule="" value="" size="20" />
+            </td>    
+        </tr>
+        </tr>       
+            <td class="right" style="width: 130px">备注2：</td>
+            <td class="left" >
+                <input name="entity.remark2"  readonly="readonly"  type="text" data-rule="" value="" size="20" />
+            </td>
+        </tr>
+
+        <tr>
+            <td class="right" style="width: 130px">备注3：</td>
+            <td class="left">
+                <input name="entity.remark3"  readonly="readonly" type="text" data-rule="" value="" size="20" />
+            </td>
+        </tr>
+        <tbody>
+    </table>
+</fieldset>
+<table class="table table-condensed" width="100%">
+	<tr>
+		<td class="right" style="width: 130px"><span style="color:red;">*</span>变更内容：</td>
+        <td class="left" colspan="3">
+        	<textarea rows="4" cols="60"  data-rule="required" >“普通门诊费”更改为“普通门诊诊察费”</textarea>
+        </td>
+	</tr>
+	
+</table>
+</div>
+</form>
+</div>
+<div class="bjui-pageFooter">
+    <ul>
+        <li>
+            <button type="button" class="btn-close closecutab" data-icon="close">关闭</button>
+        </li>
+        <li >
+            <button  onclick="saveForm(this,'${ctx}/standard/treatdict!save.do','pageform')" class="btn-default" data-icon="save">审核通过</button>
+        </li>
+        <li >
+            <button  onclick="saveForm(this,'${ctx}/standard/treatdict!save.do','pageform')" class="btn-close closecutab" data-icon="close">未通过</button>
+        </li>
+    </ul>
+</div>
+<script type="text/javascript">
+	$(function(){
+		var _id = $("#types").val();
+		if(_id!=null && _id!=""){
+			if (_id == "view") {
+				$("table").find("input").each(function(){
+					$(this).attr("readonly", "readonly");
+				});
+			}else{					
+				var $source = $("#source").children().val();
+				if($source=="01" || $source=="02" || $source=="03"){ //标准来源为国际、行业标准、国家标准、卫生部标准 编码和名称都不可编辑
+					$("#entity_name").attr("readonly", "readonly");
+					$("#entity_code").attr("readonly", "readonly");
+				}else{
+					$("#entity_code").attr("readonly", "readonly");
+				}
+				$("#create").hide();
+				$("#update").hide();
+				$("#entity_mnemonicCode").hide();
+			}
+		}else{
+			$("#create").hide();
+			$("#update").hide();			
+			$("#entity_mnemonicCode").hide();
+		}
+		
+	})
+	
+</script>
+<script type="text/javascript">
+    function setTreatDictStatus(flag, param) {
+        if (flag) {
+            $("#" + param).val("1"); // 启用
+        } else {
+            $("#" + param).val("0"); // 禁用
+        }
+    }
+</script>

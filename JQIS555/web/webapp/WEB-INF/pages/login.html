@@ -1,0 +1,139 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>晶奇综合管理系统</title>
+<link rel="stylesheet" type="text/css" href="../login/css/style.css"/>
+<script type="text/javascript" src="../login/js/jquery-1.7.2.min.js"></script>
+<!--PNG透明-->
+<!--[if lte IE 6]>
+<script type="text/javascript" src="js/DD_belatedPNG_0.0.8a.js"></script>
+<script type="text/javascript">
+    DD_belatedPNG.fix('*');
+</script>
+<![endif]-->
+</head>
+
+<body class="login">
+	<div class="header">
+   		<div class="logo"><a href="#" target="_blank">晶奇综合管理系统</a></div>
+    </div>
+</div>
+	 
+    <div class="content">
+    	<div class="mcon">
+    		 <form action="../j_spring_security_check" data-toggle="validate" method="post">
+        	<div class="CLogin">
+        		
+                <ul>
+                <#if SPRING_SECURITY_LAST_EXCEPTION??>
+                	<p class="worn">
+                		<font color="red">
+                   			 ${(SPRING_SECURITY_LAST_EXCEPTION.message)!}
+                   		 </font>
+                	</p>
+            	</#if>
+                	<li>
+                    	<span class="sp sp1"></span>
+                        <span class="st"><input type="text" name="j_username"></span>
+                    </li>
+                    <li>
+                    	<span class="sp sp2"></span>
+                        <span class="st"><input id="j_password" type="password" name="j_password" value=""></span>
+                    </li>
+                </ul>
+                <dl>
+                	<dd><input type="checkbox" name="_spring_security_remember_me"/></dd>
+                    <dt>记住用户名</dt>	
+                </dl>
+                <button class="btn" type="submit"></button>
+         
+            </div>	
+            </form>
+        </div>	
+       
+    </div>
+	 
+    <!--轮播焦点图开始-->
+    <div class="slide-index">
+        <div class=slides>
+            <div class="slide autoMaxWidth">
+                <div id=bi_0 class=image><A href="#"><img src="../login/images/login_01.png"></A></div>
+                <div id=bt_0 class=text></div>
+                <div id=bb_0 class=button></div>
+            </div>
+<!--             <div class="slide autoMaxWidth"> -->
+<!--                 <div id=bi_0 class=image><A href="#"><img src="../login/images/login_01.png"></A></div> -->
+<!--                 <div id=bt_0 class=text></div> -->
+<!--                 <div id=bb_0 class=button></div> -->
+<!--             </div> -->
+<!--             <div class="slide autoMaxWidth"> -->
+<!--                 <div id=bi_0 class=image><A href="#"><img src="../login/images/login_01.png"></A></div> -->
+<!--                 <div id=bt_0 class=text></div> -->
+<!--                 <div id=bb_0 class=button></div> -->
+<!--             </div> -->
+<!--             <div class="slide autoMaxWidth"> -->
+<!--                 <div id=bi_0 class=image><A href="#"><img src="../login/images/login_01.png"></A></div> -->
+<!--                 <div id=bt_0 class=text></div> -->
+<!--                 <div id=bb_0 class=button></div> -->
+<!--             </div> -->
+<!--             <div class="slide autoMaxWidth"> -->
+<!--                 <div id=bi_0 class=image><A href="#"><img src="../login/images/login_01.png"></A></div> -->
+<!--                 <div id=bt_0 class=text></div> -->
+<!--                 <div id=bb_0 class=button></div> -->
+<!--             </div> -->
+        </div>
+<!--        <div class=control><A href="#"></A><A href="#"></A><A href="#"></A><A href="#"></A><A href="#"></A></div> -->
+    </div>
+    <script type=text/javascript>
+//     $(function(){	
+//         indexSlides.ini();
+//     });
+    var indexSlides={};
+    indexSlides.timer=false;
+    indexSlides.total=$('.slide-index .control a').length;
+    indexSlides.current=-1;
+    indexSlides.offScreenLeft=2000;
+    indexSlides.leaveScreenLeft=4000;
+    indexSlides.animating=false;
+    indexSlides.obj=$('.slide-index .slide');
+    indexSlides.style=[];
+    indexSlides.style[0]={
+        text:{left:'30px',top:'81px'},
+        button:{left:'30px',top:'244px'},
+        direction:'tb'
+    };
+        
+    indexSlides.style[1]={
+        text:{left:'30px',top:'81px'},
+        button:{left:'30px',top:'244px'},
+        direction:'tb'
+    };
+        
+    indexSlides.style[2]={
+        text:{left:'30px',top:'81px'},
+        button:{left:'30px',top:'244px'},
+        direction:'tb'
+    };
+	indexSlides.style[3]={
+        text:{left:'30px',top:'81px'},
+        button:{left:'30px',top:'244px'},
+        direction:'tb'
+    };
+	indexSlides.style[4]={
+        text:{left:'30px',top:'81px'},
+        button:{left:'30px',top:'244px'},
+        direction:'tb'
+    };
+    </script>
+    <script type=text/javascript src="../login/js/scroll.js"></script>
+    <!--轮播焦点图结束-->
+	<div class="footer">
+    	<ul>
+        	<li><span><a href="#" target="_blank">版权所有</a></span>&nbsp;&nbsp;安徽晶奇网络科技股份有限公司</li>
+            <li><span><a href="#" target="_blank">技术支持</a></span>&nbsp;&nbsp;安徽晶奇网络科技股份有限公司</li>
+            <li><span><a href="#" target="_blank">服务热线</a></span>&nbsp;&nbsp;400-651-3766</li>
+        </ul>
+    </div>
+</body>
+</html>

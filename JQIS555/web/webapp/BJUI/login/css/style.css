@@ -1,0 +1,49 @@
+@charset "utf-8";
+/* CSS Document */
+
+*{margin:0;padding:0;}
+body{color:#666; font-size:12px;font-family:"微软雅黑"; background:url(${ctx}/../../images/nh_bg.jpg) no-repeat top;}
+a{ color:#666; text-decoration:none; border:0;}
+a:hover{text-decoration:none; border:0;}
+a {outline: none;}
+a:active {star:expression(this.onFocus=this.blur());}
+:focus { outline:0;}
+img{border:0}
+li{list-style:none}
+.clear{ clear:both;}
+
+.header{ width:1000px; height:100px; margin:10px auto 0 auto; position:relative;}
+.content{ width:1000px; height:500px; margin:0 auto; position:relative; top:5px;}
+.cleft{ float:left; width:600px; height:480px; background:url(${ctx}/../../images/nh_leftpic.png) no-repeat; position:absolute; top:0px;margin-left:0px;}
+.cright{ float:right; width:300px; height:320px; background:#FFFFFF; position:absolute; right:70px;margin-top:100px; border-radius:8px;}
+.crTitle{ float:left; width:300px; height:auto;}
+.crTitle span{ float:left; width:auto; height:auto; font-size:1.9em; margin-top:22px; margin-left:44px; display:inline; color:#303030;}
+.cright ul{ float:left; width:230px; height:auto; margin-top:20px; margin-left:35px; display:inline;}
+.cright ul li{ float:left; width:230px; height:36px; background:url(${ctx}/../../images/nh_inputbg01.jpg) no-repeat; padding-bottom:16px;}
+.cright ul li.last{ background:none;}
+.cright ul li.last .ldiv{ float:left; width:140px; height:36px; background:url(${ctx}/../../images/nh_inputbg02.jpg) no-repeat;}
+.cright ul li span{ float:left; width:26px; height:36px; background-repeat:no-repeat; background-position:left; margin-left:10px; display:inline;}
+.cright ul li span.s1{ background-image:url(${ctx}/../../images/nh_usericon.png);}
+.cright ul li span.s2{ background-image:url(${ctx}/../../images/nh_passwordicon.png);}
+.cright ul li span.s3{ background-image:url(${ctx}/../../images/nh_yzmicon.png);}
+.cright ul li input{ float:left; width:170px; height:30px; margin-left:10px; display:inline; font-size:1.2em; color:#666; border:0; margin-top:4px; background:none; line-height:30px\9;}
+.cright ul li.last .ldiv input{ float:left; width:88px;}
+.cright ul li.last .lic{ float:left; width:80px; height:35px;}
+.cr1{ float:left; width:230px; height:auto; margin-left:35px; display:inline;}
+.cr1 .s1{ float:left; width:auto; height:auto; margin-top:2px; *margin-top:-2px;}
+.cr1 .s2{ float:left; width:auto; height:auto; color:#333; margin-left:3px; *margin-left:0px; display:inline;}
+.cr1 .s3{ float:right; width:auto; height:auto; font-family:"宋体"; color:#3B98E8;}
+.cr1 .s3 a{ color:#3B98E8;}
+.cr1 .s3 a:hover{ text-decoration:underline;}
+.cright .Lbtn{ float:left; width:230px; height:38px; background:url(${ctx}/../../images/nh_lbtn.png) no-repeat; border:0; margin-top:6px; margin-left:35px; display:inline; color:#fff; font-size:1.6em; text-align:center; line-height:38px; cursor:pointer;font-family:"微软雅黑";}
+.cright .s4{ float:left; width:230px; height:auto; margin-top:12px; margin-left:35px; display:inline; font-family:"宋体"; color:#FE0000; text-align:center;}
+.footer{ width:1000px; height:auto; margin:0 auto;}
+.footer ul{ text-align:center;}
+.footer ul li{ display:inline-block; *display:inline; zoom:1; color:#444; font-size:14px; font-family:"宋体"; margin:0 14px;}
+.footer ul li span{ font-weight:bold; font-family:"微软雅黑";}
+.footer ul li a{ color:#444;}
+.footer ul li a:hover{ color:#FE0000;}
+/*动画*/
+.pic{-webkit-animation-duration: 2s; animation-duration: 2s;-webkit-animation-fill-mode: both;animation-fill-mode: both;}
+.picc{-webkit-animation-duration: 3s; animation-duration: 3s;-webkit-animation-fill-mode: both;animation-fill-mode: both;}
+

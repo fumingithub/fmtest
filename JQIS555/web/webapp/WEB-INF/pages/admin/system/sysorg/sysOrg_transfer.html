@@ -1,0 +1,29 @@
+<#include "../../../common/_public.html"/>
+
+<!--<div class="bjui-pageHeader">-->
+
+<!--</div>-->
+<div class="bjui-pageContent" id="sysOrgDiv">
+    <div class="clearfix">
+        <div id="sysOrgLeftDiv" style="height: auto; width: auto; float:left; margin-top: 5px;
+            padding-right: 20px; border: 0px solid;">
+            <input type="hidden" id="transferSysOrgId" value="${transferSysOrgId!}" />
+            <div style="margin-top: 5px; margin-left: 5px;">
+                <input type="text" id="sysOrgTransferName" size="15" placeholder="机构过滤" />
+                <button id="sysOrg_transferSearchBtn" class="btn-default" style="padding-left: 4px;padding-right: 4px" data-icon="search"></button>
+            </div>
+            <!--<a id="searchBtn" class="bjui-lookup" href="javascript:;" data-toggle="findgridbtn" style="height: 26px; line-height: 26px;"><i class="fa fa-search font16"></i></a>-->
+            <ul id="sysOrgTransferTree" class="ztree"></ul>
+        </div>
+    </div>
+</div>
+
+<div class="bjui-pageFooter">
+    <ul>
+        <li>
+            <button type="button" class="btn-close closecutab" data-icon="close">关闭</button>
+        </li>
+    </ul>
+</div>
+
+<#include "sysOrg_transfer_js.html"/>

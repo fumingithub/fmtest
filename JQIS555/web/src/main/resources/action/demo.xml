@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+        "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+    <!--管理后台 -->
+    <package name="demo" namespace="/demo" extends="ncms-default">
+
+        <action name="demo" class="net.jqsoft.demo.DemoAction">
+            <result name="versionRelease" type="freemarker">/WEB-INF/pages/demo/demo_versionRelease.html</result>
+       		<result name="choiceVersion" type="freemarker">/WEB-INF/pages/demo/demo_choiceVersion.html</result>
+       		<result name="audit" type="freemarker">/WEB-INF/pages/demo/demo_audit.html</result>
+       		<result name="importVer" type="freemarker">/WEB-INF/pages/demo/demo_importVer.html</result>
+       		<result name="verReleaseEdit" type="freemarker">/WEB-INF/pages/demo/demo_verReleaseEdit.html</result>
+       </action>
+
+    </package>
+
+</struts>

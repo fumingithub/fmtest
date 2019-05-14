@@ -1,0 +1,308 @@
+<#include "../../../common/_public.html"/>
+
+
+<div class="bjui-pageContent" id="elevatorMaintenanceRecordDiv">
+    <div class="clearfix">
+        <div style="overflow:hidden; border-left: 0px #c3ced5 solid;">
+            <input class="hidden" value="${(elevator.id)!}">
+            <input class="hidden" value="${(elevator.elevatorCode)!}">
+            <input class="hidden" id="myPermission"  value="${myPermission!}">
+            <input class="hidden" id="loginUserName"  value="${loginUserName!}">
+            <input class="hidden" id="isDel"  value="${(elevator.isDel)!}">
+            <form id="pagerForm" data-toggle="ajaxsearch" method="post"
+                  action="${ctx}/admin/system/elevatorMaintenanceRecordfm.do?id=${(elevator.id)!}">
+                <!-- 功能按钮 -->
+                <div class="office">
+                    <ul class="offbtn">
+                        <@auth name="MAINTENANCE_VIEW">
+                        <#if hasPermission>
+                        <li>
+                            <a  onclick="maintenanceEdit('view','维保记录查看','')"
+                                title="查看" id="elevator_maintenanceRecord_view" data-xternal="true">
+                                <span class="iconbg01"><i class="fa fa-search font24 iconbg02"></i></span>查看</a>
+                        </li>
+                        </#if>
+                        </@auth>
+
+                        <@auth name="MAINTENANCE_ADD">
+                        <#if hasPermission>
+                        <li>
+                            <a  title="新增" id="elevator_maintenanceRecord_add" data-xternal="true" onclick="maintenanceEdit('add','维保记录新增','${(elevator.id)!}')">
+                                <span><i class="fa fa-plus font24 iconbg01"></i></span>新增</a>
+                        </li>
+                        </#if>
+                        </@auth>
+
+                        <@auth name="MAINTENANCE_EDIT">
+                        <#if hasPermission>
+                        <li>
+                            <a  title="修改" id="elevator_maintenanceRecord_edit" onclick="maintenanceEdit('edit','维保记录修改','${(entity.id)!}')" data-xternal="true">
+                                <span class="fa fa-edit font24 iconbg03"></span>修改</a>
+                        </li>
+                        </#if>
+                        </@auth>
+
+                        <@auth name="MAINTENANCE_CONFIRM">
+                        <#if hasPermission>
+                        <li>
+                            <a title="物业确认" id="maintenanceRecord_confirm" onclick="confirmMaintenanceRecord(this)"   data-xternal="true">
+                                <span class="fa fa-file-text-o font24 iconbg02"></span>物业确认
+                            </a>
+                        </li>
+                        </#if>
+                        </@auth>
+
+                        <@auth name="MAINTENANCE_DELETE">
+                        <#if hasPermission>
+                        <li>
+                            <a onclick="logicalDelMaintenanceRecord(this)"  title="删除" id="elevator_maintenanceRecord_delete" data-xternal="true">
+                                <span class="fa fa-trash font24 iconbg01"></span>删除
+                            </a>
+                        </li>
+                        </#if>
+                        </@auth>
+
+                        <li><span class="ttt"></span></li>
+                        <li>
+                            <a id="refresh_maintenanceRecord" data-toggle="reloadsearch"
+                               data-target="#bjui-pageContent" data-icon="search">
+                                <span class="iconbg02"><i class="fa fa-refresh font24"></i></span>刷新</a>
+                        </li>
+                        <li>
+                            <a  class="closecutab" onclick="closePage(this)">
+                                <span class="iconbg03"><i class="fa fa-remove font24"></i></span>关闭
+                            </a>
+                        </li>
+
+                        <lable id="s1" style="margin-left:350px;font-size: 12px" >
+                            电梯编号：${(elevator.elevatorCode)!}
+                        </lable>
+                        <lable id="s2" style="margin-left:350px;font-size: 12px" >
+                            位置：${(elevator.villageName)!}的${(elevator.floor)!}号楼的${(elevator.elevatorNumber)!}号电梯
+                        </lable>
+                    </ul>
+                </div>
+                <!-- 查询区域 -->
+                <div class="bjui-pageHeader">
+                    <form data-toggle="ajaxsearch" method="post" >
+                        <div class="bjui-searchBar">
+                            &nbsp;&nbsp;
+                            <lable>维保类型：</lable>
+                            <select id="maintenanceType" name="maintenanceType" data-toggle="selectpicker"  data-width="120"   type="text" >
+                                <option selected="selected" value="">--请选择--</option>
+                                <option value="1"<#if (filter.parameters.maintenanceType!)=='1'> selected="selected"</#if>>维修</option>
+                                <option value="2"<#if (filter.parameters.maintenanceType!)=='2'> selected="selected"</#if>>保养</option>
+                            </select>
+                            &nbsp;&nbsp;
+                            <lable>维保状态：</lable>
+                            <select id="maintenanceStatus" name="maintenanceStatus" data-toggle="selectpicker"  data-width="120"   type="text" >
+                                <option selected="selected" value="">--请选择--</option>
+                                <option value="1"<#if (filter.parameters.maintenanceStatus!)=='1'> selected="selected"</#if>>维修中</option>
+                                <option value="2"<#if (filter.parameters.maintenanceStatus!)=='2'> selected="selected"</#if>>已完成</option>
+                            </select>
+                            &nbsp;&nbsp;
+                            <button type="submit" class="btn-default" data-toggle="ajaxsearch" data-icon="search" id="elevatorMainenceRecordSubmit">查询</button>
+                            &nbsp;&nbsp;
+                            <a class="btn btn-orange" href="javascript:;" onclick="dreFreshElevatorMainenceList();" data-icon="undo">重置</a>
+                        </div>
+                    </form>
+                </div>
+                <!-- 列表数据 -->
+                <div>
+                    <div class="bjui-pageContent" style="  bottom: 0px; margin-top: 102px;">
+                        <table data-width="100%" data-toggle="tablefixed" data-nowrap="true" data-selected-multi="false"data-height="100%"
+                               class="table table-bordered table-hover table-striped table-top">
+                            <thead>
+                            <tr >
+                                <th style="white-space:nowrap;" width="50"></th>
+                                <th style="white-space:nowrap;" width="50">NO.</th>
+                                <th style="text-align:center; white-space:nowrap;" width="100">维保类型</th>
+                                <th style="text-align:center; white-space:nowrap;" width="100">技师</th>
+                                <th style="text-align:center; white-space:nowrap;" width="100">电话</th>
+                                <th style="text-align:center; white-space:nowrap;" >维保内容</th>
+                                <th style="text-align:center; white-space:nowrap;" width="200">维保时间</th>
+                                <th style="text-align:center; white-space:nowrap;">维保状态</th>
+                            </tr>
+                            </thead>
+                            <tbody id="elevatorMaintenanceRecordListTbl">
+                                <#list entitys as entity>
+                                <tr >
+                                    <td style="white-space:nowrap;" align="center">
+                                        <input type="checkbox" class="testChk" value="${(entity.id)!}"
+                                               name="ids" data-toggle="icheck"
+                                               maintenanceStatus = "${(entity.maintenanceStatus)!}"
+                                               elevatorCode = "${(entity.elevatorCode)!}"
+                                               creatorName = "${(entity.creatorName)!}"/>
+                                    </td>
+                                    <td class="center">${entity_index+1+(start-1)*limit}</td>
+                                    <td style="white-space:nowrap;" align="center">
+                                        <#if (entity.maintenanceType)??>
+                                            <#if entity.maintenanceType == "1" ><div title="维修" class="label label-danger">维修</div></#if>
+                                            <#if entity.maintenanceType == "2" ><div title="保养" class="label label-success">保养</div></#if>
+                                        </#if>
+                                    </td>
+                                    <td style="white-space:nowrap;" align="left" title="${(entity.technicianName)!}">${(entity.technicianName)!}</td>
+                                    <td style="white-space:nowrap;" align="center" title="${(entity.technicianTel)!}">${(entity.technicianTel)!}</td>
+                                    <td style="white-space:nowrap;" align="left" title="${(entity.maintenanceorContent)!}">
+                                        <#if (entity.maintenanceorContent)?length gt 15>
+                                        ${entity.maintenanceorContent?substring(0,15)!}.....
+                                        <#else>
+                                        ${(entity.maintenanceorContent)!}
+                                    </#if>
+                                    </td>
+
+                                    <td style="white-space:nowrap;" align="center" >
+                                        <#if entity.maintenanceorTime??>
+                                            ${entity.maintenanceorTime?string("yyyy-MM-dd HH:mm:ss")}
+                                        <#else>
+                                            <div title="" class="label label-danger"></div>
+                                        </#if>
+                                        </td>
+                                    <td style="white-space:nowrap;" align="center" title="${(entity.maintenanceorStatus)!}">
+                                        <#if entity.maintenanceStatus??>
+                                            <#if entity.maintenanceStatus == "1" ><div title="维保中" class="label label-danger">维保中</div></#if>
+                                            <#if entity.maintenanceStatus == "2" ><div title="已完成" class="label label-success">已完成</div></#if>
+                                        </#if>
+
+                                    </td>
+                                </tr>
+
+                                </#list>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    /**
+     * 页面加载时初始化方法
+     */
+    $(document).ready(function () {
+        if ($("#isDel").val() == '1') {
+            $(this).alertmsg('warn', "当前数据已被删除，请刷新页面！");
+            $(this).dialog('close', $.CurrentDialog);
+            return;
+        }
+    });
+
+    /**重置**/
+    function dreFreshElevatorMainenceList() {
+        $("#maintenanceType").val("");
+        $("#maintenanceStatus").val("");
+        $("#elevatorMainenceRecordSubmit").submit();
+        $("#refresh_elevator").click();
+    }
+
+    /**当前页面关闭**/
+    function closePage(Obj) {
+        $(this).dialog("close", $.CurrentDialog);
+        $("#refresh_elevator").click();
+    }
+
+    /** 新增,编辑，查看维保记录信息**/
+    function maintenanceEdit(types,title,id) {
+        var loginUserName=$("#loginUserName").val();
+        var url = "" ;
+        //电梯信息修改
+        if("edit" == types || "view" == types){
+            if($("#elevatorMaintenanceRecordListTbl input:checked").length > 0){
+                id = $("#elevatorMaintenanceRecordListTbl input:checked").val();
+                var maintenanceStatus = $("#elevatorMaintenanceRecordListTbl input:checked").attr("maintenanceStatus");
+                var creatorName = $("#elevatorMaintenanceRecordListTbl input:checked").attr("creatorName");
+                if ( "edit" == types){
+                    if (loginUserName != creatorName){
+                        $(this).alertmsg('warn',"该记录不是您新增的，您无权修改！");
+                        return;
+                    }
+                    if ("2" == maintenanceStatus){
+                        $(this).alertmsg('warn',"“已完成”的维保记录不可修改，删除或确认！");
+                        return;
+                    }
+                }
+            }else{
+                $(this).alertmsg('warn',"请选择一条数据！");
+                return;
+            }
+        }
+        url ="${ctx}/admin/system/elevatorMaintenanceRecordfm!maintenanceRecord.do?id=" + id + "&types=" + types;
+        var dialog_options = {
+            id:"elevator_MaintenanceRecord_addOrEdit",
+            title:title,
+            url:url,
+            width: 700,
+            height: 500,
+            fresh: true,
+            mask: true
+        };
+        $(this).dialog(dialog_options);
+    }
+
+    /**删除故障申报信息**/
+    function logicalDelMaintenanceRecord(Obj) {
+        if ($("#elevatorMaintenanceRecordListTbl input:checked").length > 0) {
+            var id = $("#elevatorMaintenanceRecordListTbl input:checked").val();
+            var maintenanceStatus = $("#elevatorMaintenanceRecordListTbl input:checked").attr("maintenanceStatus");
+
+            if ("2" == maintenanceStatus ){
+                $(this).alertmsg('warn', "“已完成”的维保记录不可修改，删除或确认！");
+                return;
+            }
+            $(Obj).alertmsg("confirm", "确定要删除当前维保记录信息吗？", {
+                okCall:function () {
+                    $.ajax({
+                        type: "POST",
+                        url: "${ctx}/admin/system/elevatorMaintenanceRecordfm!logicalDelMaintenanceRecord.do?id=" + id,
+                        async: false,
+                        success: function (data) {
+                            var dataJson = eval('(' + data + ')');
+                            if (dataJson.statusCode == 300) {
+                                $(this).alertmsg('warn', dataJson.message);
+                            } else {
+                                $(this).alertmsg('correct',"维保记录信息删除成功!");
+                                $("#refresh_elevator").click();
+                                $("#refresh_maintenanceRecord").click();
+                            }
+                        }
+                    });
+                }
+            });
+        }else{
+            $(this).alertmsg('warn', "请选中一条数据！");
+            return;
+        }
+    }
+    /**物业确认——技师维保信息**/
+    function confirmMaintenanceRecord(Obj) {
+        if ($("#elevatorMaintenanceRecordListTbl input:checked").length > 0) {
+            var id = $("#elevatorMaintenanceRecordListTbl input:checked").val();
+            var maintenanceStatus = $("#elevatorMaintenanceRecordListTbl input:checked").attr("maintenanceStatus");
+            var myPermission = $("#myPermission").val();
+
+
+
+            if ("2" == maintenanceStatus){
+                $(this).alertmsg('warn', "“已完成”状态不可确认，请重新选择！");
+                return;
+            }
+            else {
+                var dialog_reason = {
+                    id:"elevator_MaintenanceRecord_confirm",
+                    title: "物业确认——技师维保信息",
+                    url: "${ctx}/admin/system/elevatorMaintenanceRecordfm!confirmMaintenanceRecord.do?id=" + id
+                    +"&troubleStatus="+maintenanceStatus + "&myPermission=" + myPermission,
+                    width:750,
+                    height: 500,
+                    fresh: true,
+                    mask: true
+                };
+                $(this).dialog(dialog_reason);
+            }
+        }else{
+            $(this).alertmsg('warn', "请选中一条数据！");
+            return;
+        }
+    }
+</script>

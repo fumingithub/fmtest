@@ -1,0 +1,144 @@
+<#include "../common/_public.html"/>
+
+<div class="bjui-pageHeader">
+    <form id="pagerForm" data-toggle="ajaxsearch" method="post"
+          action="${ctx}/admin/repository/repositoryKind.do">
+        <div class="office">
+            <ul class="offbtn">           
+                  <li><a data-toggle="navtab" data-isrefsh="true"
+                       data-url="${ctx}/admin/repository/repositoryKind!edit.do" data-id="expert-edit"
+                       data-title="新增" data-external="false" data-isrefsh="true"> <span class="iconbg01">
+				<i class="fa fa-edit  font24"></i></span>新增</a>
+                </li>
+                <li><a data-toggle="navtab" data-isrefsh="true"
+                       data-url="${ctx}/admin/repository/repositoryKind!edit.do?id={#bjui-selected}" data-id="expert-edit"
+                       data-title="专家编辑" data-external="false" data-isrefsh="true"> <span class="iconbg02">
+				<i class="fa fa-edit  font24"></i></span>编辑</a>
+                </li>
+
+                <li><a data-external="false" onclick="return viewUser(this,'${ctx}/admin/repository/repositoryKind!viewRepoKind.do?entity.id={#bjui-selected}');">
+                    <span class="iconbg01"><i class="fa fa-user font24"></i></span>查看</a></li>
+
+              
+
+                <li><a
+                        data-url="${ctx}/admin/repository/repositoryKind!delete.do?id={#bjui-selected}"
+                        data-toggle="doajax" data-external="false" data-isrefsh="true"
+                        data-confirm-msg="确定要删除选中项吗？"><span class="iconbg03">
+				<i class="fa fa-trash font24"></i></span>删除</a>
+                </li> 
+
+                <li><a id="refresh" data-toggle="reloadsearch"
+                       data-target="#bjui-pageContent" data-icon="search"><span class="iconbg02">
+				<i class="fa fa-refresh font24"></i></span>刷新</a>
+                </li>
+
+                <li><a class="closecutab"><span class="iconbg03">
+			 <i class="fa fa-remove  font24"></i></span>关闭</a></li>
+            </ul>
+        </div>
+
+        <div class="bjui-searchBar">
+            <input type="hidden" name="limit" value="${limit}"> 
+            <input
+                type="hidden" name="start" value="${start}">
+
+            <lable>名称:</lable>
+            <input name="name" class="form-control" size="15" type="text"
+                   value="${filter.parameters.name!}"/>
+
+            <lable>编码:</lable>
+            <input name="code" class="form-control" size="15" type="text"
+                   value="${filter.parameters.code!}"/>
+
+            <button type="submit" class="btn-default" data-toggle="ajaxsearch"
+                    data-icon="search">查询</button>
+            <a class="btn btn-orange" href="javascript:;"
+               onclick="$(this).navtab('reloadForm', true);" data-icon="undo">清空</a>
+        </div>
+    </form>
+</div>
+
+<div class="bjui-pageContent">
+    <table data-width="100%" data-nowrap="true" data-selected-multi="false"
+           class="table table-bordered table-hover table-striped table-top"
+    >
+        <thead>
+        <tr>
+            <th width="20"></th>
+            <th width="30">NO.</th>
+            <th style="text-align:center">名称</th>
+            <th style="text-align:center">编码</th>
+            <th style="text-align:center">备注</th>
+            <th style="text-align:center">创建人</th>
+            <th style="text-align:center">创建时间</th>
+            <th style="text-align:center">更新人</th>
+            <th style="text-align:center">更新时间</th>
+             <th style="text-align:center">状态</th>
+            
+           
+        </tr>
+        </thead>
+        <tbody>
+        <#list entitys as entity>
+            <tr>
+                 <td><input type="checkbox" value="${entity.id}" name="ids"
+                           data-toggle="icheck"></td>
+                <td style="text-align:center">${entity_index+1+(start-1)*limit}</td>
+                <td style="text-align:center">${entity.name!}</td>
+                <td style="text-align:center">${entity.code!}</td>               
+                <td style="text-align:center">${entity.remark!}</td>
+				<td style="text-align:center" title="${entity.createName!}">${entity.createName!}</td>
+				<td style="text-align:center">
+                    <#if entity.createTime??>${entity.createTime?string("yyyy-MM-dd HH:mm:ss")}
+                        <#else>
+                            <div title="" class="label label-danger"></div>
+                    </#if>
+                </td>
+                <td style="text-align:center" title="${entity.updateName!}">${entity.updateName!}</td>
+				<td style="text-align:center">
+                    <#if entity.updateTime??>${entity.updateTime?string("yyyy-MM-dd HH:mm:ss")}
+                        <#else>
+                            <div title="" class="label label-danger"></div>
+                    </#if>
+                </td>
+                
+                 <td style="text-align:center">
+                    <#if entity.status??>
+                        <#if entity.status=="0">
+                            <div title="" class="label label-success">启用</div>
+                        </#if>
+                        <#if entity.status=="1">
+                            <div title="" class="label label-danger">未启用</div>
+                        </#if>
+                    </#if>
+                </td>
+            </tr>
+        </#list>
+        </tbody>
+    </table>
+</div>
+
+<#include "../common/_page.html"/>
+
+<script language="javascript" type="text/javascript">
+    var role_id = "";
+    var doType = 0;
+    var node="";
+    //查看用户
+    function viewUser(obj,url) {
+        var dialog_options = {
+            id: 'entrust-dialog-edit',
+            url:url,
+            fresh: false,
+            width: 600,
+            height: 500,
+            mask: true,
+            title: "查看",
+            isrefshpar:false
+        }
+        $(obj).dialog(dialog_options)
+    }
+
+ 
+</script>

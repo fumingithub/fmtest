@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap
+        PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+        "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DatabaseInfoManagement">
+    <typeAlias alias="DatabaseInfoManagement" type="net.jqsoft.base.system.domain.DatabaseInfoManagement" />
+
+    <resultMap id="DatabaseInfoManagementMap" class="DatabaseInfoManagement">
+
+          <result property="id" column="id"/>
+                <result property="databaseIp" column="DATABASE_IP"/>
+                <result property="equipmentId" column="EQUIPMENT_ID"/>
+                <result property="databasePort" column="DATABASE_PORT"/>
+                <result property="databaseSid" column="DATABASE_SID"/>
+                <result property="isDel" column="IS_DEL" />
+                <result property="userName" column="USER_NAME"/>
+                <result property="password" column="PASSWORD"/>
+                <result property="dataStrucUpdate" column="DATA_STRUC_UPDATE"/>
+                <result property="checkIsornotUpdate" column="CHECK_ISORNOT_UPDATE"/>
+                <result property="etlupdate" column="ETL_UPDATE"/>
+                <result property="compliteTime" column="COMPLITE_TIME"/>
+                <result property="remarks" column="REMARKS"/>
+                <result property="creator" column="CREATOR"/>
+                <result property="createName" column="CREATE_NAME"/>
+                <result property="createTime" column="CREATE_TIME"/>
+                <result property="updator" column="UPDATOR"/>
+                <result property="updatorName" column="UPDATOR_NAME"/>
+                <result property="updateTime" column="UPDATE_TIME"/>
+    </resultMap>
+
+    <select id="getAll" resultMap="DatabaseInfoManagementMap">
+        SELECT * FROM DATABASE_INFO_MANAGEMENT
+    </select>
+    <select id="get" parameterClass="String" resultMap="DatabaseInfoManagementMap">
+        <![CDATA[
+           	   SELECT * FROM DATABASE_INFO_MANAGEMENT WHERE  id=#id:String#
+         ]]>
+    </select>
+    <insert id="insert" parameterClass="DatabaseInfoManagement">
+        <![CDATA[
+        INSERT INTO DATABASE_INFO_MANAGEMENT(
+        ID,
+        DATABASE_IP,
+        EQUIPMENT_ID,
+        DATABASE_PORT,
+        DATABASE_SID,
+        IS_DEL,
+        USER_NAME,
+        PASSWORD,
+        DATA_STRUC_UPDATE,
+        CHECK_ISORNOT_UPDATE,
+        ETL_UPDATE,
+        COMPLITE_TIME,
+        REMARKS,
+        CREATOR,
+        CREATE_NAME,
+        CREATE_TIME,
+        UPDATOR,
+        UPDATOR_NAME,
+        UPDATE_TIME
+        ) values(
+        		#id#,
+                #databaseIp#,
+                #equipmentId#,
+                #databasePort#,
+                #databaseSid#,
+                #isDel#,
+                #userName#, 
+                #password#,
+                #dataStrucUpdate#,
+                #checkIsornotUpdate#,
+                #etlupdate#,
+                #compliteTime#,
+                #remarks#,
+                #creator#,
+                #createName#,
+                #createTime#,
+                #updator#,
+                #updatorName#,
+                #updateTime#
+             )
+		]]>
+    </insert>
+    <update id="update" parameterClass="DatabaseInfoManagement">
+        <![CDATA[
+			UPDATE DATABASE_INFO_MANAGEMENT ]]>
+			<dynamic prepend="SET">
+
+            <isNotEmpty  property="databaseIp" prepend=",">
+                <![CDATA[
+					DATABASE_IP = #databaseIp:String#
+				]]>
+            </isNotEmpty >
+            
+            <isNotEmpty  property="isDel" prepend=",">
+                <![CDATA[
+					IS_DEL = #isDel:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="equipmentId" prepend=",">
+                <![CDATA[
+					EQUIPMENT_ID = #equipmentId:String#
+				]]>
+            </isNotEmpty >
+            <isNotEmpty  property="etlupdate" prepend=",">
+                <![CDATA[
+					ETL_UPDATE = #etlupdate:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="databasePort" prepend=",">
+                <![CDATA[
+					DATABASE_PORT = #databasePort:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="databaseSid" prepend=",">
+                <![CDATA[
+					DATABASE_SID = #databaseSid:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="userName" prepend=",">
+                <![CDATA[
+					USER_NAME = #userName:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="password" prepend=",">
+                <![CDATA[
+					PASSWORD = #password:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="dataStrucUpdate" prepend=",">
+                <![CDATA[
+					DATA_STRUC_UPDATE = #dataStrucUpdate:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="checkIsornotUpdate" prepend=",">
+                <![CDATA[
+					CHECK_ISORNOT_UPDATE = #checkIsornotUpdate:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="compliteTime" prepend=",">
+                <![CDATA[
+					COMPLITE_TIME = #compliteTime:DateTime#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="remarks" prepend=",">
+                <![CDATA[
+					REMARKS = #remarks:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="creator" prepend=",">
+                <![CDATA[
+					CREATOR = #creator:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="createName" prepend=",">
+                <![CDATA[
+					CREATE_NAME = #createName:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="createTime" prepend=",">
+                <![CDATA[
+					CREATE_TIME = #createTime:DateTime#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="updator" prepend=",">
+                <![CDATA[
+					UPDATOR = #updator:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="updatorName" prepend=",">
+                <![CDATA[
+					UPDATOR_NAME = #updatorName:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="updateTime" prepend=",">
+                <![CDATA[
+					UPDATE_TIME = #updateTime:DateTime#
+				]]>
+            </isNotEmpty >           
+        </dynamic>
+        <dynamic prepend="WHERE">
+            <![CDATA[
+					id = #id:int#
+				]]>
+        </dynamic>
+    </update>
+    <!--删除数据库信息-->
+	<update id="delDatabaseInfo" parameterClass="java.util.HashMap">
+		UPDATE DATABASE_INFO_MANAGEMENT SET IS_DEL = '1'
+		<dynamic prepend="WHERE">
+			<![CDATA[
+                ID = #id#
+            ]]>
+		</dynamic>
+	</update>
+    <delete id="deleteById" parameterClass="String">
+        <![CDATA[
+        DELETE FROM DATABASE_INFO_MANAGEMENT where ID = #id:String#
+     ]]>
+    </delete>
+    <sql id="databaseSearch">
+		<dynamic>
+		    <isNotEmpty prepend=" AND " property="DataBaseId">EQUIPMENT_ID
+				like '%' || #DataBaseId# || '%' </isNotEmpty>
+			<isNotEmpty prepend=" AND " property="isDel">IS_DEL
+				like '%' || #isDel# || '%' </isNotEmpty>
+			<isEmpty prepend=" AND " property="isDel">IS_DEL
+				='0' </isEmpty>
+			<isNotEmpty prepend=" AND " property="databaseIp">DATABASE_IP
+				like '%' || #databaseIp# || '%' </isNotEmpty>
+			<isNotEmpty prepend=" AND " property="dataStrucUpdate">DATA_STRUC_UPDATE
+				like '%' || #dataStrucUpdate# || '%' </isNotEmpty>
+			<isNotEmpty prepend=" AND " property="checkIsornotUpdate">CHECK_ISORNOT_UPDATE
+				like '%' || #checkIsornotUpdate# || '%' </isNotEmpty>
+		</dynamic>
+	</sql>
+    <select id="count" resultClass="int">
+        SELECT COUNT(*) FROM DATABASE_INFO_MANAGEMENT WHERE 1=1
+        <include refid="databaseSearch"/>    
+    </select>
+    <select id="select" resultMap="DatabaseInfoManagementMap"  parameterClass="java.util.HashMap">
+        SELECT * FROM DATABASE_INFO_MANAGEMENT  WHERE 1=1
+        <include refid="databaseSearch"/>
+    </select>
+    <select id="getUserName" resultMap="DatabaseInfoManagementMap"  parameterClass="java.util.HashMap">
+        SELECT * FROM DATABASE_INFO_MANAGEMENT  WHERE USER_NAME = #UserName# AND IS_DEL='0' AND EQUIPMENT_ID=#EquipmentId#
+    </select>
+</sqlMap>

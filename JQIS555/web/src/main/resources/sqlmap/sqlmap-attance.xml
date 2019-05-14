@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="WorkRecord" >
+    <typeAlias alias="WorkRecord" type="net.jqsoft.attendance.domain.WorkRecord" />
+        <resultMap id="workRecord" class="WorkRecord">
+            <result property="id" column="ID"/>
+            <result property="userId" column="USER_ID"/>
+            <result property="signInTime" column="SIGN_IN_TIME"/>
+            <result property="signOutTime" column="SIGN_OUT_TIME"/>
+            <result property="workStatus" column="WORK_STATUS"/>
+            <result property="overTime" column="OVER_TIME"/>
+            <result property="currentTime" column="CURRENT_TIME"/>
+            <result property="realName" column="REAL_NAME"/>
+        </resultMap>
+
+        <resultMap id="workRecord1" class="WorkRecord">
+            <result property="userId" column="USER_ID"/>
+            <result property="realName" column="REAL_NAME"/>
+        </resultMap>
+
+        <resultMap id="workRecord2" class="WorkRecord">
+            <result property="realName" column="REAL_NAME"/>
+            <result property="overTime" column="OVER_TIME"/>
+            <result property="realOverTime" column="REAL_OVER_TIME"/>
+        </resultMap>
+
+        <resultMap id="workRecord3" class="WorkRecord">
+            <result property="realName" column="REAL_NAME"/>
+            <result property="overTime" column="OVER_TIME"/>
+            <result property="realOverTime" column="REAL_OVER_TIME"/>
+            <result property="currentTime" column="CURRENT_TIME"/>
+        </resultMap>
+
+
+        <resultMap id="workRecord4" class="WorkRecord">
+            <result property="realName" column="REAL_NAME"/>
+            <result property="id" column="ID"/>
+            <result property="userId" column="user_id"/>
+            <result property="workStatus" column="WORK_STATUS"/>
+            <result property="isResert" column="IS_RESERT"/>
+            <result property="signInTime" column="sign_in_time"/>
+            <result property="signOutTime" column="sign_out_time"/>
+            <result property="currentTime" column="current_time"/>
+        </resultMap>
+
+        <resultMap id="leave" class="net.jqsoft.attendance.domain.Leave">
+            <result property="userId" column="user_id"/>
+            <result property="leaveStartTime" column="LEAVE_START_TIME"/>
+            <result property="leaveEndTime" column="LEAVE_END_TIME"/>
+            <result property="leaveDays" column="LEAVE_DAYS"/>
+        </resultMap>
+
+    <sql id="sel-list-common" >
+        <dynamic>
+            <isNotEmpty prepend=" AND " property="realName">T1.REAL_NAME LIKE '%'||#realName#||'%' </isNotEmpty>
+            <isNotEmpty prepend=" AND " property="workStatus">T.WORK_STATUS = #workStatus#  </isNotEmpty>
+            <isNotEmpty prepend=" AND " property="starttime">
+                <![CDATA[to_date(to_char(T.CURRENT_TIME,'yyyy-MM-dd'),'yyyy-MM-dd') >= to_date(#starttime#,'yyyy-MM-dd')]]>
+            </isNotEmpty>
+            <isNotEmpty prepend=" AND " property="endtime">
+                <![CDATA[to_date(to_char(T.CURRENT_TIME,'yyyy-MM-dd'),'yyyy-MM-dd') <= to_date(#endtime#,'yyyy-MM-dd')]]>
+            </isNotEmpty>
+        </dynamic>
+    </sql>
+
+        <insert id="insert" parameterClass="WorkRecord">
+            <![CDATA[
+                  insert into user_work_record
+                  (ID,
+                   USER_ID,
+                   WORK_STATUS,
+                   CURRENT_TIME,
+                   IS_RESERT
+                   ) values
+                   (#id#,#userId#,#workStatus#,#currentTime#,#isResert#)
+            ]]>
+        </insert>
+        <select id="select" resultMap="workRecord">
+            select t1.REAL_NAME as REAL_NAME,t.* from sys_user t1 left join user_work_record t
+                  on t1.id = t.user_id where 1 = 1
+              <include refid="sel-list-common"/>
+            order by t1.REAL_NAME,t.current_time
+        </select>
+
+        <select id="count" resultClass="int">
+            select count(*) from sys_user t1 left join user_work_record t
+            on t1.id = t.user_id where 1 = 1
+            <include refid="sel-list-common"/>
+        </select>
+
+        <select id="get" resultMap="workRecord" parameterClass="String">
+             select t1.REAL_NAME as REAL_NAME,t.* from sys_user t1 left join user_work_record t
+                  on t1.id = t.user_id where 1 = 1 and t.id=#id#
+        </select>
+
+        <select id="getAll" resultMap="workRecord1">
+              select t1.REAL_NAME as REAL_NAME,t1.id as user_id from sys_user t1  where 1 = 1
+        </select>
+
+        <select id="getAllByCurrentTime" resultMap="workRecord1" parameterClass="java.util.HashMap">
+            <![CDATA[ select t1.REAL_NAME as REAL_NAME,t1.id as user_id from sys_user t1
+                      left join user_work_record t
+                      on t1.id = t.user_id
+                      where 1 = 1 and to_date(to_char(T.CURRENT_TIME,'yyyy-MM-dd'),'yyyy-MM-dd') =
+                  to_date(to_char(#currentTime#,'yyyy-MM-dd'),'yyyy-MM-dd') ]]>
+        </select>
+    
+        <update id="update" parameterClass="WorkRecord">
+            <![CDATA[
+			UPDATE user_work_record ]]>
+            <dynamic prepend="SET">
+
+            <isNotEmpty property="signInTime" prepend=",">
+                <![CDATA[
+                SIGN_IN_TIME = #signInTime#
+                ]]>
+            </isNotEmpty>
+
+            <isNotEmpty property="signOutTime" prepend=",">
+                <![CDATA[
+                 SIGN_OUT_TIME = #signOutTime#
+                ]]>
+            </isNotEmpty>
+
+            <isNotEmpty property="overTime" prepend=",">
+                <![CDATA[
+                  OVER_TIME = #overTime#
+                ]]>
+            </isNotEmpty>
+
+            <isNotEmpty property="realOverTime" prepend=",">
+                <![CDATA[
+                  REAL_OVER_TIME = #realOverTime#
+                 ]]>
+            </isNotEmpty>
+
+            <isNotEmpty property="workStatus" prepend=",">
+                <![CDATA[
+					WORK_STATUS = #workStatus#
+				]]>
+            </isNotEmpty>
+
+            <isNotEmpty property="isResert" prepend=",">
+                <![CDATA[
+                IS_RESERT = #isResert#
+            ]]>
+            </isNotEmpty>
+            </dynamic>
+            <dynamic prepend="WHERE">
+                <![CDATA[
+					ID = #id#
+				]]>
+            </dynamic>
+        </update>
+
+        <select id="getAllCountTime" resultMap="workRecord2">
+               select t1.REAL_NAME as REAL_NAME,sum(t.over_time) as OVER_TIME,sum(t.real_over_time) as real_over_time from sys_user t1 left join user_work_record t
+                  on t1.id = t.user_id group by  REAL_NAME order by OVER_TIME
+        </select>
+    
+        <select id="getUserCountTime" resultMap="workRecord3" parameterClass="WorkRecord">
+             select t1.REAL_NAME as REAL_NAME,t.over_time as OVER_TIME,t.real_over_time as real_over_time,t.current_time from sys_user t1 left join user_work_record t
+                  on t1.id = t.user_id where t1.id=#userId# order by t.current_time
+        </select>
+
+        <select id="getResertStatus" parameterClass="java.util.HashMap" resultMap="workRecord4">
+              select t1.REAL_NAME as REAL_NAME,t.id,t.user_id,t.is_resert,t.work_status,t.sign_in_time,t.sign_out_time,t.current_time from sys_user t1
+                      left join user_work_record t
+                      on t1.id = t.user_id
+                      where 1 = 1 and to_date(to_char(T.CURRENT_TIME,'yyyy-MM-dd'),'yyyy-MM-dd') !=
+                      to_date(to_char(#currentTime#,'yyyy-MM-dd'),'yyyy-MM-dd')
+                      and t.is_resert = '02'
+        </select>
+
+        <select id="getUserLeave" parameterClass="java.util.HashMap" resultMap="leave">
+               <![CDATA[ select t1.* from people_leave t1  where t1.user_id=#userId#
+                  and to_date(to_char(t1.LEAVE_END_TIME,'yyyy-MM-dd'),'yyyy-MM-dd') >=
+                   to_date(to_char(#currentTime#,'yyyy-MM-dd'),'yyyy-MM-dd') and
+                   to_date(to_char(t1.LEAVE_START_TIME,'yyyy-MM-dd'),'yyyy-MM-dd') <=
+                   to_date(to_char(#currentTime#,'yyyy-MM-dd'),'yyyy-MM-dd')
+                   ]]>
+        </select>
+    </sqlMap>

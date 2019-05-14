@@ -1,0 +1,50 @@
+<script type="text/javascript">
+/**
+ * treegrid 异步加载
+ * e--使用该事件的元素（＋号图标）
+ * pid--异步加载的父id
+ * tbody--要刷新的table或者tbody
+ * asyncUrl--异步加载的url  asyncParam--异步加载的参数
+ */
+function showTreegridChild(e,pid,tbody,asyncUrl,asyncParam) {
+	if($(e).hasClass("glyphicon-minus")) {
+		var a1 = _n("#"+tbody).find(".treegrid-parent-"+pid).attr("pp");
+		if(typeof(a1) != "undefined") {
+			var a2 = _n("#"+tbody).find(".treegrid-parent-"+a1).attr("pp");
+			if(typeof(a2) != "undefined") {
+				var a3 = _n("#"+tbody).find(".treegrid-parent-"+a2).attr("pp");
+				if(typeof(a3) != "undefined") {
+					var a4 = _n("#"+tbody).find(".treegrid-parent-"+a3).attr("pp");
+					if(typeof(a4) != "undefined") {
+						var a5 = _n("#"+tbody).find(".treegrid-parent-"+a4).attr("pp");
+						if(typeof(a5) != "undefined") {
+							_n("#"+tbody).find(".treegrid-parent-"+a5).remove();
+						}
+						_n("#"+tbody).find(".treegrid-parent-"+a4).remove();
+					}
+					_n("#"+tbody).find(".treegrid-parent-"+a3).remove();
+				}
+				_n("#"+tbody).find(".treegrid-parent-"+a2).remove();
+			}
+			_n("#"+tbody).find(".treegrid-parent-"+a1).remove();
+		}
+		_n("#"+tbody).find(".treegrid-parent-"+pid).remove();
+		
+		$(e).removeClass("glyphicon-minus");
+		$(e).addClass("glyphicon-plus");
+		return;
+	}
+	$.ajax({
+        type:"POST",
+        url: asyncUrl,
+        data:asyncParam,
+        async : true,
+		success : function(data) {
+			$(e).removeClass("glyphicon-plus");
+			$(e).addClass("glyphicon-minus");
+			$(e).parent("td").parent("tr").after(data);
+			$("#"+tbody).trigger(BJUI.eventType.initUI);
+		}
+	});
+}
+</script>

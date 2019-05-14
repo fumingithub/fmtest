@@ -1,0 +1,32 @@
+﻿<#include "../../../common/_public.html"/>
+        <#list entitys as entity>
+            <#if entity.parentId??>
+	            <tr pp="${entity.id}" class="treegrid-${entity.id} treegrid-parent-${entity.parentId}">
+	        <#else>
+	            <tr class="treegrid-${entity.id} treegrid-collapsed">
+	        </#if>
+                <td><input type="checkbox"  value="${entity.id}" name="ids" data-toggle="icheck"> </td>
+                <td class="right"></td>
+                <td title="${entity.name!}">
+                <#if (entity.child>0)>
+                    <span class="glyphicon glyphicon-plus res-treegrid-expander" style="padding-left: 16px;cursor: pointer;" onclick="showInshospChild(this,'${entity.id}')"></span>
+            	    <span style="padding-left: 16px;">${entity.name!}</span>
+            	<#else>
+                    <span style="padding-left: 32px;"><i class="fa fa-circle"></i> ${entity.name!}</span>
+            	</#if>
+                </td>
+                <td title="${entity.code!}">${entity.code!}</td>
+                <td title="${entity.telephone!}">${entity.telephone!}</td>
+                <td title="<#if entity.openTime??>${(entity.openTime*1000)?number_to_date}</#if>" align="center"><#if entity.openTime??>${(entity.openTime*1000)?number_to_date}</#if></td>
+                <td title="${entity.legalPerson!}">${entity.legalPerson!}</td>
+                <td title="${entity.countBed!}">${entity.countBed!}</td>
+                <td title="${entity.countFactBed!}">${entity.countFactBed!}</td>
+                <td title="${entity.countPerson!}">${entity.countPerson!}</td>
+                <td title="<@dictitem id='${entity.usePriceLevel!}' areaId='${entity.areaId!}' pcode='ORG_LEVEL'/>"><@dictitem id='${entity.usePriceLevel!}' areaId='${entity.areaId!}' pcode='ORG_LEVEL'/></td>
+                <td title="<@pcarea id='${entity.areaId!}'/>"><@pcarea id="${entity.areaId!}"> </@pcarea></td>
+                <td style="text-align:center">
+				<#if entity.status== 0><div title="启用" class="label label-success">启用</div></#if>
+				<#if entity.status== 1><div title="禁用" class="label label-danger">禁用</div></#if>
+				</td>
+            </tr>
+        </#list>

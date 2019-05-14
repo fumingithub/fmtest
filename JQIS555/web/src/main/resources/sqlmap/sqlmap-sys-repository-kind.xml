@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="RepositoryKind" >
+	<typeAlias alias="RepositoryKind" type="net.jqsoft.repository.domain.RepositoryKind" />
+	
+   <resultMap class="RepositoryKind" id="RepositoryKindMap">
+   <result property="id" column="ID"/>
+   <result property="name" column="NAME"/>
+   <result property="code" column="CODE"/>
+   <result property="remark" column="REMARK"/>
+   <result property="updator" column="UPDATOR"/>
+   <result property="parentId" column="PARENT_ID"/>
+   <result property="status" column="STATUS"/>
+   <result property="updateName" column="UPDATE_NAME"/>
+   <result property="updateTime" column="UPDATE_TIME"/>
+   <result property="creator" column="CREATOR"/>
+   <result property="createName" column="CREATE_NAME"/>
+   <result property="createTime" column="CREATE_TIME"/>
+   </resultMap>
+   
+   <resultMap class="RepositoryKind" id="RepositoryKindMapForTree">
+    <result property="id" column="ID"/>
+   	<result property="name" column="NAME"/>
+   	<result property="code" column="CODE"/>
+   	<result property="remark" column="REMARK"/>
+   	 <result property="updateName" column="UPDATE_NAME"/>
+   <result property="updateTime" column="UPDATE_TIME"/>
+   <result property="creator" column="CREATOR"/>
+   <result property="createName" column="CREATE_NAME"/>
+   <result property="createTime" column="CREATE_TIME"/>
+   	<result property="status" column="STATUS"/>
+     <result property="parentId" column="PARENT_ID"/>
+     <result property="rootId" column="ROOT_ID"/>
+     <result property="rootName" column="ROOT_NAME"/>
+   </resultMap>
+    <insert id="insert" parameterClass="RepositoryKind">
+        <![CDATA[
+        INSERT INTO SYS_REPOSITORY_KIND(
+        ID,
+        NAME,
+        CODE,
+        REMARK,
+        UPDATOR,
+        UPDATE_NAME,
+        UPDATE_TIME,
+        CREATOR,
+        CREATE_NAME,
+        CREATE_TIME
+        ) values(
+                #id#,
+                #name#,
+                #code#,
+                #remark#,
+                #updator#,
+                #updateName#,
+                #updateTime#,
+                #creator#,
+                #createName#,
+                #createTime#
+             )
+		]]>
+    </insert>
+    
+    <update id="update" parameterClass="RepositoryKind">
+        <![CDATA[
+			UPDATE SYS_REPOSITORY_KIND ]]>
+			<dynamic prepend="SET">
+            <isNotEmpty  property="name" prepend=",">
+                <![CDATA[
+					NAME = #name:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="code" prepend=",">
+                <![CDATA[
+					CODE = #code:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="remark" prepend=",">
+                <![CDATA[
+					REMARK = #remark:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="updator" prepend=",">
+                <![CDATA[
+					UPDATOR = #updator:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="updateName" prepend=",">
+                <![CDATA[
+					UPDATE_NAME = #updateName:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="updateTime" prepend=",">
+                <![CDATA[
+					UPDATE_TIME = #updateTime:DateTime#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="creator" prepend=",">
+                <![CDATA[
+					CREATOR = #creator:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="createName" prepend=",">
+                <![CDATA[
+					CREATE_NAME = #createName:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="createTime" prepend=",">
+                <![CDATA[
+					CREATE_TIME = #createTime:DateTime#
+				]]>
+            </isNotEmpty >
+        </dynamic>
+        <dynamic prepend="WHERE">
+            <![CDATA[
+					id = #id:String#
+				]]>
+        </dynamic>
+    </update>
+    
+     <select id="count" resultClass="int">
+        SELECT COUNT(*) FROM SYS_REPOSITORY_KIND
+    </select>
+    <select id="select" resultMap="RepositoryKindMap"  parameterClass="java.util.HashMap">
+        SELECT * FROM SYS_REPOSITORY_KIND
+         <dynamic prepend="WHERE">
+            <isNotEmpty prepend="and">
+                1=1
+            </isNotEmpty>
+
+            <isNotEmpty property="name" prepend=" and">
+                NAME like '%' || #name# || '%'
+            </isNotEmpty>
+
+            <isNotEmpty property="code" prepend=" and">
+                CODE like '%' || #code# || '%'
+            </isNotEmpty>
+
+        </dynamic>
+    </select>
+    
+    <delete id="deleteById" parameterClass="String">
+        <![CDATA[
+        DELETE FROM SYS_REPOSITORY_KIND where id = #id:String#
+     ]]>
+    </delete>
+    
+    <select id="getAreaDictListByPCode" parameterClass="java.util.HashMap" resultMap="RepositoryKindMap">
+    SELECT
+        <dynamic>
+            <isNotEmpty property="Name"><![CDATA[ DISTINCT ]]></isNotEmpty>
+        </dynamic>
+        A.* FROM SYS_REPOSITORY_KIND A WHERE 1 = 1 
+        <dynamic>
+            <isEmpty property="code" prepend=" AND "><![CDATA[ A.CODE IS NULL ]]></isEmpty>
+            <isNotEmpty property="code" prepend=" AND "><![CDATA[ A.CODE = #code# ]]></isNotEmpty>
+ 			<isNotEmpty property="Name">
+                <![CDATA[
+                   A.NAME LIKE '%' || #Name# || '%'                 
+                ]]>
+            </isNotEmpty>
+        </dynamic>
+    </select>
+    
+     <select id="get" parameterClass="String" resultMap="RepositoryKindMap">
+        <![CDATA[
+           	   SELECT * FROM SYS_REPOSITORY_KIND WHERE id = #id:String#
+         ]]>
+    </select>
+    
+    <select id="queryKindById" parameterClass="String" resultMap="RepositoryKindMap">
+     SELECT * FROM SYS_REPOSITORY_KIND WHERE id = #id:String#
+    </select>
+   
+    <select id="getSysOrgListByParentId" parameterClass="java.util.HashMap"  resultMap="RepositoryKindMapForTree">
+    SELECT
+        <dynamic>
+            <isNotEmpty property="sysOrgName"><![CDATA[ DISTINCT ]]></isNotEmpty>
+        </dynamic>
+        <dynamic>
+            <isEmpty property="parentId">
+              <isEmpty property="filterOrgId">
+                  ORG.ID ROOT_ID,
+                  ORG.NAME ROOT_NAME,
+              </isEmpty>
+              <isNotEmpty property="filterOrgId">
+                  <![CDATA[
+                      #filterOrgId# ROOT_ID,
+                      (SELECT NAME FROM SYS_REPOSITORY_KIND WHERE ID = #filterOrgId#) ROOT_NAME,
+                  ]]>
+              </isNotEmpty>
+            </isEmpty>
+            <isNotEmpty property="parentId">
+                'none' ROOT_ID,
+                'none' ROOT_NAME,
+            </isNotEmpty>
+        </dynamic>
+        ORG.* FROM SYS_REPOSITORY_KIND ORG WHERE ORG.STATUS = '0'
+        <dynamic>
+            <isEmpty property="parentId">
+                <isEmpty property="filterOrgId" prepend=" AND ">
+                    <![CDATA[ ORG.PARENT_ID IS NULL ]]>
+                </isEmpty>
+                <isNotEmpty property="filterOrgId" prepend=" AND ">
+                    <![CDATA[ ORG.ID = #filterOrgId# ]]>
+                </isNotEmpty>
+            </isEmpty>
+            <isNotEmpty property="parentId" prepend=" AND "><![CDATA[ ORG.PARENT_ID = #parentId# ]]></isNotEmpty>
+            <isNotEmpty property="sysOrgName">
+                <![CDATA[
+                   START WITH ORG.NAME LIKE '%' || #sysOrgName# || '%' AND ORG.STATUS = '0'
+                  CONNECT BY PRIOR ORG.PARENT_ID = ORG.ID
+                ]]>
+            </isNotEmpty>
+            <isNotEmpty property="transferOrgId" prepend=" AND ">
+                <![CDATA[
+                    ORG.CODE NOT IN
+                       (SELECT CODE
+                          FROM SYS_REPOSITORY_KIND
+                         WHERE PARENT_ID = #transferOrgId#)
+                   AND ORG.ID != #transferOrgId#
+                ]]>
+            </isNotEmpty>
+        </dynamic>
+        ORDER BY ORG.CODE ASC
+    </select>
+</sqlMap>

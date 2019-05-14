@@ -1,0 +1,18 @@
+<#include "_public.html"/>
+<input id="comHospId" name="comHospId" type="text"
+	placeholder="请输入名称或者简称" size="20"
+	data-url="${ctx}/admin/quick/quick!hospitaltype.do?area=<#if areaId??>${areaId}<#else>${(entity.areaId!)}</#if>&type=0"
+	data-toggle="select2"/>
+<script language="javascript" type="text/javascript">
+function showComHosp(areaId) {
+  	$.ajax({
+		type:'post',
+		data:"areaId="+areaId+"&type=2",
+		url:"${ctx}/admin/comhosp/comhosp!showhosp.do",
+		success:function(data){
+			_n("[data-change-hosp]").html('');
+			_n("[data-change-hosp]").html(data).trigger(BJUI.eventType.initUI);
+		}
+	});
+}
+</script>

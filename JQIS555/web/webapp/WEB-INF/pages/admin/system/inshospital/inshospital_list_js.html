@@ -1,0 +1,53 @@
+﻿<script language="javascript" type="text/javascript">
+function showInshospChild(e,pid) {
+	var asyncParam = {"parentInsHospital.id":pid};
+	showTreegridChild(e,pid,"inshospTbody","${ctx}/admin/ins/inshospital!showchild.do",asyncParam);
+}
+
+function delInsHosp(e) {
+	var hospId = "",count=0;
+	_n("input[name='ids']:checked").each(function(){
+		hospId = $(this).val();
+		count++;
+	})
+	if(count == 0) {
+		$(e).alertmsg('error',"请选择一条数据！");
+		return;
+	}
+	$.ajax({
+       type: "POST",
+       url: "${ctx}/admin/ins/inshospital!checkdelete.do?id="+hospId,
+       success: function(data){
+    	   var d = eval("("+data+")");
+    	   if(d.statusCode == "300") {
+    		   $(e).alertmsg('warn',"选择的机构存在子机构，不可禁用！");
+    		   return;
+    	   }
+    	   $(this).alertmsg('confirm', '确认禁用？',{
+  				okCall:function(){
+  					delInfo(e,hospId);
+  				},
+  				cancelCall:function(){
+  					return false;
+  				}
+  		   });
+       }
+	});
+}
+
+function delInfo(e,hospId) {
+	$.ajax({
+       type: "POST",
+       url: "${ctx}/admin/ins/inshospital!delete.do?id="+hospId,
+       success: function(data){
+    	   var d = eval("("+data+")");
+    	   if(d.statusCode == "200") {
+    		   $(this).alertmsg('correct',d.message);
+    		   $("#refresh").click();
+    	   } else {
+    		   $(this).alertmsg('error',d.message);
+    	   }
+       }
+	});
+}
+</script>

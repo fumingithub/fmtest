@@ -1,0 +1,598 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap
+        PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+        "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="Project">
+	<typeAlias alias="Project" type="net.jqsoft.base.system.domain.Project" />
+
+	<resultMap id="ProjectMap" class="Project">
+
+		<result property="id" column="id" />
+		<result property="userName" column="USERNAME" />
+		<result property="passWord" column="PASSWORD" />
+		<result property="projectAddr" column="PROJECT_ADDR" />
+		<result property="projectName" column="PROJECT_NAME" />
+		<result property="guardian" column="guardian" />
+		<result property="projectLeader" column="PROJECT_LEADER" />
+		<result property="phone" column="PHONE" />
+		<result property="qq" column="QQ" />
+		<result property="email" column="EMAIL" />
+		<result property="edition" column="EDITION" />
+		<result property="isDel" column="IS_DEL" />
+		<result property="area" column="AREA" />
+		<result property="sysuserproid" column="SYS_USER_PROID" />
+		<result property="platformAddr" column="PLATFORM_ADDR" />
+		<result property="platformUserName" column="PLATFORM_USERNAME" />
+		<result property="platformPassword" column="PLATFORM_PASSWORD" />
+		<result property="checkSysAddr" column="CHECK_ADDR_SYS" />
+		<result property="platformType" column="PLATFORM_TYPE" />
+
+		<result property="apiAddress" column="API_ADDRESS" />
+		<result property="checkSysType" column="CHECK_SYSTYPE" />
+		<result property="creator" column="CREATOR" />
+		<result property="createName" column="CREATE_NAME" />
+		<result property="createTime" column="CREATE_TIME" />
+		<result property="updator" column="UPDATOR" />
+		<result property="updatorName" column="UPDATOR_NAME" />
+		<result property="updateTime" column="UPDATE_TIME" />
+		<result property="remarks" column="REMARKS" />
+
+	</resultMap>
+	<resultMap id="ProjectMap1" class="Project">
+
+		<result property="projectName" column="PROJECT_NAME" />
+		<result property="equipment" column="SERV_NAME" />
+		<result property="equipmentIp" column="SERV_IP" />
+		<result property="admin" column="SERV_USERNAME" />
+		<result property="adminPw" column="SERV_PASSWORD" />
+		<result property="domainName" column="DOMAIN_NAME" />
+		<result property="domainCode" column="DOMAIN_CODE" />
+		<result property="dataAddr" column="DATA_IP" />
+		<result property="userName" column="DATAUSER_NAME" />
+		<result property="passWord" column="DATAUSER_PASSWORD" />
+		<result property="isDataStruUp" column="DA_STRUC_UPDATE" />
+		<result property="isCheckUp" column="CHE_ISORNOT_UPDATE" />
+		<result property="isEtlUp" column="ETL_ISUPDATE" />
+		<result property="area" column="AREA" />
+	</resultMap>
+	<resultMap id="ProjectMap2" class="Project">
+
+		<result property="id" column="id" />
+		<result property="userName" column="USERNAME" />
+		<result property="passWord" column="PASSWORD" />
+		<result property="projectAddr" column="PROJECT_ADDR" />
+		<result property="projectName" column="PROJECT_NAME" />
+		<result property="edition" column="EDITION" />
+		<result property="isDel" column="IS_DEL" />
+		<result property="area" column="AREA" />
+		<result property="sysuserproid" column="SYS_USER_PROID" />
+		<result property="platformAddr" column="PLATFORM_ADDR" />
+		<result property="platformUserName" column="PLATFORM_USERNAME" />
+		<result property="platformPassword" column="PLATFORM_PASSWORD" />
+		<result property="checkSysAddr" column="CHECK_ADDR_SYS" />
+		<result property="platformType" column="PLATFORM_TYPE" />
+		<result property="checkSysType" column="CHECK_SYSTYPE" />
+		<result property="creator" column="CREATOR" />
+		<result property="createName" column="CREATE_NAME" />
+		<result property="createTime" column="CREATE_TIME" />
+		<result property="updator" column="UPDATOR" />
+		<result property="updatorName" column="UPDATOR_NAME" />
+		<result property="updateTime" column="UPDATE_TIME" />
+		<result property="remarks" column="REMARKS" />
+		<result property="equipment" column="SERVER_NAME" />
+		<result property="serProId" column="SER_PRO_ID" />
+	</resultMap>
+	<resultMap id="ProjectMap3" class="Project">
+		<result property="code" column="CODE" />
+		<result property="name" column="NAME" />
+		<result property="pCode" column="P_CODE" />
+		<result property="pName" column="P_NAME" />
+		<result property="isHavaChild" column="ISHAVACHILD" />
+		<result property="ischeck" column="ISCHECK" />
+	</resultMap>
+	
+	<resultMap id="ProjectMap4" class="Project">
+		<result property="code" column="CODE" />
+		<result property="name" column="NAME" />
+		<result property="pCode" column="P_CODE" />
+		<result property="pName" column="P_NAME" />
+	</resultMap>
+
+	<select id="getAll" resultMap="ProjectMap">
+		SELECT * FROM PROJECT
+	</select>
+	<select id="get" parameterClass="String" resultMap="ProjectMap">
+        <![CDATA[
+           	   SELECT * FROM PROJECT WHERE  ID=#id:String#
+         ]]>
+	</select>
+	<insert id="insert" parameterClass="Project">
+        <![CDATA[
+        INSERT INTO PROJECT(
+        ID,
+        USERNAME,
+        PASSWORD,
+        PROJECT_ADDR,
+        PROJECT_LEADER,
+        PHONE,
+        QQ,
+        EMAIL,
+        PROJECT_NAME,
+        guardian,
+        IS_DEL,
+        EDITION,
+        AREA,
+        SYS_USER_PROID,
+        PLATFORM_ADDR,
+        API_ADDRESS,
+        PLATFORM_USERNAME,
+        PLATFORM_PASSWORD,
+        CHECK_ADDR_SYS,
+        PLATFORM_TYPE,
+        CHECK_SYSTYPE,
+        CREATOR,
+        CREATE_NAME,
+        CREATE_TIME,
+        UPDATOR,
+        UPDATOR_NAME,
+        UPDATE_TIME,
+        REMARKS
+        ) values(
+                #id#,
+                #userName#,
+                #passWord#,
+                #projectAddr#,
+                #projectLeader#,
+                #phone#,
+                #qq#,
+                #email#,
+                #projectName#,
+                #guardian#,
+                #isDel#,
+                #edition#,                
+                #area#,
+                #sysuserproid#,
+                #platformAddr#,
+                #apiAddress#,
+                #platformUserName#,
+                #platformPassword#,
+                #checkSysAddr#,
+                #platformType#,
+                #checkSysType#,
+                #creator#,
+                #createName#,
+                #createTime#,
+                #updator#,
+                #updatorName#,
+                #updateTime#,
+                #remarks#
+             )
+		]]>
+	</insert>
+	<update id="update" parameterClass="Project">
+        <![CDATA[
+			UPDATE PROJECT ]]>
+		<dynamic prepend="SET">
+
+			<isNotEmpty property="projectName" prepend=",">
+                <![CDATA[
+					PROJECT_NAME = #projectName:String#
+				]]>
+			</isNotEmpty>
+
+			<isNotEmpty property="guardian" prepend=",">
+				<![CDATA[
+					guardian = #guardian:String#
+				]]>
+			</isNotEmpty>
+
+			<isNotEmpty property="isDel" prepend=",">
+                <![CDATA[
+					IS_DEL = #isDel:String#
+				]]>
+			</isNotEmpty>
+			
+			<isNotEmpty property="projectAddr" prepend=",">
+                <![CDATA[
+					PROJECT_ADDR = #projectAddr:String#
+				]]>
+			</isNotEmpty>
+			
+			<isNotEmpty property="projectLeader" prepend=",">
+                <![CDATA[
+					PROJECT_LEADER = #projectLeader:String#
+				]]>
+			</isNotEmpty>
+			
+			<isNotEmpty property="phone" prepend=",">
+                <![CDATA[
+					PHONE = #phone:String#
+				]]>
+			</isNotEmpty>
+			
+			<isNotEmpty property="qq" prepend=",">
+                <![CDATA[
+					QQ = #qq:String#
+				]]>
+			</isNotEmpty>
+			
+			<isNotEmpty property="email" prepend=",">
+                <![CDATA[
+					EMAIL = #email:String#
+				]]>
+			</isNotEmpty>
+			
+			
+			<isNotEmpty property="userName" prepend=",">
+                <![CDATA[
+					USERNAME = #userName:String#
+				]]>
+			</isNotEmpty>
+			
+			<isNotEmpty property="passWord" prepend=",">
+                <![CDATA[
+					PASSWORD = #passWord:String#
+				]]>
+			</isNotEmpty>
+			
+			
+			<isNotEmpty property="platformAddr" prepend=",">
+                <![CDATA[
+					PLATFORM_ADDR = #platformAddr:String#
+				]]>
+			</isNotEmpty>
+
+			<isNotEmpty property="apiAddress" prepend=",">
+				<![CDATA[
+					API_ADDRESS = #apiAddress:String#
+				]]>
+			</isNotEmpty>
+			
+			<isNotEmpty property="platformUserName" prepend=",">
+                <![CDATA[
+					PLATFORM_USERNAME = #platformUserName:String#
+				]]>
+			</isNotEmpty>
+			
+			<isNotEmpty property="platformPassword" prepend=",">
+                <![CDATA[
+					PLATFORM_PASSWORD = #platformPassword:String#
+				]]>
+			</isNotEmpty>
+			
+			<isNotEmpty property="checkSysAddr" prepend=",">
+                <![CDATA[
+					CHECK_ADDR_SYS = #checkSysAddr:String#
+				]]>
+			</isNotEmpty>
+			
+			<isNotEmpty property="platformType" prepend=",">
+                <![CDATA[
+					PLATFORM_TYPE = #platformType:String#
+				]]>
+			</isNotEmpty>
+			
+			<isNotEmpty property="checkSysType" prepend=",">
+                <![CDATA[
+					CHECK_SYSTYPE = #checkSysType:String#
+				]]>
+			</isNotEmpty>
+			
+
+			<isNotEmpty property="edition" prepend=",">
+                <![CDATA[
+					EDITION = #edition:String#
+				]]>
+			</isNotEmpty>
+
+			<isNotEmpty property="area" prepend=",">
+                <![CDATA[
+					AREA = #area:String#
+				]]>
+			</isNotEmpty>
+
+			<isNotEmpty property="creator" prepend=",">
+                <![CDATA[
+					CREATOR = #creator:String#
+				]]>
+			</isNotEmpty>
+
+			<isNotEmpty property="createName" prepend=",">
+                <![CDATA[
+					CREATE_NAME = #createName:String#
+				]]>
+			</isNotEmpty>
+
+			<isNotEmpty property="createTime" prepend=",">
+                <![CDATA[
+					CREATE_TIME = #createTime:DateTime#
+				]]>
+			</isNotEmpty>
+
+			<isNotEmpty property="updator" prepend=",">
+                <![CDATA[
+					UPDATOR = #updator:String#
+				]]>
+			</isNotEmpty>
+
+			<isNotEmpty property="updatorName" prepend=",">
+                <![CDATA[
+					UPDATOR_NAME = #updatorName:String#
+				]]>
+			</isNotEmpty>
+
+			<isNotEmpty property="updateTime" prepend=",">
+                <![CDATA[
+					UPDATE_TIME = #updateTime:DateTime#
+				]]>
+			</isNotEmpty>
+
+			<isNotEmpty property="remarks" prepend=",">
+                <![CDATA[
+					REMARKS = #remarks:String#
+				]]>
+			</isNotEmpty>
+		</dynamic>
+		<dynamic prepend="WHERE">
+            <![CDATA[
+					id = #id:int#
+				]]>
+		</dynamic>
+	</update>
+	
+	<!--删除项目-->
+	<update id="delProject" parameterClass="java.util.HashMap">
+		UPDATE PROJECT SET IS_DEL = '1'
+		<dynamic prepend="WHERE">
+			<![CDATA[
+                ID = #id#
+            ]]>
+		</dynamic>
+	</update>
+	
+	<delete id="deleteById" parameterClass="String">
+        <![CDATA[
+        DELETE FROM PROJECT  where id = #id:String#
+     ]]>
+	</delete>
+	<sql id="projectSearch">
+		<dynamic>
+		    <isNotEmpty prepend=" AND " property="loginId">aa.id
+				=#loginId:String#</isNotEmpty>
+
+			<isNotEmpty prepend=" AND " property="Projectid">
+				pro.id in($Projectid$)
+			</isNotEmpty>
+
+			<isNotEmpty prepend=" AND " property="guardian">
+				GUARDIAN
+				like '%'
+				|| #guardian# || '%'
+			</isNotEmpty>
+				
+			<isNotEmpty prepend=" AND " property="projectName">PROJECT_NAME
+				like '%'
+				|| #projectName# || '%' </isNotEmpty>
+			<isNotEmpty prepend=" AND " property="area">AREA
+				like '%'
+				|| #area# || '%' </isNotEmpty>
+			<isNotEmpty prepend="OR" property="platformAddr">PLATFORM_ADDR
+				like '%'
+				|| #platformAddr# || '%' </isNotEmpty>
+			<isNotEmpty prepend=" AND " property="id">ID
+				IN ($id$)
+			</isNotEmpty>							
+			<isEmpty prepend=" AND " property="isDel">IS_DEL
+				='0' </isEmpty>
+			<isNotEmpty prepend=" AND " property="isDel">IS_DEL
+				like '%' ||
+				#isDel# || '%' </isNotEmpty>			
+			<isNotEmpty prepend=" AND " property="inUse">inUse
+				like '%' ||
+				#inUse# || '%' </isNotEmpty>
+			<isNotEmpty prepend=" AND " property="platformType">PLATFORM_TYPE
+				like '%' ||
+				#platformType# || '%' </isNotEmpty>
+			<isNotEmpty prepend=" AND " property="checkSysType">CHECK_SYSTYPE
+				like '%' ||
+				#checkSysType# || '%' </isNotEmpty>
+		</dynamic>
+	</sql>
+	<sql id="projectSearch1">
+		<dynamic>
+			<isNotEmpty prepend=" AND " property="projectName">PROJECT_NAME
+				like '%'
+				|| #projectName# || '%' </isNotEmpty>
+			<isNotEmpty prepend=" AND " property="id">P.ID
+				IN ($id$)
+			</isNotEmpty>							
+			<isNotEmpty prepend=" AND " property="isDel">P.IS_DEL
+				like '%' ||
+				#isDel# || '%' </isNotEmpty>
+			<isEmpty prepend=" AND " property="isDel">P.IS_DEL='0'
+			</isEmpty>			
+			<isNotEmpty prepend=" AND " property="inUse">inUse
+				like '%' ||
+				#inUse# || '%' </isNotEmpty>
+			<isNotEmpty prepend=" AND " property="platformType">P.PLATFORM_TYPE
+				like '%' ||
+				#platformType# || '%' </isNotEmpty>
+			<isNotEmpty prepend=" AND " property="checkSysType">P.CHECK_SYSTYPE
+				like '%' ||
+				#checkSysType# || '%' </isNotEmpty>
+		</dynamic>
+	</sql>
+	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM project pro left join SYS_PRO_PERMISSION syo
+          on syo.server_id=pro.id
+          left join sys_user aa
+          on aa.id=syo.user_id
+          where 1=1
+		<include refid="projectSearch" />
+	</select>
+	<select id="select" resultMap="ProjectMap" parameterClass="java.util.HashMap">
+          select pro.* from project pro left join SYS_PRO_PERMISSION syo
+          on syo.server_id=pro.id
+          left join sys_user aa
+          on aa.id=syo.user_id
+          where 1=1
+		<include refid="projectSearch" />
+		ORDER BY pro.AREA ASC
+	</select>
+	<select id="getProjectName"  resultMap="ProjectMap"
+		parameterClass="java.util.HashMap">
+		SELECT * FROM PROJECT WHERE (PROJECT_NAME=#projectName# OR PLATFORM_ADDR=#platformAddr# ) AND IS_DEL='0' 
+	</select>
+	<select id="excelExport" resultMap="ProjectMap1"  parameterClass="java.util.HashMap">
+         select P.PROJECT_NAME,
+       P.AREA,
+       eeq.SERVER_NAME          AS SERV_NAME,
+       eeq.SERVER_IP            AS SERV_IP,
+       eeq.SERVER_USERNAME      AS SERV_USERNAME,
+       eeq.SERVER_PASSWORD      AS SERV_PASSWORD,
+       eeq.AREA_NAME            AS DOMAIN_NAME,
+       eeq.AREA_CODE            AS DOMAIN_CODE,
+       eeq.DATABASE_IP          AS DATA_IP,
+       eeq.USER_NAME            AS DATAUSER_NAME,
+       eeq.PASSWORD             AS DATAUSER_PASSWORD,
+       eeq.DATA_STRUC_UPDATE    AS DA_STRUC_UPDATE,
+       eeq.CHECK_ISORNOT_UPDATE AS CHE_ISORNOT_UPDATE,
+       eeq.ETL_UPDATE           AS ETL_ISUPDATE
+  FROM PROJECT P
+  LEFT JOIN (select EQ.ID,
+                    EQ.SERVER_NAME,
+                    EQ.SERVER_IP,
+                    EQ.SERVER_USERNAME,
+                    EQ.SERVER_PASSWORD,
+                    EQ.PROJECT_ID as pro,
+                    AREA.AREA_NAME,
+                    AREA.AREA_CODE,
+                    DATA.DATABASE_IP,
+                    DATA.USER_NAME,
+                    DATA.PASSWORD,
+                    DATA.DATA_STRUC_UPDATE,
+                    DATA.CHECK_ISORNOT_UPDATE,
+                    DATA.ETL_UPDATE
+               from (select * from EQUIPMENT_INFOR where is_del = '0') EQ
+               left join (select * from AREA_MANAGEMENT where is_del = '0') AREA
+                 ON EQ.ID = AREA.EQUIPMENT_ID
+               left join (select *
+                           from DATABASE_INFO_MANAGEMENT
+                          where is_del = '0') DATA
+                 ON EQ.ID = DATA.EQUIPMENT_ID) eeq
+    on p.id = eeq.pro
+        WHERE 1=1
+		<include refid="projectSearch1" />
+	order by p.project_name desc
+    </select>
+    <!--项目服务器授权-->
+    <select id="queryAll" resultMap="ProjectMap4" parameterClass="java.util.HashMap">
+		 select code,name,p_code,p_name,IS_DEL,UPDATE_TIME from(select id code , PROJECT_NAME name , '' p_code, '' p_name ,IS_DEL,UPDATE_TIME  from project where is_del='0'
+		union all select id code,SERVER_NAME name , PROJECT_ID p_code ,'' p_name ,IS_DEL,UPDATE_TIME from equipment_infor where is_del='0'
+		) SR
+		<isNotEmpty property="loginRoleId">
+            inner JOIN SYS_PRO_PERMISSION SA ON SR.CODE = SA.PROJECT_ID
+        </isNotEmpty>
+        where SR.IS_DEL='0'
+        <isNotEmpty property="loginRoleId" prepend=" and">
+            SA.USER_ID in ($loginRoleId$)
+        </isNotEmpty>
+        ORDER BY SR.UPDATE_TIME
+    </select>
+    <!--根据用户ID查询项目服务器资源-->
+    <select id="queryProAndServResourceByUserId" resultMap="ProjectMap3" parameterClass="String">
+        <![CDATA[
+        SELECT SR1.*,
+       (select count(*)
+          from (select id code,
+                       PROJECT_NAME name,
+                       '' p_code,
+                       '' p_name,
+                       IS_DEL
+                  from project
+                union all
+                select id code,
+                       SERVER_NAME name,
+                       PROJECT_ID p_code,
+                       '' p_name,
+                       IS_DEL
+                  from equipment_infor) SR where sr.P_CODE=SR1.CODE) ISHAVACHILD,
+       (CASE
+         WHEN USER_ID IS NULL THEN
+          0
+         ELSE
+          1
+       END) ISCHECK
+  FROM (select id code,
+                       PROJECT_NAME name,
+                       '' p_code,
+                       '' p_name,
+                       IS_DEL
+                  from project
+                union all
+                select id code,
+                       SERVER_NAME name,
+                       PROJECT_ID p_code,
+                       '' p_name,
+                       IS_DEL
+                  from equipment_infor) sr1
+  LEFT JOIN SYS_PRO_PERMISSION SA
+    ON SR1.CODE = SA.SERVER_ID
+ where SA.USER_ID=#loginRoleId:String#
+   AND SR1.IS_DEL = '0'
+         ]]>
+    </select>
+	<!--根据用户姓名查询项目ID-->
+	<select id="selectProjectIdByselectRealName" resultMap="ProjectMap" parameterClass="java.util.HashMap">
+		select pro.* from project pro left join SYS_PRO_PERMISSION syo
+          on syo.server_id=pro.id
+          left join sys_user aa
+          on aa.id=syo.user_id
+          where 1=1
+            <isNotEmpty property="selectRealName" prepend=" and">
+				aa.REAL_NAME like '%' || #selectRealName# || '%'
+			</isNotEmpty>
+           AND IS_DEL = '0'
+     </select>
+	<!--根据维护人名查询项目ID-->
+	<select id="selectProjectIdByselectguardian" resultMap="ProjectMap" parameterClass="java.util.HashMap">
+		select pro.* from project pro left join SYS_PRO_PERMISSION syo
+		on syo.server_id=pro.id
+		left join sys_user aa
+		on aa.id=syo.user_id
+		where 1=1
+		<isNotEmpty property="selectguardian" prepend=" and">
+			aa.REAL_NAME like '%' || #selectguardian# || '%'
+		</isNotEmpty>
+		AND IS_DEL = '0'
+	</select>
+    <!--删除权限-->
+    <delete id="deleteAuth" parameterClass="String">
+        <![CDATA[
+                 DELETE FROM SYS_PRO_PERMISSION WHERE USER_ID=#selectUserId:String#
+            ]]>
+    </delete>
+    <!--插入权限-->
+    <insert id="insertAuth" parameterClass="java.util.HashMap">
+        <![CDATA[
+                INSERT INTO SYS_PRO_PERMISSION(ID,USER_ID,SERVER_ID) VALUES(#id#,#selectUserId#,#resourceId#)
+         ]]>
+    </insert>
+
+	<!--删除权限-->
+	<delete id="deleteGrantAuth" parameterClass="java.util.HashMap">
+                 DELETE FROM SYS_PRO_PERMISSION WHERE 1=1
+					 <isNotEmpty property="selectUserId" prepend=" and">
+				     USER_ID=#selectUserId:String#
+			        </isNotEmpty>
+			        <isNotEmpty property="idd" prepend=" and">
+				     SERVER_ID=#idd:String#
+			        </isNotEmpty>
+	</delete>
+	<!--插入权限-->
+	<insert id="insertGrantAuth" parameterClass="java.util.HashMap">
+		<![CDATA[
+                INSERT INTO SYS_PRO_PERMISSION(ID,USER_ID,SERVER_ID) VALUES(#id#,#selectUserId#,#projectId#)
+         ]]>
+	</insert>
+</sqlMap>

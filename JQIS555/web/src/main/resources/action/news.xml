@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+        "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+    <package name="news" namespace="/admin/news" extends="ncms-default">
+        <!-- 文章管理 -->
+        <action name="news" class="net.jqsoft.base.system.action.NewsAction">
+            <result name="success" type="freemarker">/WEB-INF/pages/admin/system/news/news_list.html</result>
+            <result name="edit" type="freemarker">/WEB-INF/pages/admin/system/news/news_edit.html</result>
+            <result name="view" type="freemarker">/WEB-INF/pages/admin/system/news/news_view.html</result>
+        </action>
+    </package>  
+</struts>

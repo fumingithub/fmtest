@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+        "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+    <!-- 会议室使用、会议室维护 -->
+    <package name="meeting" namespace="/meetingroom/meeting" extends="ncms-default">
+        <!-- 会议室管理 -->
+        <action name="meeting" class="net.jqsoft.meeting.view.MeetingAction">
+            <result name="success" type="freemarker">/WEB-INF/pages/meetingroom/meeting/meeting_list.html</result>
+            <result name="input" type="freemarker">/WEB-INF/pages/meetingroom/meeting/meeting_edit.html</result>
+            <result name="view" type="freemarker">/WEB-INF/pages/meetingroom/meeting/meeting_view.html</result>
+        </action>
+
+        <action name="usemeeting" class="net.jqsoft.meeting.view.UseMeetingAction">
+            <result name="success" type="freemarker">/WEB-INF/pages/useMeeting/useMeeting_list.html</result>
+            <result name="return" type="freemarker">/WEB-INF/pages/useMeeting/useMeeting_return.html</result>
+        </action>
+    </package>
+</struts>

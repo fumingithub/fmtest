@@ -1,0 +1,45 @@
+<script language="javascript" type="text/javascript">
+    //新增、编辑
+    function toEditUser(obj, operate){
+        var id = "", url = "";
+        if ("add" == operate) {
+            url = "${ctx}/admin/repository/repositoryBase!edit.do?ztSysOrgId=" + $("#ztSysOrgId").val();
+        } else {
+            if ($("#userListTbl input:checked").length > 0) {
+                id = $("#userListTbl input:checked").val();
+                if ("edit" == operate) {
+                    url = "${ctx}/admin/repository/repositoryBase!edit.do?id=" + id;
+                } else {
+                		$(this).alertmsg('warn', "请选中一条数据！");
+                		return;
+            	}
+        	}
+       }
+
+        var dialog_options = {
+            id:obj.id,
+            url: url,
+            fresh:true,
+            width:800,
+            height:700,
+            mask:true,
+            title:obj.title
+        }
+        $(obj).dialog(dialog_options)
+    }
+
+
+
+    function undoForm() {
+        $("#title").val("");
+        $("#userSearch").submit();
+        
+    }
+
+    $(function () {
+        var user_sonPName = $("#user_sonPName").val(); 
+        var user_parentId = $("#user_parentId").val(); 
+        $("#user_pName").val(user_sonPName).attr("title", user_sonPName);
+        $("#ztSysOrgId").val(user_parentId);
+    });
+</script>

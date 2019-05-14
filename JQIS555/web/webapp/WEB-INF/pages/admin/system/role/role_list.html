@@ -1,0 +1,111 @@
+<#include "../../../common/_public.html"/>
+<#include "../../../common/_area.html"/>
+<div class="bjui-pageHeader">
+ <form id="pagerForm" data-toggle="ajaxsearch" action="${ctx}/admin/system/role.do" method="post">
+ <div class="office">
+			<ul class="offbtn">
+				<@auth name="SYS_ROLE_VIEW_USERS">
+				<#if hasPermission>
+				<li><a data-external="false"
+					onclick="return viewUser(this,'${ctx}/admin/system/role!viewusers.do?entity.id={#bjui-selected}');">
+						<span class="iconbg01"><i class="fa fa-user font24"></i></span>查看用户
+				</a></li>
+				</#if>
+			</@auth>
+
+
+	 		<@auth name="SYS_ROLE_ASSIGN">
+			 <#if hasPermission>
+				<li><a
+					onclick="toEdit(this,'${ctx}/admin/system/resource!assign.do?roleId={#bjui-selected}')"
+					title="授权" id="resource_assign"><span class="iconbg02">
+							<i class="fa fa-shirtsinbulk font24"></i>
+					</span>授权</a></li>
+			 </#if>
+ 			</@auth>
+
+	 		<@auth name="SYS_ROLE_ADD">
+	 			<#if hasPermission>
+				<li><a
+					onclick="toEdit(this,'${ctx}/admin/system/role!edit.do')"
+					title="新增" id="role_add"><span class="iconbg01"> <i
+							class="fa fa-file-text-o font24"></i></span>新增</a></li>
+				</#if>
+ 			</@auth>
+
+<!-- 			<@auth name="SYS_ROLE_ADD_SON"> -->
+<!-- 				<#if hasPermission> -->
+<!-- 				<li><a -->
+<!-- 					onclick="toEdit(this,'${ctx}/admin/system/role!edit.do?parentId={#bjui-selected}')" -->
+<!-- 					title="添加子项" id="role_add"><span class="iconbg04"> <i -->
+<!-- 							class="fa fa-plus-square font24"></i></span>添加子项</a></li> -->
+<!-- 				</#if> -->
+<!-- 			</@auth> -->
+
+			<@auth name="SYS_ROLE_EDIT">
+				<#if hasPermission>
+				<li><a
+					onclick="toEdit(this,'${ctx}/admin/system/role!edit.do?id={#bjui-selected}')"
+					title="修改" id="role_add"><span class="iconbg02"> <i
+							class="fa fa-edit  font24"></i></span>编辑</a></li>
+				</#if>
+			</@auth>
+
+			<@auth name="SYS_ROLE_DELETE">
+				<#if hasPermission>
+				<li><a onclick="return checkDelRole(this)"> <span
+						class="iconbg03"><i class="fa fa-trash font24"></i></span>删除
+				</a></li>
+				</#if>
+			</@auth>
+				<li><span class="ttt"></span></li>
+				<li><a id="refresh" data-toggle="reloadsearch"
+					data-target="#bjui-pageContent" data-icon="search"><span
+						class="iconbg02"><i class="fa fa-refresh font24"></i></span>刷新</a></li>
+				<li><a class="closecutab"><span class="iconbg03"><i
+							class="fa fa-remove  font24"></i></span>关闭</a></li>
+			</ul>
+		</div>
+ <div class="bjui-searchBar">
+      <input type="hidden" name="limit" value="${limit}">
+      <input type="hidden" name="start" value="${start}">
+      	 &nbsp;&nbsp;
+         <lable>角色名称:</lable>
+         <input name="name" class="form-control" value="${filter.parameters.name!}" size="15" type="text"/>
+         &nbsp;&nbsp;
+         <lable>角色编码:</lable>
+         <input name="code" class="form-control" value="${filter.parameters.code!}" size="15" type="text"/>
+         <button type="submit" class="btn-default"  data-toggle="ajaxsearch" data-icon="search">查询</button>&nbsp;
+		 <a class="btn btn-orange" href="javascript:;" onclick="$(this).navtab('reloadForm', true);" data-icon="undo">清空</a>
+     </div>
+	</form>
+</div>
+<div class="bjui-pageContent">
+	<table data-width="100%" data-toggle="tablefixed" data-nowrap="true" data-selected-multi="false"
+		class="table table-bordered table-hover table-striped table-top min-width">
+		<thead>
+			<tr>
+				<th></th>
+				<th>NO.</th>
+				<th  style="text-align:center" title="角色名称">角色名称</th>
+				<th  style="text-align:center" title="角色编码">角色编码</th>
+				<th  style="text-align:center" title="角色描述">角色描述</th>
+			</tr>
+		</thead>
+		<tbody>
+			<#list entitys as entity>
+			<tr>
+				<td><input type="checkbox" value="${entity.id}" name="ids"
+					data-toggle="icheck">
+				</td>
+				<td style="text-align:right">${entity_index+1+(start-1)*limit}</td>
+				<td style="text-align:left" title="${entity.name!}">${entity.name!}</td>
+				<td style="text-align:left" title="${entity.code!}">${entity.code!}</td>
+				<td class="left" title="${entity.remark!}">${entity.remark!}</td>
+			</tr>
+			</#list>
+		</tbody>
+	</table>
+</div>
+<#include "role_list_js.html"/>
+<#include "../../../common/_page.html"/>

@@ -1,0 +1,374 @@
+<#include "../../../common/_public.html"/>
+<div class="bjui-pageContent">
+    <form  id="pageform" data-isrefsh="true">
+        <input class="hidden" id="iId" name="entity.id" value="${entity.id!}"/>
+        <input class="hidden" id="elevatorId" name="entity.elevatorId" value="${entity.elevatorId!}"/>
+        <input class="hidden" id="troubleStatus" name="troubleStatus" value="${(entity.troubleStatus)!}"/>
+        <input class="hidden" id="myPermission" name="myPermission" value="${myPermission!}"/>
+        <input class="hidden" id="types" name="types" value="${types!}"/>
+        <input class="hidden" id="confirmTroubleStatus" name="confirmTroubleStatus" value="${(confirmTroubleStatus)!}"/>
+        <input class="hidden" id="confirmMaintenanceStatus" name="confirmMaintenanceStatus" value="${(confirmMaintenanceStatus)!}"/>
+        <input class="hidden" id="elevatorTroubleId" name="maintenanceRecord.elevatorTroubleId" value="${entity.id!}"/>
+        <input class="hidden" id="maintenanceRecordId" name="maintenanceRecord.id" value="${(maintenanceRecord.id)!}"/>
+        <input class="hidden" id="troubleCreator"  value="${(troubleCreator)!}"/>
+        <input class="hidden" id="loginUserName"  value="${(loginUserName)!}"/>
+        <div style="margin:15px auto 0;">
+            <fieldset>
+                <legend>
+                    <#if ((myPermission == 'wyfm')&&(confirmTroubleStatus== '1')&& ((types!) != 'view'))><h3 class="listtitle">确认故障申报信息</h3></#if>
+                    <#if ((myPermission == 'wyfm')&&(confirmTroubleStatus== '3')&& ((types!) != 'view'))><h3 class="listtitle">确认维保信息</h3></#if>
+                    <#if (myPermission == 'jsfm') && ((types!) != 'view')><h3 class="listtitle">技师维保</h3></#if>
+                    <#if ((types!) == 'view')><h3 class="listtitle">故障申报记录</h3></#if>
+                </legend>
+                <table class="table table-condensed">
+                    <tbody>
+                    <!--技师不能查看不是自己新增数据的申报人信息-->
+
+                        <tr class="confirmOne">
+                            <td class="right" ><span style="color:red">*</span>申报人姓名：</td>
+                            <td class="left">
+                                <input id="entity_declareName" name="entity.declareName"  title="${entity.declareName!}" size="15" type="text" data-rule="required;length[~50]"
+                                <#if myPermission=='jsfm'>
+                                value="${entity.declareName?substring(0,1)!}***"
+                                <#else>
+                                value="${entity.declareName!}"
+                            </#if>
+
+                                />
+                            </td>
+                            <td class="right" ><span style="color:red">*</span>申请人电话：</td>
+                            <td class="left"  >
+                                <input id="entity_declareTel" name="entity.declareTel" title="${entity.declareTel!}" size="15" type="text" data-rule="required;mobilePhone"
+                                <#if myPermission=='jsfm'>
+                                value="${entity.declareTel?substring(0,3)!}********"
+                                <#else>
+                                value="${entity.declareTel!}"
+                            </#if>
+                                />
+                            </td>
+                        </tr>
+
+                        <tr class="confirmOne">
+                            <td class="right" ><span style="color:red">*</span>申报时间：</td>
+                            <td class="left" >
+                                <input id="entity_declareTime" name="entity.declareTime" type="text" data-rule="required;date"data-max-date="${.now?date}" readonly
+                                <#if ((types!) == 'add')>data-toggle="datepicker"</#if>
+                                       value="${((entity.declareTime)?string('yyyy-MM-dd'))!}"
+                                       title="${((entity.declareTime)?string('yyyy-MM-dd HH:mm:ss'))!}"size="15" />
+                            </td>
+                            <td class="right"><span style="color:red">*</span>故障类型: </td>
+                            <td class="left">
+                                <select data-clear="" name="entity.troubleType" id="troubleType" data-toggle="selectpicker" data-width="150" data-rule="required">
+                                    <option value="" >--请选择--</option>
+                                    <option value= '1'  <#if (entity.troubleType)! == '1' >selected="selected"</#if>>外观损害不影响使用 </option>
+                                    <option value= '2'  <#if (entity.troubleType)! == '2' >selected="selected"</#if>>面板损坏影响使用正常</option>
+                                    <option value= '3'  <#if (entity.troubleType)! == '3' >selected="selected"</#if>>故障不可使用</option>
+                                </select>
+                            </td>
+                        </tr>
+
+                        <tr colspan="4" class="confirmOne">
+                            <td class="right" ><span style="color:red">*</span>故障描述：</td>
+                            <td class="left" colspan="3">
+                                    <textarea name="entity.troubleDescribe" title="${(entity.troubleDescribe)!}" type="text" data-rule="required;length[0~500]"
+                                              style="width:504px; height:60px">${entity.troubleDescribe!}</textarea>
+                            </td>
+                        </tr>
+                        <tr colspan="4" class="confirmTwo">
+                            <td class="right" ><span style="color:red">*</span>确认人：</td>
+                            <td class="left" >
+                                <input id="entity_troubleConfirmorName" name="entity.confirmorName" type="text" data-rule="required;length[~50]"readonly
+                                       title="${entity.confirmorName!}" size="15"
+                                <#if ((confirmTroubleStatus!) == '1')>
+                                value="${loginUserName!}"
+                                <#else>value="${entity.confirmorName!}"
+                            </#if>
+                                />
+                            </td>
+
+                            <td class="right" ><span style="color:red">*</span>确认时间:</td>
+                            <td class="left" >
+                                <input id="entity_troubleConfirmorTime" name="entity.confirmorTime" type="text" data-rule="required;date"size="15"
+                                       data-max-date="${.now?date}" readonly data-min-date="#entity_declareTime"
+                                <#if ((types!) == 'add') || ( (confirmTroubleStatus! == '1'))>data-toggle="datepicker"</#if>
+                                     value="${((entity.confirmorTime)?string('yyyy-MM-dd'))!}"
+                                    title="${((entity.confirmorTime)?string('yyyy-MM-dd HH:mm:ss'))!}"  />
+                            </td>
+                        </tr>
+
+                        <tr colspan="4" class="confirmTwo">
+                            <td class="right" ><span style="color:red">*</span>确认内容：</td>
+                            <td class="left" colspan="3" >
+                                    <textarea  id="entity_troubleConfirmorContent" name="entity.confirmorContent" type="text" data-rule="required;length[0~500]"
+                                               value="${entity.confirmorContent!}"title="${entity.confirmorContent!}"
+                                               style="width:504px; height:60px">${entity.confirmorContent!}</textarea>
+                            </td>
+                        </tr>
+
+                        <tr colspan="4" class="confirmTwo">
+                            <td class="right" ><span style="color:red">*</span>技师姓名：</td>
+                            <td class="left" >
+                                <#if ((types!) == 'add') || ((types!) == 'edit') || (confirmTroubleStatus== '1')>
+                                    <select id="entity_technicianName1" name="entity.technicianName" data-toggle="selectpicker" data-width="150" type="test" data-rule="required"
+                                            onchange="getTelPhone1(this)">
+                                        <option value="" >--请选择--</option>
+                                        <#list technicianUserList as user>
+                                        <option technicianTel="${(user.mobiePhone)!}" value="${(user.userName)!}"
+                                        <#if ((entity.technicianId)!) == '${(user.id)!}' >selected="selected"</#if>>${(user.userName)!}</option>
+                                        </#list>
+                                    </select>
+                                </#if>
+                                <#if ((types!) == 'view') || (confirmTroubleStatus == '2') || ((myPermission == 'wyfm')&&(confirmTroubleStatus== '3'))>
+                                    <input id="entity_technicianName2" name="entity.technicianName"  type="text" data-rule="required;mobilePhone" size="15"
+                                        <#if myPermission=='yezhu_fumin'>
+                                        value="${entity.technicianName?substring(0,1)!}**"
+                                        <#else>
+                                        value="${entity.technicianName!}"
+                                        </#if> />
+                                </#if>
+                            </td>
+
+                            <td class="right" ><span style="color:red">*</span>技师电话:</td>
+                            <td class="left" >
+                                <input id="entity_technicianTel" name="entity.technicianTel"type="text" data-rule="required" size="15"
+                                    <#if myPermission=='yezhu_fumin'>value="${entity.technicianTel?substring(0,3)!}********"
+                                    <#else> value="${entity.technicianTel!}"
+                                    </#if>/>
+                            </td>
+                        </tr>
+
+                    <!--如果是技师维保 / 物业第一次确认 /查看-->
+                        <#if ((myPermission == 'jsfm') && ((confirmTroubleStatus)! == '2'))
+                            ||((myPermission == 'wyfm') && ((confirmTroubleStatus)! == '3')
+                            || ((types!) == 'view'))>
+                            <tr colspan="4" class="confirmThree">
+                                <td class="right" ><span style="color:red">*</span>维保人：</td>
+                                <td class="left" >
+                                    <input id="entity_maintenanceorName2" name="maintenanceRecord.technicianName" type="text" data-rule="required;length[~50]" size="15"readonly
+                                    <#if (confirmTroubleStatus!)=='2'>value="${loginUserName!}"
+                                    <#else> value="${(maintenanceRecord.technicianName)!}"
+                                </#if>
+
+                                           />
+                                </td>
+
+                                <td class="right" ><span style="color:red">*</span>联系电话：</td>
+                                <td class="left" >
+                                    <input id="entity_maintenanceTel" name="maintenanceRecord.technicianTel" type="text" data-rule="required;mobilePhone"
+                                           value="${(maintenanceRecord.technicianTel)!}"   size="15"  />
+                                </td>
+                           </tr>
+
+                            <tr class="confirmThree">
+                                <td class="right" ><span style="color:red">*</span>维保时间:</td>
+                                <td class="left" colspan="3">
+                                    <input id="entity_maintenanceorTime" name="maintenanceRecord.maintenanceorTime" type="text" data-rule="required;date"size="15"data-max-date="${.now?date}"data-min-date="#entity_troubleConfirmorTime"readonly
+                                    <#if ((types!) == 'add') ||(((myPermission!) == 'jsfm')&&(confirmTroubleStatus! == '2')) >data-toggle="datepicker"</#if>
+                                           value="${((maintenanceRecord.maintenanceorTime)?string('yyyy-MM-dd'))!}"
+                                           title="${((maintenanceRecord.maintenanceorTime)?string('yyyy-MM-dd HH:mm:ss'))!}"  />
+                                </td>
+
+                            </tr>
+                            <tr class="confirmThree">
+                                <td class="right"  >其他维保人：</td>
+                                <td class="left" colspan="3">
+                                    <input id="entity_maintenanceorOther1" name="maintenanceRecord.maintenanceorOther" type="text" data-rule="length[~50]"
+                                           value="${(maintenanceRecord.maintenanceorOther)!}"style="width:504px " onclick="toEditOtherTechnician(this)" />
+                                </td>
+                            </tr>
+
+                            <tr colspan="4" class="confirmThree">
+                                <td class="right" ><span style="color:red">*</span>维保内容：</td>
+                                <td class="left" colspan="3" >
+                                        <textarea  id="entity_maintenanceorContent" name="maintenanceRecord.maintenanceorContent" title="${(maintenanceRecord.maintenanceorContent)!}" type="text" data-rule="required;length[0~500]"
+                                                   style="width:504px; height:60px">${(maintenanceRecord.maintenanceorContent)!}</textarea>
+                                </td>
+                            </tr>
+                        </#if>
+                 <!--如果是物业确认故障技师维保（第二次确认） / 查看 -->
+                        <#if ((myPermission == 'wyfm') &&
+                            ((confirmMaintenanceStatus! == '1')|| (confirmTroubleStatus! == '3')))
+                            || ((types!) == 'view') >
+                                <tr colspan="4" class="confirmFour">
+                                    <td class="right" ><span style="color:red">*</span>确认人：</td>
+                                    <td class="left" >
+                                        <input id="entity_maintenanceConfirmorName" name="maintenanceRecord.confirmorName" type="text" data-rule="required;length[~50]"
+                                              title="${(maintenanceRecord.confirmorName)!}" size="15"readonly
+                                        <#if ((confirmTroubleStatus!) == '3')>
+                                        value="${loginUserName!}"
+                                        <#else>value="${(maintenanceRecord.confirmorName)!}"
+                                    </#if>/>
+                                    </td>
+
+                                    <td class="right" ><span style="color:red">*</span>确认时间:</td>
+                                    <td class="left" >
+                                        <input id="entity_maintenanceConfirmorTime" name="maintenanceRecord.confirmorTime"data-max-date="${.now?date}"data-min-date="#entity_maintenanceorTime"type="text" size="15"data-rule="required"readonly
+                                        <#if ((types!) == 'add') || (((myPermission!) == 'wyfm')&&(confirmTroubleStatus! == '3'))>data-toggle="datepicker"</#if>
+                                               value="${((maintenanceRecord.confirmorTime)?string('yyyy-MM-dd'))!}"
+                                               title="${((maintenanceRecord.confirmorTime)?string('yyyy-MM-dd HH:mm:ss'))!}"/>
+                                    </td>
+                                </tr>
+                                <tr colspan="4" class="confirmFour">
+                                    <td class="right" ><span style="color:red">*</span>确认内容：</td>
+                                    <td class="left" colspan="3" >
+                                            <textarea  id="entity_maintenanceConfirmorContent" name="maintenanceRecord.confirmorContent" type="text" data-rule="required;length[0~500]"
+                                                        title="${(maintenanceRecord.confirmorContent)!}"
+                                                       style="width:504px; height:60px"> ${(maintenanceRecord.confirmorContent)!}</textarea>
+                                    </td>
+                                </tr>
+                        </#if>
+                    </tbody>
+                </table>
+            </fieldset>
+        </div>
+    </form>
+</div>
+<div class="bjui-pageFooter">
+    <ul>
+        <li><button type="button" class="btn-close closecutab" data-icon="close">关闭</button></li>
+        <li><button type="button" class="btn-default" data-icon="save" onclick="confirmTroubleDeclareSave('pageform');">保存</button></li>
+
+    </ul>
+</div>
+
+<script>
+
+    /**
+     * 页面加载时初始化方法
+     */
+    $(document).ready(function () {
+        //状态
+        var confirmTroubleStatus = $("#confirmTroubleStatus").val();
+        var types = $("#types").val();
+        //账号角色
+        var myPermission = $("#myPermission").val();
+
+        if ('view'== types){
+            if ('1'== confirmTroubleStatus){
+                $(".confirmTwo").hide();
+                $(".confirmThree").hide();
+                $(".confirmFour").hide();
+            }
+            if ('2'== confirmTroubleStatus){
+                $(".confirmThree").hide();
+                $(".confirmFour").hide();
+            }
+            if ('3'== confirmTroubleStatus){
+                $(".confirmFour").hide();
+            }
+            if ('4'== confirmTroubleStatus){
+                $(".confirmThree").show();
+                $(".confirmFour").show();
+            }
+            $(".confirmOne input").attr("readonly","readonly");
+            $(".confirmOne input").attr("disabled","disabled");
+            $(".confirmOne textarea").attr("disabled","disabled");
+            $(".confirmOne select").attr("disabled","disabled");
+
+            $(".confirmTwo input").attr("readonly","readonly");
+            $(".confirmTwo input").attr("disabled","disabled");
+            $(".confirmTwo textarea").attr("disabled","disabled");
+            $(".confirmTwo select").attr("disabled","disabled");
+
+            $(".confirmThree input").attr("readonly","readonly");
+            $(".confirmThree input").attr("disabled","disabled");
+            $(".confirmThree textarea").attr("disabled","disabled");
+            $(".confirmThree select").attr("disabled","disabled");
+
+            $(".confirmFour input").attr("readonly","readonly");
+            $(".confirmFour input").attr("disabled","disabled");
+            $(".confirmFour textarea").attr("disabled","disabled");
+            $(".confirmFour select").attr("disabled","disabled");
+        }
+
+        $(".confirmOne input").attr("readonly","readonly");
+        $(".confirmOne input").attr("disabled","disabled");
+        $(".confirmOne textarea").attr("disabled","disabled");
+        $(".confirmOne select").attr("disabled","disabled");
+
+        if (confirmTroubleStatus != '1'){
+            $(".confirmTwo input").attr("readonly","readonly");
+            $(".confirmTwo input").attr("disabled","disabled");
+            $(".confirmTwo textarea").attr("disabled","disabled");
+            $(".confirmTwo select").attr("disabled","disabled");
+        }
+        if (myPermission != 'jsfm'){
+            $(".confirmThree input").attr("readonly","readonly");
+            $(".confirmThree input").attr("disabled","disabled");
+            $(".confirmThree textarea").attr("disabled","disabled");
+            $(".confirmThree select").attr("disabled","disabled");
+        }
+    });
+
+    /**联动获取技师号码-技师**/
+    function getTelPhone1(obj) {
+        var index = obj.selectedIndex;
+        var technicianTel = obj.options[index].getAttribute("technicianTel");
+        $("#entity_technicianTel").val(technicianTel);
+    }
+    /**联动获取技师号码-维保人**/
+    function getTelPhone2(obj) {
+        var index = obj.selectedIndex;
+        var technicianTel = obj.options[index].getAttribute("technicianTel");
+        $("#entity_maintenanceTel").val(technicianTel);
+    }
+    /**保存**/
+    function confirmTroubleDeclareSave(formId) {
+        debugger;
+        //获得当前操作状态和账号角色
+        var confirmTroubleStatus = $("#confirmTroubleStatus").val();
+        var myPermission = $("#myPermission").val();
+        var url = "";
+        var TroubleId = "";
+
+        if( "wyfm" == myPermission  ){
+            //保存-物业第一次确认（故障申报信息），保存至故障表
+            if ("1" == confirmTroubleStatus){
+                url ="${ctx}/admin/system/elevatorTroubleDeclarefm!confirmTroubleDeclareSave.do";
+            }
+            //保存-物业第二次确认（维保记录信息），保存至维保表
+            else {
+                url ="${ctx}/admin/system/elevatorTroubleDeclarefm!confirmMaintenanceRecordSave.do";
+            }
+        }
+       //保存-技师维保，调用维保记录页面新增保存的方法，保存至维保表
+        if( "jsfm" == myPermission  ){
+            TroubleId = $("#iId").val();
+            url = "${ctx}/admin/system/elevatorTroubleDeclarefm!troubleDeclareMaintenanceSave.do";
+        }
+        var dataForms = $("#"+formId);
+        var $formFlag = dataForms.isValid();
+        if($formFlag){
+            $.ajax({
+                type: "post",
+                data: $("#" + formId ).serialize(),
+                url: url,
+                success: function (data) {
+                    var dataJson = eval('(' + data + ')');
+                    if (dataJson.statusCode == 300){
+                        $(this).alertmsg('warn',dataJson.message);
+                    }else if(dataJson.statusCode == 200){
+                        $(this).alertmsg('correct',dataJson.message);
+                        $(this).dialog('close',$.CurrentDialog);
+                        $("#refresh_troubleDeclare").click();
+                        $("#refresh_elevator").click();
+                    }
+                }
+            })
+        }
+    }
+
+    /**添加其他维保人**/
+    function toEditOtherTechnician(obj){
+        var dialog_options = {
+            id:'technicianOtherList',
+            url:"${ctx}/admin/system/elevatorTroubleDeclarefm!addTechnicianOtherList.do",
+            fresh:true,
+            width:500,
+            height:500,
+            mask:true,
+            title:'技师列表'
+        }
+        $(obj).dialog(dialog_options)
+    }
+</script>

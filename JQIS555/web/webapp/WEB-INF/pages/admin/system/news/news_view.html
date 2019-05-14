@@ -1,0 +1,46 @@
+<#include "../../../common/_public.html"/>
+<!-- <div class="bjui-pageHeader" style="background:#FFF;"> -->
+<!-- 	<div class="row" style="height:70px"> -->
+<!-- 		<div class="col-md-6"> -->
+<!-- 			<div class="office"> -->
+<!-- 				<ul class="offbtn"> -->
+<!-- 					<li><a class="closecutab"><span class="iconbg03"><i class="fa fa-remove  font24"></i></span>关闭</a> -->
+<!-- 					</li> -->
+<!-- 				</ul> -->
+<!-- 			</div> -->
+<!-- 		</div> -->
+<!-- 	</div> -->
+<!-- </div> -->
+<div class="bjui-pageContent">
+	<form action="" name="pagerform">
+		<div style="margin:15px auto 0; width:900px;">
+			<fieldset>
+				<table width="100%">
+					<tbody>
+						<tr align="center">
+							<td style="height:50px"><h3>${entity.title!}</h3></td>
+						</tr>
+						<tr align="center">
+							<td style="height:50px">作者：${entity.author!}  发布于：
+								<div>
+									<#if entity.releasetime??>
+										${(entity.releasetime*1000)?number_to_date}
+									</#if>
+								</div></td>
+						</tr>						
+						<tr align="center">
+							<td>${entity.message!}</td>
+						</tr>
+					</tbody>							
+				</table>
+			</fieldset>
+		</div>
+	</form>
+</div>
+<div class="bjui-pageFooter">
+    <ul>
+        <li>
+            <button type="button" class="btn-close closecutab" data-icon="close">关闭</button>
+        </li>
+    </ul>
+</div>

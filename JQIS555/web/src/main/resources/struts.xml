@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+        "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+    <package name="ncms-default" namespace="/" extends="json-default">
+
+        <interceptors>
+            <interceptor-stack name="CCStack">
+                <interceptor-ref name="store">
+                    <param name="operationMode">AUTOMATIC</param>
+                </interceptor-ref>
+                <interceptor-ref name="defaultStack"/>
+            </interceptor-stack>
+        </interceptors>
+
+        <default-interceptor-ref name="CCStack"/>
+        <global-results>
+            <result name="tip">/WEB-INF/pages/tips.jsp</result>
+            <result name="login" type="freemarker">/WEB-INF/pages/login.html</result>
+            <result name="result" type="freemarker">/WEB-INF/pages/common/_result.html</result>
+            <result name="deleted" type="freemarker">/WEB-INF/pages/common/_result.html</result>
+        </global-results>
+        <!--<global-exception-mappings>-->
+        <!--<exception-mapping result="error" exception="java.lang.Exception">-->
+        <!--</exception-mapping>-->
+        <!--</global-exception-mappings>-->
+        <action name="status" class="net.jqsoft.base.portal.StatusAction">
+            <result name="404" type="freemarker">/WEB-INF/pages/portal/admin/404.html</result>
+            <result name="500" type="freemarker">/WEB-INF/pages/portal/admin/500.html</result>
+            <result name="301" type="freemarker">/WEB-INF/pages/portal/admin/301.html</result>
+            <result name="302" type="freemarker">/WEB-INF/pages/portal/admin/302.html</result>
+            <result name="0" type="freemarker">/WEB-INF/pages/portal/admin/login.html</result>
+            <result name="200" type="freemarker">/WEB-INF/pages/portal/admin/200.html</result>
+        </action>
+
+        <action name="redirect" class="net.jqsoft.RedirectAction">
+            <result name="success" type="freemarker">/WEB-INF/pages/admin/${page}</result>
+        </action>
+
+    </package>
+    <include file="action/meeting.xml"/>
+	<include file="action/system.xml"/>
+    <include file="action/safety.xml"/>
+    <include file="action/news.xml"/>
+    <include file="action/portal.xml"/>
+    <include file="action/demo.xml"/>
+    <include file="action/repository.xml"/>
+    <include file="action/workrecord.xml"/>
+    <include file="action/leave.xml"/>
+    <include file="action/notice.xml"/>
+    <include file="action/project.xml"/>
+    <include file="action/equipmentinfor.xml"/>
+</struts>

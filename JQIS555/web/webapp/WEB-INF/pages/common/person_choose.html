@@ -1,0 +1,162 @@
+<#setting date_format="yyyy-MM-dd"/>
+<#if entitys?size gt 0 >
+<div class="vCard" style="position: absolute;width: 800px;z-index:1;background: #efe;border: 1px solid bisque;">
+    <table data-width="100%" person data-nowrap="true" data-selected-multi="false" class="table table-bordered table-hover">
+        <thead>
+        <tr>
+            <th width="30">NO.</th>
+            <th width="70">姓名</th>
+            <th width="100">身份证号</th>
+            <th width="50">性别</th>
+            <th width="180">所属地区</th>
+            <th width="50">选择</th>
+        </tr>
+        </thead>
+        <tbody>
+         <#list entitys as entity>
+         <tr <#if entity_index == 0>class="selected"</#if>>
+             <td align="center">${entity_index+1+(start-1)*limit}</td>
+             <td align="center" title="${entity.name!}">${entity.name!}</td>
+             <td align="center" title="${entity.cardNo!}">${entity.cardNo!}</td>
+             <td align="center"><@dictitem pcode='SEX'>
+                 <#list dictItemList as dict>
+                     <#if '${entity.sex!}'=='${dict.itemCode!}'>${dict.name!}</#if>
+                 </#list>
+             </@dictitem></td>
+             <td align="center" title="<@pcarea id='${entity.areaId!}'></@pcarea>"><@pcarea id='${entity.areaId!}'></@pcarea></td>
+             <td align="center" >
+                 <a href="javascript:;"
+                    data-args="{name:'${entity.name!}',
+                    cardNo:'${entity.cardNo!}',
+                    visitCardNo:'${entity.visitCardNo!}',
+                    birthday:'<#if entity.birthday??>${(entity.birthday*1000)?number_to_date}</#if>',
+                    personNo:'${entity.personNo!}',
+                    areaId:'${entity.areaId!}',
+                    personType:'${entity.personType!}',
+                    householderName:'${entity.householderName!}',
+                    address:'${entity.address!}',
+                    bankUsername:'${entity.bankUsername!}',
+                    billNo:'${entity.billNo!}',
+                    bankId:'${entity.bankId!}',
+                    areaName:'<@pcarea id='${entity.areaId!}' up=4></@pcarea>',
+                    sexType:'${entity.sex!}',
+                    sex:'<@dictitem pcode='SEX'><#list dictItemList as dict><#if entity.sex==dict.itemCode>${dict.name!}</#if></#list></@dictitem>',
+                    telephone:'${entity.telephone!}',
+                    relation:'<@dictitem pcode='FAMILY_SHIP'><#list dictItemList as dict><#if entity.relation==dict.itemCode>${dict.name!}</#if></#list></@dictitem>'}"
+                    class="btn btn-blue" title="选择本项" onclick="checkThisPersonData(this)" data-icon="check">选择</a>
+             </td>
+         </tr>
+        </#list>
+        <tr><td colspan="6"><a class="btn btn-close" onclick="$.CurrentNavtab.find('div.vCard').hide();">关闭</a></td></tr>
+        </tbody>
+    </table>
+</div>
+</#if>
+<script>
+    function checkThisPersonData(obj){
+        var obj = $(obj).attr("data-args").toObj();
+        /**************************添加数据(慢病)****************************/
+        addDataToAppointInput("entity.name",obj.name);
+        addDataToAppointInput("entity.cardNo",obj.cardNo);
+        addDataToAppointInput("entity.birthday",obj.birthday);
+        addDataToAppointInput("entity.personNo",obj.personNo);
+        addDataToAppointInput("entity.areaId",obj.areaId);
+        addDataToAppointInput("entity.areaName",obj.areaName);
+        addDataToAppointInput("entity.sex",obj.sex);
+        addDataToAppointInput("entity.telephone",obj.telephone);
+        addDataToAppointInput("entity.relation",obj.relation);
+        /**************************添加数据(慢病)****************************/
+        
+        /**************************添加数据(门诊住院)****************************/   
+            addDataToAppointInput("billNo",obj.billNo);
+		    addDataToAppointInput("householderName",obj.householderName);
+		    addDataToAppointInput("personCode",obj.personNo);
+		    addDataToAppointInput("areaId",obj.areaId);
+		    addDataToAppointInput("personType",obj.personType);
+		    addDataToAppointInput("areaName",obj.areaName);
+		    addDataToAppointInput("personName",obj.name);
+		    addDataToAppointInput("personCardNo",obj.cardNo);
+		    addDataToAppointInput("personSexName",obj.sex);
+		    addDataToAppointInput("personSex",obj.sexType);
+		    addDataToAppointInput("address",obj.address);
+		    addDataToAppointInput("personTelephone",obj.telephone);
+		    addDataToAppointInput("bankUsername",obj.bankUsername);
+		    addDataToAppointInput("bankId",obj.bankId);
+		    addDataToAppointInput("bankNo",obj.bankNo);
+		    addDataToAppointInput("medicalCardId",obj.visitCardNo);
+
+        if( typeof changeDrugDiagArea === 'function' ){
+        	changeDrugDiagArea(obj.areaId);
+        }
+        /**************************添加数据(门诊住院)****************************/
+        /**************************添加数据(转诊)****************************/
+        addDataToAppointInput("name",obj.name);
+        addDataToAppointInput("linkTel",obj.telephone);
+        /**************************添加数据(转诊)****************************/
+        $.CurrentNavtab.find("div.vCard").hide();
+    }
+
+    function addDataToAppointInput(name,val){
+        $.CurrentNavtab.find("input[name='"+name+"']").val(val);
+    }
+
+    $(function(){
+        var $input = $.CurrentNavtab.find("input[person]");
+        var $div = $.CurrentNavtab.find("div.vCard");
+        $div.parent().css({
+            "left": $input.position().left+"px",
+            "top":$input.position().top+$input.outerHeight()+"px"
+        });
+        $(window).resize(function() {
+            $div.parent().css({
+                "left": $input.position().left+"px",
+                "top":$input.position().top+$input.outerHeight()+"px"
+            });
+        });
+        $.CurrentNavtab.find("div.bjui-pageContent").scroll(function() {
+            $div.parent().css({
+                "left": $input.position().left+"px",
+                "top":$input.position().top+$input.outerHeight()+"px"
+            });
+        });
+        document.onkeydown = function(e){
+            var ev = document.all ? window.event : e;
+            if(ev.keyCode==38) {//↑号
+                $.CurrentNavtab.find("input[person]").blur();
+                var $table = $.CurrentNavtab.find("table[person]>tbody");
+                if($table.find("tr:eq(0)").hasClass("selected")){
+                    $table.find("tr:eq(0)").removeClass("selected");
+                    $table.find("tr:last-child").addClass("selected");
+                }else if($table.find("tr.selected").length>0){
+                    var $tr = $table.find("tr.selected").prev();
+                    $table.find("tr").removeClass("selected");
+                    $tr.addClass("selected");
+                }else{
+                    $table.find("tr:last-child").addClass("selected");
+                }
+                return false;
+            }
+            if(ev.keyCode==40) {//↓号
+                $.CurrentNavtab.find("input[person]").blur();
+                var $table = $.CurrentNavtab.find("table[person]>tbody");
+                if($table.find("tr:last-child").hasClass("selected")){
+                    $table.find("tr:last-child").removeClass("selected");
+                    $table.find("tr:eq(0)").addClass("selected");
+                }else if($table.find("tr.selected").length>0){
+                    var $tr = $table.find("tr.selected").next();
+                    $table.find("tr").removeClass("selected");
+                    $tr.addClass("selected");
+                }else{
+                    $table.find("tr:eq(0)").addClass("selected");
+                }
+                return false;
+            }
+            if(ev.keyCode==13){
+                var $table = $.CurrentNavtab.find("table[person]>tbody");
+                $table.find("tr.selected>td:last-child>a").click();
+                $.CurrentNavtab.find("input[name='entity.visitCardNo']").blur();
+                return false;
+            }
+        }
+    });
+</script>

@@ -1,0 +1,36 @@
+<#macro meta>
+    <#include "_meta.html"/>
+</#macro>
+
+<#macro public>
+    <#include "_public.html"/>
+</#macro>
+
+<#macro sidebar>
+    <#include "_sidebar.html"/>
+</#macro>
+<#macro header>
+    <#include "_header.html"/>
+</#macro>
+<#macro footer>
+    <#include "_footer.html"/>
+</#macro>
+<#macro nav>
+    <#include "_nav.html"/>
+</#macro>
+<#macro js>
+    <#include "_js.html"/>
+</#macro>
+<#macro css>
+    <#include "_css.html"/>
+</#macro>
+
+<#macro admin>
+    <@public/>
+    <@meta/>
+    <@css/>
+    <@js/>
+</#macro>
+
+
+

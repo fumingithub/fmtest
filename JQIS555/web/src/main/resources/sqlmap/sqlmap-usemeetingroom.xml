@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap
+        PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+        "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="UseMeeting">
+    <typeAlias alias="UseMeetingRoom" type="net.jqsoft.meeting.domain.UseMeeting" />
+
+     <resultMap id="UseMeetingRoom" class="UseMeetingRoom">
+         <result property="id" column="ID"/>
+         <result property="roomId" column="ROOM_ID"/>
+         <result property="userId" column="USER_ID"/>
+         <result property="useDate" column="USE_DATE"/>
+         <result property="useTime" column="USE_TIME"/>
+         <result property="remark" column="REMARK"/>
+    </resultMap>
+
+    <resultMap id="UseMeetingRoomSelect" class="UseMeetingRoom">
+        <result property="id" column="ID"/>
+        <result property="roomId" column="ROOM_ID"/>
+        <result property="roomName" column="ROOM_NAME"/>
+        <result property="userName" column="USER_NAME"/>
+        <result property="useDate" column="USE_DATE"/>
+        <result property="useTime" column="USE_TIME"/>
+        <result property="userName" column="USER_NAME" />
+        <result property="remark" column="REMARK" />
+        <result property="inUse" column="IN_USE" />
+    </resultMap>
+
+    <resultMap id="MeetingMapSelect" class="Meeting">
+        <result property="id" column="ID" />
+        <result property="name" column="NAME" />
+        <result property="userName" column="USER_NAME" />
+        <result property="location" column="LOCATION" />
+        <result property="meetingSize" column="MEETING_SIZE" />
+        <result property="haveMicrophone" column="HAVE_MICROPHONE" />
+        <result property="haveProjector" column="HAVE_PROJECTOR" />
+        <result property="haveWifi" column="HAVE_WIFI" />
+        <result property="haveComputer" column="HAVE_COMPUTER" />
+        <result property="type" column="TYPE" />
+        <result property="updator" column="UPDATOR" />
+        <result property="updatorName" column="UPDATOR_NAME" />
+        <result property="updateTime" column="UPDATE_TIME" />
+        <result property="creator" column="CREATOR" />
+        <result property="creatorName" column="CREATOR_NAME" />
+        <result property="createTime" column="CREATE_TIME" />
+        <result property="remark" column="REMARK" />
+        <result property="inUse" column="IN_USE" />
+        <result property="status" column="STATUS" />
+    </resultMap>
+
+
+    <sql id="sql-common">
+        <dynamic>
+            <isNotEmpty property="name" prepend=" and">
+                m.name like '%' || #name# || '%'
+            </isNotEmpty>
+            <isNotEmpty property="inUse" prepend=" and">
+                m.IN_USE=#inUse#
+            </isNotEmpty>
+        </dynamic>
+    </sql>
+
+    <select id="select" resultMap="MeetingMapSelect" >
+        SELECT m.* FROM MEETING_ROOM m WHERE 1=1
+        <include refid="sql-common"/>
+    </select>
+
+    <select id="getAll" resultMap="UseMeetingRoom">
+        SELECT * FROM USE_MEETING_ROOM
+    </select>
+    <select id="get" parameterClass="String" resultMap="UseMeetingRoom">
+        SELECT * FROM USE_MEETING_ROOM WHERE  id=#id:String#
+    </select>
+    <insert id="insert" parameterClass="UseMeetingRoom">
+        <![CDATA[
+        INSERT INTO USE_MEETING_ROOM(
+        ID,
+        ROOM_ID,
+        USER_ID,
+        USE_DATE,
+        USE_TIME,
+        REMARK
+        ) values(
+                #id#,
+                #roomId#,
+                #userId#,
+                #useDate#,
+                #useTime#,
+                #remark#
+             )
+		]]>
+    </insert>
+    <update id="update" parameterClass="UseMeetingRoom">
+        <![CDATA[
+			UPDATE USE_MEETING_ROOM ]]>
+			<dynamic prepend="SET">
+            <isNotEmpty  property="roomId" prepend=",">
+                <![CDATA[
+					ROOM_ID = #roomId:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="userId" prepend=",">
+                <![CDATA[
+					USER_ID = #userId:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="useDate" prepend=",">
+                <![CDATA[
+					useDate = #USE_DATE:DateTime#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="useTime" prepend=",">
+                <![CDATA[
+					USE_TIME = #useTime:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="remark" prepend=",">
+                <![CDATA[
+					REMARK = #remark:String#
+				]]>
+            </isNotEmpty >
+
+        </dynamic>
+        <dynamic prepend="WHERE">
+            <![CDATA[
+					id = #id:String#
+				]]>
+        </dynamic>
+    </update>
+    <delete id="deleteById" parameterClass="String">
+        <![CDATA[
+        DELETE FROM USE_MEETING_ROOM where id = #id:String#
+     ]]>
+    </delete>
+    <select id="count" resultClass="int">
+        SELECT COUNT(*) FROM USE_MEETING_ROOM WHERE 1=1
+    </select>
+
+
+
+
+</sqlMap>

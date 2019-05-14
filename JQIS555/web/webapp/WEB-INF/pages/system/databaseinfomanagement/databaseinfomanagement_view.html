@@ -1,0 +1,127 @@
+﻿
+<#include "../../common/_public.html"/>
+<div class="bjui-pageContent">
+	<form action="" id="dimForm"  data-alertmsg="true" data-isrefsh="false">
+		<div style="margin:15px auto 0; width:900px;">
+			<fieldset>
+				<legend>
+					<h3 class="listtitle">数据库信息</h3>
+					<input type="hidden" name="id" value="${entity.id!}"/>
+					<input type="hidden" id="types" value="${types!}">
+					<input type="hidden" name="entity.equipmentId" value="${equipmentId!}" />
+				</legend>
+				<table class="table table-condensed" width="100%">
+					<tbody>
+					<tr>
+						<td class="right" style="width: 130px"><span style="color:red">*</span>数据库Ip</td>
+						<td class="left" colspan="3">
+							<input name="entity.databaseIp" type="text" data-rule="required;length[~100]" readonly value="${databaseIp!}" size="20" />
+						</td>
+						<td class="right" style="width: 130px"><span style="color:red">*</span>数据库端口</td>
+						<td class="left" colspan="3">
+							<input name="entity.databasePort" type="text" data-rule="required;length[~10]" value="${entity.databasePort!}" size="20" />
+						</td>
+					</tr>
+					<tr>
+						<td class="right" style="width: 130px"><span style="color:red">*</span>数据库SID</td>
+						<td class="left" colspan="3">
+							<input name="entity.databaseSid" type="text" data-rule="required;length[~10]" value="${entity.databaseSid!}" size="20" />
+						</td>
+						<td></td>
+                        <td></td>
+					</tr>
+					<tr>
+						<td class="right" style="width: 130px"><span style="color:red">*</span>用户名</td>
+						<td class="left" colspan="3">
+							<input name="entity.userName" type="text" data-rule="required;length[~100]" value="${entity.userName!}" size="20" />
+						</td>
+						<td class="right" style="width: 130px"><span style="color:red">*</span>密码</td>
+						<td class="left" colspan="3">
+							<input name="entity.password" type="text" data-rule="required;length[~100]" value="${entity.password!}" size="20" />
+						</td>
+					</tr>
+					<tr>
+                        <td class="right" style="width: 130px">备注</td>
+                        <td class="left" colspan="7">
+                            <textarea id="remarks" name="entity.remarks" data-rule="length[~100]" size="64.5">${entity.remarks!}</textarea>
+                        </td>
+                    </tr>
+					
+				</table>
+			</fieldset>
+		</div>
+	</form>
+</div>
+<!-- <div class="bjui-pageFooter"> -->
+<!--     <ul> -->
+<!--             <button type="button" class="btn-close closecutab" data-icon="close">关闭</button> -->
+
+<!--         <li> -->
+<!--             <button onclick="databasesaveForm(this,'${ctx}/project/databaseinfomanagement!save.do','dimForm')" class="btn-default" data-icon="save">保存</button> -->
+<!--         </li> -->
+<!--     </ul> -->
+<!-- </div> -->
+<div class="bjui-pageFooter">
+    <ul>
+        <li>
+            <button type="button" class="btn-close closecutab" data-icon="close">关闭</button>
+        </li>
+        <li <#if types??><#if types == "view">hidden="true"</#if></#if>>
+            <button onclick="databasesaveForm(this,'${ctx}/project/databaseinfomanagement!save.do','dimForm')" class="btn-default" data-icon="save">保存</button>
+        </li>
+    </ul>
+</div>
+<script type="text/javascript">  
+    function databasesaveForm(obj, url, formId) {
+        var dataForms = $("#" + formId);
+        var $formFlag = dataForms.isValid();
+        if ($formFlag) {
+            $.ajax({
+                type : "POST",
+                url : url,
+                data : $("#" + formId).serialize(),
+                success : function(data) {
+                    var dataJson = eval('(' + data + ')');
+                    if (dataJson.statusCode == 300) {
+                        $(this).alertmsg('warn', dataJson.message);
+                    } else if (dataJson.statusCode == 200) {
+                        $(this).alertmsg('correct', dataJson.message);
+                     
+                        $(this).dialog("close", $.CurrentDialog);
+                         $(this).dialog("close", $.CurrentDialog);
+                        $("#databaseSearch").click();        
+                    }
+                }
+            })
+        }
+    };
+    function databasecloseDialogAndRefresh() {
+        //$(this).dialog("close", "combinationmembers_addMembers");
+        $("#databaseSearch").click();
+    }
+    function databaseUndoForm() {
+        _d("#databaseIp").val("");
+        _d("#databaseSearch").submit();  
+    }
+    function setDatabaseInsStatus(flag,param){
+    	if(flag){
+        	$("#"+param).val("1");//启用
+   	 	}else{
+        	$("#"+param).val("0");//禁用
+   	 	}
+	}
+    $(function(){
+		var _id = $("#types").val();
+		if(_id!=null && _id!=""){
+			if (_id == "view") {
+				$("table").find("input").each(function(){
+					$(this).attr("readonly", "readonly");
+				});
+				$("textarea").attr("readonly", "readonly");
+			}
+		}
+		
+	})
+    
+    
+</script>

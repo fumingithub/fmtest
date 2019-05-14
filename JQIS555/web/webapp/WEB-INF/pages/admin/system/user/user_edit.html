@@ -1,0 +1,173 @@
+<!--Copyright (c) 2013-2015 jqsoft.net-->
+<#include "../../../common/_public.html"/>
+<#include "../../../common/_area.html"/>
+<#include "user_edit_orgchange_js.html"/>
+<!--  
+<div class="bjui-pageHeader" style="background:#FFF;">
+    <div class="row" style="height:70px">
+        <div class="col-md-12">
+            <div class="office">
+                <ul class="offbtn">
+                    <li><a class="submit"><span class="iconbg04"><i class="fa fa-save font24"></i>
+                        </span>保存</a></li>
+                    <li><a class="closecutab"><span class="iconbg03"><i class="fa fa-remove  font24"></i>
+                        </span>关闭</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>-->
+<div class="bjui-pageContent">
+    <form action=""  id="pagerform" name="pagerform">
+        <div style="margin:15px auto 0; ">
+            <fieldset>
+                <legend>
+                    <h3 class="listtitle">用户信息</h3>
+                    <input type="hidden" name="id" value="${entity.id!}" />
+                </legend>
+                <table class="table table-condensed" width="100%">
+                    <tbody>
+                        
+                        <tr>
+                            <td class="right" style="width: 130px"><span
+                                style="color:red;">*</span>用户名</td>
+                            <td class="left" colspan="3"><input name="entity.userName" maxlength="25"
+                                type="text" data-rule="required" value="${entity.userName!}"
+                                size="20" /></td>
+                        </tr>
+                        <#if !(entity.passWord)??>
+                        <tr>
+                            <td class="right" style="width: 130px"><span
+                                style="color:red;">*</span>用户密码</td>
+                            <td class="left" colspan="3"><input name="entity.passWord" maxlength="25"
+                                data-rule="required" value="${entity.passWord?default('')}"
+                                size="20" /></td>
+                        </tr>
+                        </#if>
+                        <tr>
+                            <td class="right" style="width: 130px"><span
+                                style="color:red;">*</span>真实姓名</td>
+                            <td class="left" colspan="3"><input name="entity.realName"
+                                type="text" data-rule="required" maxlength="25"
+                                value="${entity.realName?default('')}" size="20" /></td>
+                        </tr>
+                        
+                        <tr>
+                            <td class="right" style="width: 130px">所属部门</td>
+<!--                             <td class="left" colspan="3"> -->
+<!--                                 <#if "${entity.id!}" == "" || !entity.id??> -->
+<!--                                     <input name="entity.insId" type="hidden" <#if parent??>value="${parent.id!}"</#if> /> -->
+<!--                                     <input class="form-control" maxlength="25" readonly="readonly" size="20" -->
+<!--                                     <#if parent??>value="${parent.name!}"</#if> /> -->
+<!--                                 <#else> -->
+<!--                                     <input name="entity.insId" type="hidden" value="${entity.insId!}" /> -->
+<!--                                     <input class="form-control" value="${entity.insName!}" maxlength="25" -->
+<!--                                            readonly="readonly" size="20" /> -->
+<!--                                 </#if> -->
+<!--                             </td> -->
+                            <td class="left" colspan="3" >
+                            <#if "${entity.id!}" == "" || !entity.id??> 
+                            	<input type="hidden" id="newOrgId" name="entity.insId" <#if parent??> value="${parent.id!}" </#if> data-rule="" />
+	                            <input type="text" id="newOrgName" name="newOrgName"  data-toggle="selectztree" <#if parent??>value="${parent.name!}"</#if>
+	                                   class="form-control" size="20" readonly="readonly" data-tree="#newOrgzTree" data-rule="group"/>
+	                            <ul id="newOrgzTree" class="ztree hide" style="min-height: 200px; overflow: auto;"></ul>
+                            <#else>
+	                            <input type="hidden" id="newOrgId" name="entity.insId" value="${entity.insId!}" data-rule="" />
+	                            <input type="text" id="newOrgName" name="newOrgName"  data-toggle="selectztree" value="${entity.hospitalName!}"
+	                                   class="form-control" size="20" readonly="readonly" 
+	                                   data-tree="#newOrgzTree" data-rule="group" />
+	                            <ul id="newOrgzTree" class="ztree hide" style="min-height: 200px; overflow: auto;"></ul>
+                            </#if>
+                        	</td>
+                        </tr>
+                        
+                        <tr>
+                            <td class="right" style="width: 130px">手机号码</td>
+                            <td class="left" colspan="3"><input name="entity.mobiePhone" data-rule="mobile"
+                                type="text" value="${entity.mobiePhone?default('')}" size="20" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="right" style="width: 130px">固定电话</td>
+                            <td class="left" colspan="3"><input name="entity.telePhone" data-rule="tel"
+                                type="text" value="${entity.telePhone?default('')}" size="20" />
+                            </td>
+                        </tr>
+                        <!--<tr>-->
+                            <!--<td class="right" style="width: 130px">所属机构</td>-->
+                            <!--<td class="left" colspan="3">-->
+                                <!--<input name="entity.insId" type="text" value="${entity.insId!}" data-toggle="select2" data-url="${ctx}/admin/quick/quickDict!queryOrg.do?insId=${entity.insId!}"  size="20" />-->
+                            <!--</td>-->
+                        <!--</tr>-->
+                        <tr>
+                            <td class="right" style="width: 130px">工作岗位</td>
+                            <td class="left" colspan="3"><input name="entity.office" maxlength="25"
+                                type="text" value="${entity.office?default('')}" size="20" /></td>
+                        </tr>
+                        <tr hidden="true">
+                            <td class="right">状态</td>
+                            <td class="left">
+                                <div data-toggle="switch" data-on-label="启用" data-off-label="禁用" data-onchange="setUserStatus" data-onparam="userStatus">
+                                    <input type="hidden" id="userStatus" name="entity.status" value="${entity.status?default('0')}">
+                                    <input type="checkbox" <#if !(entity.status)??||"${(entity.status)!}"=="0"> checked="checked"</#if>/>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </fieldset>
+        </div>
+    </form>
+</div>
+<div class="bjui-pageFooter">
+    <ul>
+        <li>
+            <button type="button" class="btn-close closecutab" data-icon="close">关闭</button>
+        </li>
+        <li>
+            <button onclick="saveForm(this,'${ctx}/admin/system/user!save.do','pagerform')" class="btn-default" data-icon="save">保存</button>
+        </li>
+    </ul>
+</div>
+<script type="text/javascript">
+    function setUserStatus(flag,param){
+        if(flag){
+            $("#"+param).val("0");//正常
+        }else{
+            $("#"+param).val("1");//锁定
+        }
+    }
+    
+    function showIns(e) {
+        $.ajax({
+            type:'post',
+            data:'entity.userType='+e.value+'&entity.areaId='+$("#user_area_tree_areaId").val(),
+            url:'${ctx}/admin/system/user!showins.do',
+            success:function(data){
+                $("#trIns").html(data).trigger(BJUI.eventType.initUI);
+            }
+        });
+    }
+
+    function saveForm(obj, url, formId) {
+        var dataForms = $("#" + formId);
+        var $formFlag = dataForms.isValid();
+        if ($formFlag) {
+            $.ajax({
+                type : "POST",
+                url : url,
+                data : $("#" + formId).serialize(),
+                success : function(data) {
+                    var dataJson = eval('(' + data + ')');
+                    if (dataJson.statusCode == 300) {
+                        $(this).alertmsg('warn', dataJson.message);
+                    } else if (dataJson.statusCode == 200) {
+                        $(this).alertmsg('correct', dataJson.message);
+                        $(this).dialog("close", $.CurrentDialog);
+                        $("#userSearch").submit();
+                    }
+                }
+            })
+        }
+    };
+</script>

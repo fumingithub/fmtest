@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap
+        PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+        "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="Attachment">
+    <typeAlias alias="Attachment" type="net.jqsoft.base.system.domain.Attachment" />
+
+    <resultMap id="AttachmentMap" class="Attachment">
+
+          <result property="id" column="ID"/>
+                <result property="name" column="NAME"/>
+                <result property="type" column="TYPE"/>
+                <result property="fileSize" column="FILE_SIZE"/>
+                <result property="description" column="DESCRIPTION"/>
+                <result property="path" column="PATH"/>
+                <result property="encodeName" column="ENCODE_NAME"/>
+                <result property="relateBizCode" column="RELATE_BIZ_CODE"/>
+                <result property="relateBizId" column="RELATE_BIZ_ID"/>
+                <result property="status" column="STATUS"/>
+                <result property="remark" column="REMARK"/>
+                <result property="updator" column="UPDATOR"/>
+                <result property="updatorName" column="UPDATOR_NAME"/>
+                <result property="updateTime" column="UPDATE_TIME"/>
+                <result property="creator" column="CREATOR"/>
+                <result property="creatorName" column="CREATOR_NAME"/>
+                <result property="createTime" column="CREATE_TIME"/>
+
+    </resultMap>
+
+    <select id="getAll" resultMap="AttachmentMap">
+        SELECT * FROM ATTACHMENT
+    </select>
+    <select id="get" parameterClass="String" resultMap="AttachmentMap">
+        <![CDATA[
+           	   SELECT * FROM ATTACHMENT WHERE  id=#id:String#
+         ]]>
+    </select>
+    <insert id="insert" parameterClass="Attachment">
+        <![CDATA[
+        INSERT INTO ATTACHMENT(
+        ID,
+        NAME,
+        TYPE,
+        FILE_SIZE,
+        DESCRIPTION,
+        PATH,
+        ENCODE_NAME,
+        RELATE_BIZ_CODE,
+        RELATE_BIZ_ID,
+        STATUS,
+        REMARK,
+        UPDATOR,
+        UPDATOR_NAME,
+        UPDATE_TIME,
+        CREATOR,
+        CREATOR_NAME,
+        CREATE_TIME
+        ) values(
+                #id#,
+                #name#,
+                #type#,
+                #fileSize#,
+                #description#,
+                #path#,
+                #encodeName#,
+                #relateBizCode#,
+                #relateBizId#,
+                #status#,
+                #remark#,
+                #updator#,
+                #updatorName#,
+                #updateTime#,
+                #creator#,
+                #creatorName#,
+                #createTime#
+             )
+		]]>
+    </insert>
+    <update id="update" parameterClass="Attachment">
+        <![CDATA[
+			UPDATE ATTACHMENT ]]>
+			<dynamic prepend="SET">
+            <isNotEmpty  property="name" prepend=",">
+                <![CDATA[
+					NAME = #name:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="type" prepend=",">
+                <![CDATA[
+					TYPE = #type:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="fileSize" prepend=",">
+                <![CDATA[
+					FILE_SIZE = #fileSize:Integer#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="description" prepend=",">
+                <![CDATA[
+					DESCRIPTION = #description:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="path" prepend=",">
+                <![CDATA[
+					PATH = #path:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="encodeName" prepend=",">
+                <![CDATA[
+					ENCODE_NAME = #encodeName:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="relateBizCode" prepend=",">
+                <![CDATA[
+					RELATE_BIZ_CODE = #relateBizCode:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="relateBizId" prepend=",">
+                <![CDATA[
+					RELATE_BIZ_ID = #relateBizId:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="status" prepend=",">
+                <![CDATA[
+					STATUS = #status:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="remark" prepend=",">
+                <![CDATA[
+					REMARK = #remark:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="updator" prepend=",">
+                <![CDATA[
+					UPDATOR = #updator:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="updatorName" prepend=",">
+                <![CDATA[
+					UPDATOR_NAME = #updatorName:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="updateTime" prepend=",">
+                <![CDATA[
+					UPDATE_TIME = #updateTime:DateTime#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="creator" prepend=",">
+                <![CDATA[
+					CREATOR = #creator:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="creatorName" prepend=",">
+                <![CDATA[
+					CREATOR_NAME = #creatorName:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="createTime" prepend=",">
+                <![CDATA[
+					CREATE_TIME = #createTime:DateTime#
+				]]>
+            </isNotEmpty >
+        </dynamic>
+        <dynamic prepend="WHERE">
+            <![CDATA[
+					id = #id:String#
+				]]>
+        </dynamic>
+    </update>
+    <delete id="deleteById" parameterClass="String">
+        <![CDATA[
+        DELETE FROM ATTACHMENT where id = #id:String#
+     ]]>
+    </delete>
+    <select id="count" resultClass="int">
+        SELECT COUNT(*) FROM ATTACHMENT
+    </select>
+    <select id="select" resultMap="AttachmentMap"  parameterClass="java.util.HashMap">
+        SELECT * FROM ATTACHMENT
+    </select>
+    
+    <select id="selectByMd5" resultMap="AttachmentMap"  parameterClass="String">
+        SELECT * FROM ATTACHMENT where file_md5 = #md5#
+    </select>
+</sqlMap>

@@ -1,0 +1,100 @@
+<#include "../../../common/_public.html"/>
+<#include "../../../common/_area.html"/>
+<#include "../../../common/_pinyin.html"/>
+<!-- <div class="bjui-pageHeader" style="background:#FFF;"> -->
+<!-- 	<div class="row" style="height:70px"> -->
+<!-- 		<div class="col-md-12"> -->
+<!-- 			<div class="office"> -->
+<!-- 				<ul class="offbtn"> -->
+<!-- 					<li><a id="lbtnSave" class="submit"><span class="iconbg04"><i -->
+<!-- 								class="fa fa-save font24"></i> -->
+<!-- 						</span>淇濆瓨</a> -->
+<!-- 					</li> -->
+<!-- 					<li><a class="closecutab"><span class="iconbg03"><i -->
+<!-- 								class="fa fa-remove  font24"></i> -->
+<!-- 						</span>鍏抽棴</a> -->
+<!-- 					</li> -->
+<!-- 				</ul> -->
+<!-- 			</div> -->
+<!-- 		</div> -->
+<!-- 	</div> -->
+<!-- </div> -->
+<div class="bjui-pageContent">
+	<form id="form" action="">
+	<div style="margin:15px auto 0;">
+		<fieldset>
+			<legend>
+				<h3 class="listtitle" id="unitTitle">閮ㄩ棬淇℃伅</h3>
+				<input type="hidden" name="id" value="${entity.id!}" />
+			</legend>
+			<table class="table table-condensed" width="100%">
+				<tbody>
+					
+					<tr>
+						<td class="right"><span style="color:red;">*</span>閮ㄩ棬缂栫爜</td>
+						<td class="left"><input name="entity.code" id="unitCode" maxlength="20"
+							type="text" data-rule="required" value="${entity.code!}"
+							<#if (isHaveChild!)=='1'>readonly="readonly"</#if> size="20" />
+						</td>
+					</tr>
+					<tr>	
+						<td class="right"><span style="color:red;">*</span>閮ㄩ棬鍚嶇О</td>
+						<td class="left"><input id="unitName"
+							name="entity.name" type="text" data-rule="required" maxlength="25" onkeyup="getText(this)"
+							value="${entity.name!}" size="20" /></td>
+					</tr>
+					<tr>
+						<td class="right" style="width: 130px">涓婄骇閮ㄩ棬鍚嶇О</td>
+						<td class="left">
+							<input name="entity.parentId" type="hidden" value="${(parentIns.id)!}" /> 
+							<input value="${(parentIns.name)!}" size="20" type="text" readonly="true"/>
+						</td>
+					</tr>    
+
+					<tr>
+						<td class="right" style="width: 130px">鐢靛瓙閭</td>
+						<td class="left">
+							<input name="entity.email" type="text" data-rule="email" value="${entity.email!}" size="20" />
+						</td>
+					</tr>
+					<tr>	
+						<td class="right" style="width: 130px">鐢佃瘽</td>
+						<td class="left">
+							<input name="entity.telephone" type="text" maxlength="13" value="${entity.telephone!}" size="20" />
+						</td>
+					</tr>
+					<tr>
+
+						<td class="right">鐘舵�</td>
+						<td class="left" colspan="3">
+							<div data-toggle="switch" data-on-label="鍚敤" data-off-label="绂佺敤" data-onchange="setInsStatus" data-onparam="insStatus">
+								<input type="hidden" id="insStatus" name="entity.status" value="${entity.status?default('0')}">
+                               	<input type="checkbox" <#if !(entity.status)??||"${(entity.status)!}"=="0"> checked="checked"</#if>/>
+							</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</fieldset>
+	</div>
+</form>
+</div>
+<div class="bjui-pageFooter">
+    <ul>
+        <li>
+            <button type="button" class="btn-close closecutab" data-icon="close">鍏抽棴</button>
+        </li>
+        <li>
+            <button onclick="saveForm(this,'${ctx}/admin/system/department!save.do','form')" class="btn-default" data-icon="save">淇濆瓨</button>
+        </li>
+    </ul>
+</div>
+<script type="text/javascript">
+    function setInsStatus(flag,param){
+        if(flag){
+            $("#"+param).val("0");//姝ｅ父
+        }else{
+            $("#"+param).val("1");//閿佸畾
+        }
+    }
+</script>

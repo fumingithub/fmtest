@@ -1,0 +1,171 @@
+<script type="text/javascript">
+/**
+ * 行政区划
+ * 1.在areaId input框中 添加属性 data-last="true"  则父节点不可选，只有最后一级节点可以选择
+ * 2.在areaId input框中和查询按钮分别添加  class="data-query" 则，选中地区后直接刷新列表
+ * 3.在areaId input框中 添加属性data-show="2" 表示 控制从选择的节点开始 向上延伸显示2级父节点  如大坝组 --> 三河镇 木兰村 大坝组
+ *      和data-last="true" 一起使用
+ * 限制显示到县：
+ * data-area-level="3" 添加在ul上
+ * areaLevel="3" 添加在标签参数上
+ */
+function areaNodeClick(e, treeId, treeNode) {
+	var zTree = $.fn.zTree.getZTreeObj(treeId);
+	var dataset = zTree.setting.treeObj[0].dataset;
+	var areaLevel = "";
+	//if(typeof dataset.areaLevel != "undefined") //areaLevel = dataset.areaLevel;
+	if(treeNode.isParent) {
+		return false;
+	}
+	$.ajax({
+		async:true,
+		url:"${ctx}/admin/area/area!showchild.do?pCode="+treeNode.id+"&areaLevel="+areaLevel,
+		type:'post',
+		error:function(){
+			alert("error");
+		},
+		success:function(data){
+			var s = eval("("+data.msg+")");
+			if(s != "") {
+				zTree.addNodes(treeNode, s);
+			}
+		}
+	})
+}
+
+function areaNodeCheck(e, treeId, treeNode) {
+    var zTree = $.fn.zTree.getZTreeObj(treeId), nodes = zTree.getCheckedNodes(true)
+    var ids = '', names = ''
+
+    for ( var i = 0; i < nodes.length; i++) {
+        /* var f = true;
+        var child = nodes[i].children;
+        if (child != null) {
+            for ( var j = 0; j < child.length; j++) {
+                if (child[j].checked == true) {
+                    f = false;
+                    break;
+                }
+            }
+        }
+        if (f == true) { */
+            ids += ',' + nodes[i].id;
+            names += ',' + nodes[i].name;
+        /* } */
+    }
+    if (ids.length > 0) {
+        ids = ids.substr(1), names = names.substr(1)
+    }
+    var $last = $("#" + treeId + "_areaId").attr("data-last");
+
+    if($last=="true" && ids.length != 12){//控制是否父节点可选
+        return;
+    }
+    var $show = $("#" + treeId + "_areaId").attr("data-show"); //控制从最低级开始 向上延伸显示多少级父节点
+    if($show) {
+        if (names != "" && names!=null) {
+            var show = parseInt($show);
+            for (var i = 0; i < show; i++) {
+                treeNode = treeNode.getParentNode();
+                if(treeNode != null)
+                    names = treeNode.name + " " + names;
+            }
+        }
+    }
+    
+    var $from ;
+    $from_nav = $.CurrentNavtab.find('input[data-tree="#' + treeId+'"]');
+    $from_dia = $.CurrentDialog.find('input[data-tree="#' + treeId+'"]');
+    if($from_nav.length){
+    	$from = $from_nav;
+    }else{
+    	$from = $from_dia;
+    }
+    
+    if ($from.length ){
+        $from.val(names);
+        //删除错误提示信息
+        if($from.hasClass('n-invalid')){
+            $from.removeClass('n-invalid');
+            $from.next('span.msg-box').hide();
+        }
+        $("#"+treeId).parent().hide();
+
+    }
+    $("#" + treeId + "_areaId").val(ids);
+    if($("#"+treeId+"_areaId").hasClass("data-query")){//控制选好地区直接查询
+        $.CurrentNavtab.find('button.data-query').click();
+    }
+    changeSelectData(ids);
+}
+
+/**
+ * 根据选择的所属地区限定页面其他下拉选择框
+ */
+function changeSelectData(areaId) {
+	$.CurrentNavtab.find("select[data-area]").each(function(){
+        showSelectData(this,$(this).attr('data-area'),areaId);
+    });
+	// 清空选择的医疗机构
+	$.CurrentNavtab.find("select[data-clear]").each(function(){
+		$(this).val('');
+		$(this).selectpicker("refresh");
+	});
+	// 改变机构select2参数
+	$.CurrentNavtab.find("[data-change-hosp]").each(function(){
+		showComHosp(areaId);
+	})
+}
+
+/**
+ * 下拉数据动态设置
+ */
+function showSelectData(sel,dictCode,areaId) {
+	$.ajax({
+       type: "POST",
+       async:false,
+	   dataType: "json",
+       url: "${ctx}/admin/dict/dict!childlist.do?entity.dictCode="+dictCode+"&entity.areaId="+areaId,
+       success: function(data){
+	       $(sel).empty();
+	       var html = "<option value='' selected='selected'>--请选择--</option>";
+	       for(var i=0;i<data.length;i++) {
+	    	   html += "<option value="+data[i].itemCode+">"+data[i].name+"</option>";
+    	   }
+	       $(sel).append(html);
+	       $(sel).selectpicker("refresh");
+       }
+    });
+}
+
+/**
+ * 显示医疗机构
+ */
+function showInsHosp(e,hidAreaId,areaMsg,hidInsType,insTypeMsg,insTypeValue) {
+	if($("#"+hidAreaId).val() == "") {
+		$(e).alertmsg('error',areaMsg);
+		return;
+	}
+	if("undefined" == typeof insTypeValue) {
+		if($("#"+hidInsType).val()=="") {
+			$(e).alertmsg('error',insTypeMsg);
+			return;
+		}
+		insTypeValue=$("#"+hidInsType).val();
+	}
+	var areaId = $("#"+hidAreaId).val();
+	if(areaId != "") areaId = areaId.substring(0,6);
+	var lookup_options = {
+        id: "inshosp-lookup-"+hidAreaId,
+        data:{"areaId":areaId,"insType":insTypeValue},
+        url:"${ctx}/admin/ins/inshospital!lookup.do",
+        width: 800,
+        height: 650,
+        mask: true,
+        fresh: true,
+        isrefshpar:true,
+        title: "医疗机构"
+    }
+	$(e).lookup(lookup_options)
+}
+</script>

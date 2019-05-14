@@ -1,0 +1,122 @@
+<#include "../../../common/_public.html"/>
+<#include "../../../common/_area.html"/>
+<div class="bjui-pageHeader">
+ <form id="pagerForm" data-toggle="ajaxsearch" action="${ctx}/admin/news/news.do" method="post">
+ <div class="office">
+     <ul class="offbtn">
+         <@auth name="SYS_NEWS_ADD">
+         <#if hasPermission>
+             <li><a data-toggle="dialog" data-width="1000" data-height="700"  data-mask="true" data-id="news_edit" data-isrefsh="true" data-isrefshpar="true" data-url="${ctx}/admin/news/news!editpage.do" data-external="false" data-title="文章管理-新增"> <span class="iconbg01"><i class="fa fa-file-text-o font24"></i></span>新增</a></li>
+         </#if>
+         </@auth>
+
+         <@auth name="SYS_NEWS_EDIT">
+         <#if hasPermission>
+            <li><a data-toggle="dialog" data-width="1000" data-height="700"  data-mask="true" data-title="文章管理-编辑" data-isrefsh="true" data-isrefshpar="true" data-id="news_edit" data-external="false" data-url="${ctx}/admin/news/news!editpage.do?entity.id={#bjui-selected}"> <span class="iconbg02"><i class="fa fa-edit  font24"></i></span>编辑</a></li>
+         </#if>
+         </@auth>
+
+        <@auth name="SYS_NEWS_VIEW">
+        <#if hasPermission>
+           <li><a data-toggle="dialog" data-width="950" data-height="500"  data-mask="true" data-title="文章管理-查看" data-id="news_view" data-url="${ctx}/admin/news/news!viewpage.do?entity.id={#bjui-selected}"><span class="iconbg04"><i class="fa fa-search font24"></i></span>查看</a></li>
+        </#if>
+        </@auth>
+
+        <@auth name="SYS_NEWS_DELETE">
+        <#if hasPermission>
+            <li><a data-url="${ctx}/admin/news/news!deletenews.do?entity.id={#bjui-selected}" data-toggle="doajax" data-external="false" data-isrefsh="true" data-confirm-msg="确定要删除选中项吗？"><span class="iconbg03"><i class="fa fa-trash font24"></i></span>删除</a></li>
+        </#if>
+        </@auth>
+
+        <@auth name="SYS_NEWS_RELEASENEWS">
+        <#if hasPermission>
+         <li><a data-url="${ctx}/admin/news/news!releasenews.do?entity.id={#bjui-selected}" data-toggle="doajax" data-external="false" data-isrefsh="true" data-confirm-msg=" 是否确认发布此文章？" id="sub"><span class="iconbg02"><i class="fa fa-globe font24"></i></span>发布</a></li>
+        </#if>
+        </@auth>
+         <li><span class="ttt"></span></li>
+         <li><a id="refresh"data-toggle="reloadsearch" data-target="#bjui-pageContent" data-icon="search"><span class="iconbg02"><i class="fa fa-refresh font24"></i></span>刷新</a></li>
+         <li> <a  class="closecutab"><span class="iconbg03"><i class="fa fa-remove  font24"></i></span>关闭</a> </li> 
+     </ul>
+ </div>
+
+     <div class="bjui-searchBar">
+      <input type="hidden" name="limit" value="${limit}">
+      <input type="hidden" name="start" value="${start}">
+		 &nbsp;&nbsp;
+         <lable>标题:</lable>
+         <input name="title" class="form-control" value="${filter.parameters.title!}" size="15" type="text"/>
+         &nbsp;&nbsp;
+         <lable>作者:</lable>
+         <input name="author" class="form-control" value="${filter.parameters.author!}" size="15" type="text"/>
+         &nbsp;&nbsp;
+         <lable>发布状态:</lable>
+         <select name="status" data-width="150px" data-toggle="selectpicker" class="form-control">
+             <option <#if "${filter.parameters.status!}"=="">selected="selected"</#if> value="">--请选择--</option>
+             <option value="0" <#if "${filter.parameters.status!}"=="0">selected="selected"</#if>>已发布</option>
+             <option value="1" <#if "${filter.parameters.status!}"=="1">selected="selected"</#if>>未发布</option>
+         </select>
+         <button type="submit" class="btn-default"  data-toggle="ajaxsearch" data-icon="search">查询</button>&nbsp;
+		 <a class="btn btn-orange" href="javascript:;" onclick="$(this).navtab('reloadForm', true);" data-icon="undo">清空</a>
+     </div>
+ </form>
+</div>
+<div class="bjui-pageContent">
+    <table data-width="100%" data-nowrap="true" data-selected-multi="false"
+           class="table table-bordered table-hover table-striped table-top">
+        <thead>
+        <tr>
+            <th></th>
+            <th>NO.</th>
+            <th class="list-col-VerifyNo" style="text-align:center" title="标题">
+                <div class="list-col-VerifyNo">标题</div>
+            </th>
+            <th class="list-col-Applicants" style="text-align:center" title="作者">
+                <div class="list-col-Applicants">作者</div>
+            </th>
+            <th class="list-col-VISProjectName" style="text-align:center" title="发布状态">
+                <div class="list-col-VISProjectName">发布状态</div>
+            </th>
+            <th class="list-col-CardType" style="text-align:center" title="发布时间">
+                <div class="list-col-CardType">发布时间</div>
+            </th>
+            <th class="list-col-CardType" style="text-align:center" title="发布者">
+                <div class="list-col-CardType">发布者</div>
+            </th>
+        </tr>
+        </thead>
+        <tbody id="applyListTable">
+        <#list entitys as news>
+        <tr>
+            <td>
+            <input type="checkbox" name="ids" data-toggle="icheck" value="${news.id}">
+            </td>
+            <td class="left">${news_index+1+(start-1)*limit}</td>
+            <td class="left" title="${news.title!}">
+                <div title='${news.title!}'>${news.title!}</div>
+            </td>
+            <td class="left" title="${news.author!}">
+                <div>${news.author!}</div>
+            </td>
+
+            <td class="center" tittle="发布状态">
+                <div>
+                	<#if news.status=="0"><div title="已发布" class="label label-success">已发布</div></#if>
+                	<#if news.status=="1"><div title="未发布" class="label label-danger">未发布</div></#if>
+                </div>
+            </td>
+            <td class="center">
+                <div>
+                    <#if news.releasetime??>
+                    ${(news.releasetime*1000)?number_to_date}
+                    </#if>
+                </div>
+            </td>
+            <td class="left">
+                <div title='${news.releaseperson!}'> ${news.releaseperson!}</div>
+            </td>
+        </tr>
+        </#list>
+        </tbody>
+    </table>
+</div>
+<#include "../../../common/_page.html"/>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+        "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+    <!--管理后台 -->
+    <package name="leave" namespace="/admin/leave" extends="ncms-default">
+
+       <!-- 请假管理 -->
+        <action name="leave" class="net.jqsoft.attendance.action.LeaveAction">
+            <result name="success" type="freemarker">/WEB-INF/pages/leave/leave_list.html</result>
+            <result name="input" type="freemarker">/WEB-INF/pages/leave/leave_edit.html</result>
+        </action>
+    </package>
+
+</struts>

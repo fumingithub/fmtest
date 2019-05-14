@@ -1,0 +1,51 @@
+<#include "../../../common/_public.html"/>
+ <!--  <script type="text/javascript" src="${ctx}/BJUI/flex/jquery.js"></script>  -->
+  <script type="text/javascript" src="${ctx}/BJUI/flex/flexpaper_flash.js"></script> 
+  <script type="text/javascript" src="${ctx}/BJUI/flex/flexpaper_flash_debug.js"></script> 
+  <form id="showMessage"></form>
+  <div style="position:absolute; left: 0px; top: 0px;""> 
+   <a id="viewerPlaceHolder" style="width: 790px; height: 360px; display: block"></a> 
+   <script type="text/javascript">  
+   $(function(){
+	   if("${swfPath!}" != "" && "${swfPath!}" != null){
+		   var fp = new FlexPaperViewer(  
+			       '${ctx}/swf/FlexPaperViewer', 
+			       'viewerPlaceHolder', 
+			       { config : { 
+			       SwfFile : '${ctx}/${swfPath!}',//编码设置 
+			       Scale : 0.6,  
+			       ZoomTransition : 'easeOut',//变焦过渡 
+			       ZoomTime : 0.5, 
+			       ZoomInterval : 0.2,//缩放滑块-移动的缩放基础[工具栏] 
+			       FitPageOnLoad : true,//自适应页面 
+			       FitWidthOnLoad : true,//自适应宽度 
+			       FullScreenAsMaxWindow : false,//全屏按钮-新页面全屏
+			       ProgressiveLoading : true,//分割加载 
+			       MinZoomSize : 0.2,//最小缩放 
+			       MaxZoomSize : 3,//最大缩放 
+			       SearchMatchAll : true,
+			       InitViewMode : 'Portrait',//初 始 显 示 模 式(SinglePage,TwoPage,Portrait) 
+			       ViewModeToolsVisible : true,//显示模式工具栏是否显示 
+			       ZoomToolsVisible : true,//缩放工具栏是否显示 
+			       NavToolsVisible : true,//跳页工具栏 
+			       CursorToolsVisible : false, 
+			       SearchToolsVisible : true, 
+			       PrintPaperAsBitmap:true, 
+			       localeChain: 'en_US' 
+			       }}); 
+		   }else{
+			   alert("没有找到该文件或图片");
+		   }
+   });
+  	 //控制打印，flexpaper的调用函数
+    function onDocumentPrinted(){
+  	  var printCount = ${printCount};
+      	if (printCount > 0){
+      		return true;
+      	}else{
+      		alert("该文档或图片不允许打印");
+      		return false;
+      	}
+      }
+ </script> 
+  </div> 

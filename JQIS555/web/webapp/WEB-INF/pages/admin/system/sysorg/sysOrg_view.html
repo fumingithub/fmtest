@@ -1,0 +1,97 @@
+﻿<#include "../../../common/_public.html"/>
+
+<div class="bjui-pageContent">
+    <form action="${ctx}/admin/system/sysorg!save.do" id="pageform" data-isrefsh="true">
+        <input type="hidden" id="editType" name="editType" value="${editType!}">
+        <div style="margin:15px auto 0;">
+            <fieldset>
+                <legend>
+                    <h3 class="listtitle">部门信息</h3>
+                    <input type="hidden" id="iId" name="id" value="${entity.id!}"/>
+                    <input type="hidden" id="types" value="${types!}">
+                </legend>
+                <table class="table table-condensed" width="100%">
+                    <tbody>
+                    <tr>
+                        <td class="right" style="width: 130px"><span style="color:red">*</span>部门代码：</td>
+                        <td class="left" colspan="3">
+                            <input id="entity_code" name="entity.code" type="text" data-rule="required;length[~50]"
+                                   value="${entity.code!}" title="${entity.code!}" size="22" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="right" style="width: 130px"><span style="color:red">*</span>部门名称：</td>
+                        <td class="left" colspan="3">
+                            <input id="entity_name" name="entity.name" type="text" data-rule="required;length[~50]"
+                                   value="${entity.name!}" title="${entity.name!}" size="22" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="right" style="width: 130px">上级部门</td>
+                        <td class="left" colspan="3">
+                            <#if "${entity.id!}" == "">
+                                <input name="entity.parentId" type="hidden" <#if parent??>value="${parent.id!}"</#if> />
+                                <input class="form-control"
+                                <#if parent??>value="${parent.name!}"</#if> readonly="readonly" size="22" />
+                            <#else>
+                                <input name="entity.parentId" type="hidden" value="${entity.parentId!}" />
+                                <input class="form-control" value="${entity.parentName!}"
+                                       readonly="readonly" size="22" />
+                            </#if>
+                        </td>
+                    </tr>
+                    <tr>    
+                        <td class="right" style="width: 130px">联系电话：</td>
+                        <td class="left" colspan="3">
+                            <input name="entity.telephone" type="text"  value="${entity.telephone!}" size="22" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="right" style="width: 130px">电子邮箱：</td>
+                        <td class="left" colspan="3">
+                            <input name="entity.email" type="text" data-rule="email" value="${entity.email!}" size="22" />
+                        </td>
+                    </tr>
+                    <tr>    
+                        <td class="right" style="width: 130px;display:none;">状态：</td>
+                        <#if types??>
+                            <#if types=="view">
+                            <td class="left" colspan="3" style="display:none">
+                                <#if entity.status== '0'><div title="正常" class="label label-success">正常</div></#if>
+                                <#if entity.status== '1'><div title="锁定" class="label label-danger">锁定</div></#if>
+                            </td>
+                            <#else>
+                            <td></td>
+                            <td class="left" colspan="3" style="display:none">
+                                <div data-toggle="switch" data-on-label="正常" data-off-label="锁定" data-onchange="setSysOrgStatus" data-onparam="setSysOrgStatus">
+                                    <input type="hidden" id="setSysOrgStatus" name="entity.status" value="${entity.status?default('0')}">
+                                    <input type="checkbox" <#if !(entity.status)??||"${(entity.status)!}"=="0"> checked="checked"</#if>/>
+                                </div>
+                            </td>
+                            </#if>
+                        <#else>
+                        <td class="left" colspan="3" style="display:none">
+                            <div data-toggle="switch" data-on-label="正常" data-off-label="锁定" data-onchange="setSysOrgStatus" data-onparam="setSysOrgStatus">
+                                <input type="hidden" id="setSysOrgStatus" name="entity.status" value="${entity.status?default('0')}">
+                                <input type="checkbox" <#if !(entity.status)??||"${(entity.status)!}"=="0"> checked="checked"</#if>/>
+                            </div>
+                        </td>
+                        </#if>
+                    </tr>
+                </table>
+            </fieldset>
+        </div>
+    </form>
+</div>
+<div class="bjui-pageFooter">
+    <ul>
+        <li>
+            <button type="button" class="btn-close closecutab" data-icon="close">关闭</button>
+        </li>
+        <li <#if types??><#if types == "view">hidden="true"</#if></#if>>
+            <button type="button" class="btn-default" data-icon="save" onclick="refreshSysOrgTree('pageform');">保存</button>
+        </li>
+    </ul>
+</div>
+
+<#include "sysOrg_view_js.html" />

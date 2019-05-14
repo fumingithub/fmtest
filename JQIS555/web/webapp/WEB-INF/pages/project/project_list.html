@@ -1,0 +1,313 @@
+<#include "../common/_public.html"/>
+<div class="bjui-pageHeader">
+ <form id="pagerForm" data-toggle="ajaxsearch" action="${ctx}/project/project.do" method="post">
+ <div class="office">
+			<ul class="offbtn">
+ 			<@auth name="PROJECT_ADD">
+                <#if hasPermission>
+                <li> <a  data-toggle="dialog" data-width="900" data-height="520"  data-id="meeting_add" data-mask="true"  data-url="${ctx}/project/project!edit.do?types=add" data-xternal="true" data-title="项目维护> 新增"> <span class="fa fa-file-text-o font24 iconbg01"></span>新增</a> </li>
+                </#if>
+                </@auth>
+			<@auth name="PROJECT_EDIT">
+                <#if hasPermission>
+                <li> <a  onclick="projectEdit(this,'${ctx}/project/project!edit.do?id={#bjui-selected}&types=edit','项目编辑','projectedit')"> <span class="fa fa-edit  font24 iconbg02"></span>编辑</a> </li>
+<!--                 <li> <a  data-toggle="dialog" data-width="900" data-height="450"  data-id="meeting_edit" data-mask="true"  data-url="${ctx}/project/project!edit.do?id={#bjui-selected}&types=edit" data-title="项目维护> 编辑" data-xternal="true"> <span class="fa fa-edit  font24 iconbg02"></span>编辑</a> </li> -->
+                </#if>
+            </@auth>
+            
+            <@auth name="PROJECT_LIST">
+                <#if hasPermission>
+                     <li> <a  onclick="projectView(this,'${ctx}/project/project!edit.do?id={#bjui-selected}&types=view','项目查看','projectView')"> <span class="fa fa-search font24 iconbg04"></span>查看</a> </li>
+<!--                 <li> <a  data-toggle="dialog" data-width="900" data-height="450"  data-id="healthcardinfo_edit"  -->
+<!--                 data-mask="true"  data-url="${ctx}/project/project!edit.do?id={#bjui-selected}&types=view" -->
+<!--                  data-title="查看项目信息" data-xternal="true"><span class="iconbg04"><i class="fa fa-search font24"></i></span>查看项目信息</a> </li> -->
+                </#if>
+                </@auth>                
+               <@auth name="SERVER_MA">
+                <#if hasPermission>
+                   	<li> <a onclick="serverManager(this,'servermanager','',_n('#bjui-moreParams').val(),_n('#bjui-selected').val());" title=""><span class="fa fa-plus-square font24 iconbg04"></span>服务器管理</a> </li>
+	            </#if>
+	            </@auth>
+	            <@auth name="PROJECT_IMPORT">
+                   <#if hasPermission>
+	                <li>
+                        <a  data-toggle="dialog" data-width="600" data-height="400" data-mask="true" data-id="access_import"
+                        data-url="${ctx}/project/project!AccessImport.do" data-xternal="true">
+                        <span class="fa fa-sign-in font24 iconbg01"></span>导入</a>
+                    </li>
+                  </#if>
+	            </@auth>
+	            <@auth name="PROJECT_EXPORT">
+                   <#if hasPermission>
+                <li>
+                    <a onclick="doExportProjectBaseInfo(this)"> <span class="iconbg04"><i class="fa fa-file-excel-o font24"></i></span>导出</a>
+                </li>
+                </#if>
+	          </@auth>
+	          <@auth name="TOGRANTAUTHORITY">
+                   <#if hasPermission>
+                 <li> <a  onclick="authorityToUser(this,'${ctx}/project/Authority!authority.do?projectId={#bjui-selected}','项目授权','authorityToUser')"> <span class="fa fa-shirtsinbulk  font24 iconbg03"></span>授权</a> </li>
+                   </#if>
+	          </@auth>
+			<@auth name="PROJECT_DELETE">
+                <#if hasPermission>
+                <li> <a  data-url="${ctx}/project/project!delete.do?id={#bjui-selected}" data-toggle="doajax" data-xternal="true" data-isrefsh="true" data-confirm-msg="确定要选中项吗？"><span class="fa fa-trash font24 iconbg03"></span>删除</a> </li>
+                </#if>
+            </@auth>
+                
+				<li><span class="ttt"></span></li>
+                <li> <a id="refresh" data-toggle="reloadsearch" data-target="#bjui-pageContent" data-icon="search" ><span class="fa fa-refresh font24 iconbg02"></span>刷新</a> </li>
+                <li> <a  class="closecutab"><span class="iconbg03"><i class="fa fa-remove  font24"></i></span>关闭</a> </li>
+			</ul>
+		</div>
+	  <div class="bjui-searchBar">
+      <input type="hidden" name="limit" value="${limit}">
+      <input type="hidden" name="start" value="${start}">
+      <input type="hidden" id="loginId" value="${loginId!}">
+       <input type="hidden" id="selectRealName" value="${selectRealName!}">
+<!--       <input type="" id="sysuserproid"  value="${entity.sysuserproid!}"> -->
+      	 &nbsp;&nbsp;
+      	 <label>&nbsp;地区：</label>
+         <input id="areaId" name="area" class="form-control" size="15" type="text" value="${filter.parameters.area!}" />
+      	 <label>&nbsp;&nbsp;项目名称：</label>
+         <input id="projectNameId" name="projectName" class="form-control" size="15" type="text" value="${filter.parameters.projectName!}" />
+         &nbsp;
+         <label>平台类型:</label>
+			<td class="left"><select id="platformTypeId" name="platformType" data-width="150px"
+				data-height="250px" data-toggle="selectpicker">
+					<option value="">--全部--</option>
+					<option value="1"<#if '${entity.platformType!}' ==
+						'1'>selected</#if>>.NET</option>
+					<option value="2"<#if '${entity.platformType!}' ==
+						'2'>selected</#if>>Java</option>
+			</select></td>
+			&nbsp;
+         <label>校验系统类型:</label>
+			<td class="left"><select id="checkSysTypeId" name="checkSysType" data-width="150px"
+				data-height="250px" data-toggle="selectpicker">
+					<option value="">--全部--</option>
+					<option value="1"<#if '${entity.checkSysType!}' ==
+						'1'>selected</#if>>.NET</option>
+					<option value="2"<#if '${entity.checkSysType!}' ==
+						'2'>selected</#if>>Java</option>
+			</select></td>
+         <br>
+         <label>是否删除:</label>
+			<td class="left"><select id="isDelId" name="isDel" data-width="150px"
+				data-height="250px" data-toggle="selectpicker">
+					<option value="">--全部--</option>
+					<option value="1"<#if '${entity.isDel!}' ==
+						'1'>selected</#if>>是</option>
+					<option value="0"<#if '${entity.isDel!}' ==
+						'0'>selected</#if>>否</option>
+			</select></td>
+			&nbsp;
+			<label>用户姓名：</label>
+            <input id="realName" name="realName" class="form-control" size="15" type="text" value="${filter.parameters.realName!}" />
+            &nbsp;&nbsp;
+            <label>维护人：</label>
+            <input id="guardian" name="guardian" class="form-control" size="15" type="text" value="${filter.parameters.guardian!}" />
+			<button id="project_search" type="submit" class="btn-default"  data-toggle="ajaxsearch" data-icon="search" id="projectSearchBtn">查询</button>&nbsp;
+		 <a class="btn btn-orange" href="javascript:;" onclick="$(this).navtab('reloadForm', true);" data-icon="undo">清空</a>
+     </div>
+	</form>
+</div>
+<div class="bjui-pageContent" style="top: 102px; bottom: 28px; margin-top: 0px;"  style="overflow:scroll;">
+	<table style="table-layout:fixed;min-width:1000px;" data-width="100%" data-nowrap="true" data-selected-multi="true"
+		class="table table-bordered table-hover table-striped table-top">
+		<thead>
+			<tr>
+				<th width="1%"></th>
+				<th width="1%">NO.</th>
+				<th  width="3%" style="text-align:center" title="地区" width="100">地区</th>
+				<th  width="6%" style="text-align:center" title="项目名称" width="100">项目名称</th>
+				<th  width="12%" style="text-align:center" title="项目地址" width="100">项目地址</th>
+				<th  width="3%" style="text-align:center" title="用户名" width="100">用户名</th>
+<!-- 				<th  width="18%" style="text-align:center" title="项目名称" width="1400">平台地址</th> -->
+<!-- 				<th  width="9%" style="text-align:center" title="项目名称" width="100">平台用户名</th>	 -->
+<!-- 				<th  width="9%" style="text-align:center" title="项目名称" width="100">平台密码</th> -->
+<!-- 				<th  width="18%" style="text-align:center" title="项目名称" width="100">校验系统地址</th> -->
+<!-- 				<th  width="9%" style="text-align:center" title="版本" width="100">版本</th> -->
+				<th  width="3%" style="text-align:center" title="状态" width="100">平台类型</th>
+				<th  width="3%" style="text-align:center" title="状态" width="100">校验系统类型</th>
+			</tr>
+		</thead>
+		<tbody>
+			<#list entitys as entity>
+			<tr>			
+				<td><input type="checkbox" value="${entity.id}" name="ids"
+					data-toggle="icheck" icheck-values="recordMoreParams('${entity.projectName!},${entity.sysuserproid!}',this)">
+				</td>
+				<td style="text-align:center">${entity_index+1+(start-1)*limit}</td>
+				<td style="text-align:center" title="${entity.area!}">${entity.area!}</td>				
+				<td nowrap="nowrap" style="text-align:left">
+                       <a  data-toggle="dialog" data-width="900" data-height="520"  data-mask="true"
+                        data-title='查看项目信息' data-id="project_view"
+                        data-url="${ctx}/project/project!edit.do?id=${entity.id!}&types=view"
+                        data-xternal="true" class="list-a" title="${entity.projectName!}">${entity.projectName!}</a>
+                </td>                
+<!-- 				<td style="text-align:center" title="${entity.projectName!}">${entity.projectName!}</td> -->
+                <td style="text-align:left" title="${entity.projectAddr!}"><a href="${entity.projectAddr!}" target="_blank" data-xternal="true" class="list-a">${entity.projectAddr!}</a></td>
+                <td style="text-align:center" title="${entity.userName!}">${entity.userName!}</td>
+<!--                 <td style="text-align:center" title="${entity.platformAddr!}">${entity.platformAddr!}</td> -->
+<!--                 <td style="text-align:center" title="${entity.platformUserName!}">${entity.platformUserName!}</td> -->
+<!--                 <td style="text-align:center" title="${entity.platformPassword!}">${entity.platformPassword!}</td> -->
+<!--                 <td style="text-align:center" title="${entity.checkSysAddr!}">${entity.checkSysAddr!}</td> -->
+<!-- 				<td style="text-align:center" title="${entity.edition!}">${entity.edition!}</td> -->
+                <td style="white-space:nowrap;" align="center">
+				    <#if entity.platformType??>
+                            <#if entity.platformType =="1"><div title=".NET" class="label label-success">.NET</div></#if>
+                            <#if entity.platformType! =="2"><div title="Java" class="label label-danger">Java</div></#if>
+                    </#if>
+                </td>
+                <td style="white-space:nowrap;" align="center">
+				    <#if entity.checkSysType??>
+                            <#if entity.checkSysType! =="1"><div title=".NET" class="label label-success">.NET</div></#if>
+                            <#if entity.checkSysType! =="2"><div title="Java" class="label label-danger">Java</div></#if>
+                    </#if>
+                </td>
+			</tr>
+			</#list>
+		</tbody>
+	</table>
+	<div id='batchloading' style='display:none;width:100%;height:120%;text-align:center;top: 0px; position: absolute;alpha(opacity=45); opacity:0.45;background-color:#FFFFFF;z-index:1000;'>
+</div>
+<div id='batchload' style='display:none;width:100%;height:120%;text-align:center;top:0px;padding-top:20%; position: absolute;alpha(opacity=45);z-index:1000;'>
+    <h3><img style="height: 100px;width:100px;text-align:center;"src="${ctx}/BJUI/themes/css/img/load.gif" ></h3>
+</div>
+</div>
+<script language="javascript" type="text/javascript">
+
+	function serverManager(obj,idd,url,serTitle,id){
+		if(isEmpty(id)){
+			$(obj).alertmsg("warn", "请选择一条数据!");
+		}
+// 		var sysuserproid =_d("#sysuserproid").val();
+	    if('servermanager'==idd){
+// 		params=_n('#bjui-moreParams').val();
+        var serTitle=serTitle.split(",");
+        var serTitleManag=serTitle[0].substring(10);
+//         var sysuserproid=serTitle[1];
+        var loginId=_n("#loginId").val();
+        var selectRealName=_n("#selectRealName").val();
+        var checkNumbers = _n("input[type='checkbox']:checked").length;  
+                if (checkNumbers > 1) {
+                    $(obj).alertmsg("warn", "只能选择一条数据!");
+                    return;
+                }
+	    }
+		if(url==''){
+		url="${ctx}/project/equipmentinfor.do?id="+id;
+		}
+	    $(obj).dialog({
+	        id: "dialog-detail",
+            type: "post",
+			url:url,
+	        title:"服务器管理 ["+serTitleManag+"]",
+	        mask: true,
+	        width: 1000,
+	        height: 600,
+	        fresh: true
+	    });
+	}
+    function projectEdit(obj,url,title,id) {
+    	debugger;
+            if (id == "projectedit") {
+                var checkNumbers = _n("input[type='checkbox']:checked").length;
+                if (checkNumbers > 1) {
+                    $(obj).alertmsg("warn", "只能选择一条数据!");
+                    return;
+                }
+            }
+
+            var options = {
+                width : "900",
+                height : "520",
+                type:'post',
+                fresh:true,
+                mask : true,
+                id : id,
+                url : url,
+                title : title
+            }
+            $(obj).dialog(options);
+        }
+
+    function authorityToUser(obj,url,title,id) {
+        debugger;
+        if (id == "authorityToUser") {
+            var checkNumbers = _n("input[type='checkbox']:checked").length;
+            if (checkNumbers > 1) {
+                $(obj).alertmsg("warn", "只能选择一条数据!");
+                return;
+            }
+            if (checkNumbers==0) {
+                $(obj).alertmsg("warn", "请选择一条数据!");
+                return;
+            }
+        }
+
+        var options = {
+            width : "600",
+            height : "600",
+            type:'post',
+            fresh:true,
+            mask : true,
+            id : id,
+            url : url,
+            title : title
+        }
+        $(obj).dialog(options);
+    }
+
+    function projectView(obj,url,title,id) {
+    	debugger;
+            if (id == "projectView") {
+                var checkNumbers = _n("input[type='checkbox']:checked").length;
+                if (checkNumbers > 1) {
+                    $(obj).alertmsg("warn", "只能选择一条数据!");
+                    return;
+                }
+            }
+
+            var options = {
+                width : "900",
+                height : "520",
+                type:'post',
+                fresh:true,
+                mask : true,
+                id : id,
+                url : url,
+                title : title
+            }
+            $(obj).dialog(options);
+        }
+
+	 function doExportProjectBaseInfo(obj){debugger;
+                var id=$("#bjui-selected").val();
+                if(isEmpty(id)) {
+                	id = "";
+                }
+    	var projectName = $("#projectNameId").val();
+       var url='${ctx}/project/project!reportExcel.do?id='+ id +'&projectName='+encodeURI(_n("#projectNameId").val())+"&platformType="+_n("#platformTypeId").val()+"&checkSysType="+_n("#checkSysTypeId").val()+"&isDel="+_n("#isDelId").val();       // 显示遮罩
+       _n("#batchloading").show();
+       _n("#batchload").show();
+       var options = {
+    		   url:url,
+            callback  : function() {
+               _n("#batchloading").hide();
+               _n("#batchload").hide();
+               $(obj).alertmsg('correct', "导出成功！");
+           },
+           // 下载失败回调函数
+           errorcallback : function (data) {
+               _n("#batchloading").hide();
+               _n("#batchload").hide();
+               $(obj).alertmsg("error", "导出失败！");
+           }
+       };
+       $(obj).bjuiajax('doExport', options);
+   };
+	
+</script>
+<#include "../common/_page.html"/>

@@ -1,0 +1,132 @@
+<#include "../common/_public.html"/>
+<!-- <div class="bjui-pageHeader" style="background:#FFF;"> -->
+<!--     <div class="row" style="height:70px"> -->
+<!--         <div class="col-md-6"> -->
+<!--             <div class="office"> -->
+<!--                 <ul class="offbtn"> -->
+<!--                     <li><a id="lbtnSave" onClick="saveRoleList()"><span class="iconbg04"><i class="fa fa-save font24"></i></span>保存</a></li> -->
+<!--                     <li><a class="btn-close closecutab"><span class="iconbg03"><i class="fa fa-remove  font24"></i></span>关闭</a> -->
+<!--                     </li> -->
+<!--                 </ul> -->
+<!--             </div> -->
+<!--         </div> -->
+<!--     </div> -->
+<!-- </div> -->
+<div class="bjui-pageContent">
+    <form action="" name="pagerform" id="resource_assign_dialog" method="post" data-toggle="validate" data-alertmsg="false">
+        <input type="hidden" name="selectUserId" value="${selectUserId!}">
+		<!--本来拥有的资源id-->
+        <input type="hidden" name="resourceIds" id="resourceIds" value="${resourceIds!}">
+		<input type="hidden" name="originSelectNodes" id="originSelectNodes" value="" size="50" />
+		<input type="hidden" name="allResourceIdsNodes" value="" id="allResourceIdsNodes" />
+		<input type="hidden" name="afterOperateSelectNodes" value="" id="afterOperateSelectNodes" />
+		<input type="hidden"   id="currentUserId" value="${currentUserId!}">
+        <div style="margin-top:5px;  overflow:hidden;">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><a>资源列表</a></h3>
+                    </div>
+                     <div class="panel-body">
+		                    <div id="ttdiv" style="width:100%; overflow:auto; float:left;">
+							<ul id="proandserv_assign_Tree" class="ztree ztree_main" simpleData="true" 
+							data-toggle="ztree" data-expand-all="false" data-check-enable="true"
+					 		>
+							<#list entitys as entity>
+                                        <li data-id="${entity.code!}" data-pid="${entity.pCode!}"
+                                            data-tabid="${entity.code!}" >${entity.name!}</li>
+							</#list>
+							</ul>
+							</div>	
+                	</div>
+           	 	</div>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="bjui-pageFooter">
+	<ul>
+		<li>
+			<button onClick="closeServerAssign()" type="button" class="btn-close closecutab" data-icon="close">关闭</button>
+		</li>
+		<li>
+			<#if "${currentUserId!}"=="1"> <button onClick="saveSourceList()" class="btn-default" data-icon="save">保存</button></#if>
+		</li>
+	</ul>
+</div>
+<script language="javascript" type="text/javascript">
+$(document).on(BJUI.eventType.afterInitUI, function(e) {
+	var ids = $("#resourceIds").val();
+	var selectNodes = "";
+	if (ids != null && ids.length > 0) {
+		var zTree = $.fn.zTree.getZTreeObj("proandserv_assign_Tree");
+		if (zTree != null) {
+			var list = ids.split(',');
+	   		for (var i = 0; i < list.length; i++) {
+	   			var tNode = zTree.getNodesByParam('id',list[i],null);
+	   			if (tNode.length > 0 && !tNode[0].checked) {
+	   					zTree.checkNode(tNode[0], !tNode[0].checked, true, true);
+	   			}
+	   		}
+   		}
+		var tNodes = zTree.getCheckedNodes(true);
+		for (var i = 0; i < tNodes.length; i++) {
+			selectNodes = selectNodes + tNodes[i].id + ",";
+		}
+		_d("#originSelectNodes").val(selectNodes);
+	}
+});
+function saveSourceList(){
+	var selectNodes = "";
+	// 所有节点
+	var allResourceIdsNodes = "";
+  var zTree = $.fn.zTree.getZTreeObj("proandserv_assign_Tree");
+  var tNodes = zTree.getCheckedNodes(true);
+	var allNodes = zTree.transformToArray(zTree.getNodes());
+	for (var i = 0; i < allNodes.length; i++) {
+		allResourceIdsNodes = allResourceIdsNodes + allNodes[i].id + ",";
+	}
+	$("#allResourceIdsNodes").val(allResourceIdsNodes);
+//  if(tNodes.length==0)
+//	  {
+//	  $(this).alertmsg('info',"请至少选择一个资源项！");
+//		  return;
+//	  }
+  var ids = "";
+  for (var i = 0; i < tNodes.length; i++) {
+  	if (!tNodes[i].id == "") {
+  		ids = ids + tNodes[i].id + ",";
+  	}
+	  selectNodes = selectNodes + tNodes[i].id + ",";
+
+  }
+	_d("#afterOperateSelectNodes").val(selectNodes);
+  	if (ids.endsWith(',')) {
+  		ids = ids.substring(0, ids.length - 1);
+  	}
+  $("#resourceIds").val(ids);
+	$.CurrentDialog.find('form:eq(0)').trigger('bjui.ajaxStart');
+	 $.ajax({
+       type: "POST",
+       url: "${ctx}/project/Authority!auth.do?",
+       data:$("#resource_assign_dialog").serialize(),// serializes the form's elements.
+       success: function(data){
+		   data = eval('(' + data + ')');
+		   if (data.statusCode == "200") {
+			   $(this).alertmsg('correct',"保存成功！");
+		   }else {
+			   $(this).alertmsg('warn',"操作失败！");
+		   }
+		   $.CurrentDialog.find('form:eq(0)').trigger('bjui.ajaxStop');
+		   $(this).dialog("close", $.CurrentDialog);
+       },
+	 	error : function () {
+			$.CurrentDialog.find('form:eq(0)').trigger('bjui.ajaxStop');
+		}
+	
+	}); 
+}
+function closeServerAssign(){
+  $("#auth_user_search").click();
+}
+</script>

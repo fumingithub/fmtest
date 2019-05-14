@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+        "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+    <!--管理后台 -->
+    <package name="admin" namespace="/admin" extends="ncms-default">
+
+        <action name="index" class="net.jqsoft.base.portal.PortalAction" method="admin">
+            <result name="admin" type="freemarker">/WEB-INF/pages/portal/admin/index.html</result>
+        </action>
+        <action name="home" class="net.jqsoft.base.portal.PortalAction" method="home">
+            <result name="home" type="freemarker">/WEB-INF/pages/portal/admin/welcome.html</result>
+        </action>
+        <action name="activeX" class="net.jqsoft.base.portal.PortalAction" method="activeX">
+            <result name="activeX" type="freemarker">/WEB-INF/pages/portal/admin/activeX.html</result>
+        </action>
+
+    </package>
+    <package name="portal" namespace="/portal" extends="ncms-default">
+<!--
+        <action name="news" class="net.jqsoft.hecv.portal.PortalAction" method="news">
+            <result name="admin" type="freemarker">/WEB-INF/pages/admin/portal/news.html</result>
+        </action>
+        <action name="notice" class="net.jqsoft.hecv.portal.PortalAction" method="notice">
+            <result name="admin" type="freemarker">/WEB-INF/pages/admin/portal/notice.html</result>
+        </action>
+        <action name="quick" class="net.jqsoft.hecv.portal.PortalAction" method="quick">
+            <result name="admin" type="freemarker">/WEB-INF/pages/admin/portal/quick.html</result>
+        </action>-->
+        <action name="login" class="net.jqsoft.base.portal.PortalAction" method="login">
+        </action>
+        <action name="year" class="net.jqsoft.base.portal.ManageYearAction" method="modify">
+            <result name="success" type="json">
+                <param name="root">map</param>
+            </result>
+        </action>
+
+    </package>
+
+</struts>

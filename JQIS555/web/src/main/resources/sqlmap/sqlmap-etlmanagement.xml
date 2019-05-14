@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap
+        PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+        "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="EtlManagement">
+    <typeAlias alias="EtlManagement" type="net.jqsoft.base.system.domain.EtlManagement" />
+
+    <resultMap id="EtlManagementMap" class="EtlManagement">
+
+          <result property="id" column="id"/>
+                <result property="equipmentId" column="EQUIPMENT_ID"/>
+                <result property="isornotUpdate" column="ISORNOT_UPDATE"/>
+                <result property="creator" column="CREATOR"/>
+                <result property="createName" column="CREATE_NAME"/>
+                <result property="createTime" column="CREATE_TIME"/>
+                <result property="updator" column="UPDATOR"/>
+                <result property="updatorName" column="UPDATOR_NAME"/>
+                <result property="updateTime" column="UPDATE_TIME"/>
+                <result property="remarks" column="REMARKS"/>
+
+    </resultMap>
+
+    <select id="getAll" resultMap="EtlManagementMap">
+        SELECT * FROM ETL_MANAGEMENT
+    </select>
+    <select id="get" parameterClass="String" resultMap="EtlManagementMap">
+        <![CDATA[
+           	   SELECT * FROM ETL_MANAGEMENT WHERE  id=#id:String#
+         ]]>
+    </select>
+    <insert id="insert" parameterClass="EtlManagement">
+        <![CDATA[
+        INSERT INTO ETL_MANAGEMENT(
+        EQUIPMENT_ID,
+        ISORNOT_UPDATE,
+        CREATOR,
+        CREATE_NAME,
+        CREATE_TIME,
+        UPDATOR,
+        UPDATOR_NAME,
+        UPDATE_TIME,
+        REMARKS
+        ) values(
+                #equipmentId#,
+                #isornotUpdate#,
+                #creator#,
+                #createName#,
+                #createTime#,
+                #updator#,
+                #updatorName#,
+                #updateTime#,
+                #remarks#
+             )
+		]]>
+    </insert>
+    <update id="update" parameterClass="EtlManagement">
+        <![CDATA[
+			UPDATE ETL_MANAGEMENT ]]>
+			<dynamic prepend="SET">
+
+            <isNotEmpty  property="equipmentId" prepend=",">
+                <![CDATA[
+					EQUIPMENT_ID = #equipmentId:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="isornotUpdate" prepend=",">
+                <![CDATA[
+					ISORNOT_UPDATE = #isornotUpdate:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="creator" prepend=",">
+                <![CDATA[
+					CREATOR = #creator:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="createName" prepend=",">
+                <![CDATA[
+					CREATE_NAME = #createName:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="createTime" prepend=",">
+                <![CDATA[
+					CREATE_TIME = #createTime:DateTime#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="updator" prepend=",">
+                <![CDATA[
+					UPDATOR = #updator:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="updatorName" prepend=",">
+                <![CDATA[
+					UPDATOR_NAME = #updatorName:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="updateTime" prepend=",">
+                <![CDATA[
+					UPDATE_TIME = #updateTime:DateTime#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="remarks" prepend=",">
+                <![CDATA[
+					REMARKS = #remarks:String#
+				]]>
+            </isNotEmpty >
+        </dynamic>
+        <dynamic prepend="WHERE">
+            <![CDATA[
+					id = #id:int#
+				]]>
+        </dynamic>
+    </update>
+    <delete id="deleteById" parameterClass="String">
+        <![CDATA[
+        DELETE FROM demo where id = #id:String#
+     ]]>
+    </delete>
+    <select id="count" resultClass="int">
+        SELECT COUNT(*) FROM ETL_MANAGEMENT
+    </select>
+    <select id="select" resultMap="EtlManagementMap"  parameterClass="java.util.HashMap">
+        SELECT * FROM ETL_MANAGEMENT
+    </select>
+
+</sqlMap>

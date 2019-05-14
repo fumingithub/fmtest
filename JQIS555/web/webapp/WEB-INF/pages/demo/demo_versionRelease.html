@@ -1,0 +1,233 @@
+<#include "../common/_public.html"/>
+<div class="bjui-pageHeader">
+    <form id="pagerForm" data-toggle="ajaxsearch" method="post" action="${ctx}/demo/demo!versionRelease.do">
+        <div class="office">
+            <ul class="offbtn">
+	            	<li> 
+	            	<a data-toggle="dialog" data-width="900" data-height="450"  data-mask="true"  data-id="dialog-edit" 
+	            	   data-url="${ctx}/standard/treatdict!edit.do" data-xternal="true" data-title="新增"> <span class="iconbg01"><i class="fa fa-file-text-o font24"></i></span>新增</a> 
+	            	</li>
+                	<li> 
+                		<a data-toggle="dialog" data-width="900" data-height="450"  data-mask="true"  data-id="dialog-edit" 
+                		   data-url="${ctx}/standard/treatdict!edit.do?id={#bjui-selected}&types=edit" data-title="编辑" data-xternal="true"> <span class="iconbg02"><i class="fa fa-edit  font24"></i></span>编辑</a> 
+                    </li> 
+                	<li> <a onclick="toEdit(this,'${ctx}/standard/treatdict!edit.do?id={#bjui-selected}&types=view')" title="查看" 
+                	        id="treatdict-search" > <span class="iconbg04"><i class="fa fa-search font24"></i></span>查看</a> 
+                	</li>
+                	<li> <a id="enabledButt_treat" data-url="${ctx}/standard/treatdict!setStatus.do?code={#bjui-selected}" 
+                	        data-toggle="doajax" data-xternal="true"><span class="iconbg01"><i class="fa fa-trash font24"></i></span>删除</a> 
+                	</li>
+                	<li> <a data-id="choiceVersion" data-url="${ctx}/demo/demo!choiceVersion.do" 
+                	       data-toggle="dialog" data-width="900"  data-height="450"  data-mask="true" data-title="选择版本（双击选中）" title="选择历史版本数据" data-xternal="false"><span class="iconbg02"><i class="fa fa-hdd-o font24"></i></span>选择版本</a> 
+                	</li>
+                	<li> <a data-id="demo_importVer" data-url="${ctx}/demo/demo!importVer.do"  data-width="900"  data-height="450"  data-mask="true" data-title="导入版本数据文件" title="导入版本数据文件"
+                	        data-toggle="dialog" data-xternal="true"><span class="iconbg04"><i class="fa fa-sign-in font24"></i></span>数据导入</a> 
+                	</li>
+                	<li> <a data-id="demo_verReleaseEdit" data-url="${ctx}/demo/demo!verReleaseEdit.do"  data-width="500"  data-height="300" data-mask="true" data-title="发布版本" title="发布编辑好的标准数据"
+                	        data-toggle="dialog" data-xternal="true"><span class="iconbg02"><i class="fa fa-cloud-upload font24"></i></span>版本发布</a> 
+                	</li>
+                <li><span class="ttt"></span></li>
+                <li>
+                    <a id="choiceVersion_refresh" data-toggle="reloadsearch"
+                        data-target="#bjui-pageContent" data-icon="search"><span class="iconbg02">
+                        <i class="fa fa-refresh font24"></i></span>刷新</a>
+                </li>
+                <li> <a class="a-close closecutab"><span class="iconbg03"><i class="fa fa-remove  font24"></i></span>关闭</a> </li>
+            </ul>
+            <div style="float: right;height: 70px;text-align: left;">
+            	<div style="margin-top: 10px;margin-right: 10px">
+            		<ul>
+         				<li style="font-size: 16px;margin: auto 0">当前发布版本
+            				<span style="color: green;font-size: 14px;font-weight: bold;">V0.4.0.2017.01.01</span>
+            			</li>
+<!--             			<li style="font-size: 16px;margin-top: 2px;">当前生效版本 -->
+<!--             				<span style="color: red;font-size: 14px;font-weight: bold;">V0.3.1.2016.12.03</span> -->
+<!--             			</li > -->
+<!--             			<li style="font-size: 13px;margin-top: 2px;text-align: right;"> -->
+<!--             				<a href="javascript:void(0)" style="cursor: pointer;">查看发布历史</a> -->
+<!--             			</li > -->
+            		</ul>
+            		
+            	</div>
+            </div>
+        </div>
+        <div class="bjui-searchBar">
+        	&nbsp;&nbsp;
+            <lable>项目编码：</lable>
+            <input name="code" class="form-control" size="15" type="text" value="" />
+            &nbsp;&nbsp;
+            <lable>项目名称：</lable>
+            <input name="name" class="form-control" size="15" type="text" value="" />
+            &nbsp;&nbsp;
+            <lable>标准来源：</lable>
+            <select name="source" data-toggle="selectpicker" data-width="150">
+	             <option selected="selected" value="">--请选择--</option>
+	             <option value="01"
+	             >国际行业标准</option>
+	             <option value="02"
+	             >国家标准</option>
+	             <option value="03"
+	             >卫生部标准</option>
+	             <option value="04"
+	             >地方扩展标准</option>
+	             <option value="99"
+	             >自定义标准</option>
+         	</select>
+            <br/>
+         	&nbsp;&nbsp;
+         	<lable>审核状态：</lable>
+            <select name="source" data-toggle="selectpicker" data-width="150">
+	             <option selected="selected" value="">--请选择--</option>
+	             <option value="01"
+	             >未审核</option>
+	             <option value="02"
+	             >已审核</option>
+         	</select>
+         	&nbsp;&nbsp;
+            <button type="submit" class="btn-default"  data-toggle="ajaxsearch" data-icon="search">查询</button>&nbsp;
+            <a class="btn btn-orange" href="javascript:;" onclick="$(this).navtab('reloadForm', true);" data-icon="undo">清空</a>
+        </div>
+    </form>
+   </div>
+<div class="bjui-pageContent">
+    <table data-width="100%" data-nowrap="true" data-selected-multi="false"  class="table table-bordered table-hover table-striped table-top">
+        <thead>
+        <tr>
+            <th style="text-align:center" width="2%"></th>                   
+            <th style="text-align:center" width="30%">项目编码</th>
+            <th style="text-align:center" width="30%">项目名称</th>
+            <th style="text-align:center" width="15%">单位</th>            
+            <th style="text-align:center" width="15%">标准来源</th>
+            <th style="text-align:center" width="8%">状态</th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="center"><input type="checkbox"  value="AAAA0001" name="ids" data-toggle="icheck"
+                > </td>
+                <td class="center">AAAA0001</td>
+                <td class="left">普通门诊诊察费 </td>
+                <td class="center">次</td>
+                <td class="center">国家标准</td> 
+                <td class="center">
+              		<a data-id="choiceVersion" data-url="${ctx}/demo/demo!audit.do" 
+                	    data-toggle="dialog" data-width="900"  data-height="450"  data-mask="true" data-title="审核变更" data-xternal="true">
+                	       <div title="未审核" class="label label-danger">未审核</div>
+                	       </a> 
+             	</td>		
+            </tr>
+            <tr>
+                <td class="center"><input type="checkbox"  value="AAAA0001" name="ids" data-toggle="icheck"
+                > </td>
+                <td class="center">AAAA0001</td>
+                <td class="left">普通门诊诊察费 </td>
+                <td class="center">次</td>
+                <td class="center">国家标准</td> 
+                <td class="center">
+              		<div title="未审核" class="label label-danger">未审核</div>
+             	</td>	
+            </tr>
+            <tr>
+                <td class="center"><input type="checkbox"  value="AAAA0001" name="ids" data-toggle="icheck"
+                > </td>
+                <td class="center">AAAA0001</td>
+                <td class="left">普通门诊诊察费 </td>
+                <td class="center">次</td>
+                <td class="center">国家标准</td> 
+                <td class="center">
+              		<div title="未审核" class="label label-danger">未审核</div>
+             	</td>	
+            </tr>
+            <tr>
+                <td class="center"><input type="checkbox"  value="AAAA0001" name="ids" data-toggle="icheck"
+                > </td>
+                <td class="center">AAAA0002</td>
+                <td class="left">副主任医师门诊诊察费 </td>
+                <td class="center">次</td>
+                <td class="center">国家标准</td> 
+                <td class="center">
+              		<div title="已审核" class="label label-success">已审核</div>
+             	</td>	
+            </tr>
+            <tr>
+                <td class="center"><input type="checkbox"  value="AAAA0001" name="ids" data-toggle="icheck"
+                > </td>
+                <td class="center">AAAA0004</td>
+                <td class="left">主任医师门诊诊察费 </td>
+                <td class="center">次</td>
+                <td class="center">国家标准</td> 
+                <td class="center">
+              		<div title="已审核" class="label label-success">已审核</div>
+             	</td>	
+            </tr>
+             <tr>
+                <td class="center"><input type="checkbox"  value="AAAA0001" name="ids" data-toggle="icheck"
+                > </td>
+                <td class="center">AAAC0001</td>
+                <td class="left">门/急诊留观诊察费 </td>
+                <td class="center">次</td>
+                <td class="center">国家标准</td> 
+                <td class="center">
+              		<div title="已审核" class="label label-success">已审核</div>
+             	</td>	
+            </tr>
+             <tr>
+                <td class="center"><input type="checkbox"  value="AAAA0001" name="ids" data-toggle="icheck"
+                > </td>
+                <td class="center">AAAD0001</td>
+                <td class="left">住院诊察费</td>
+                <td class="center">次</td>
+                <td class="center">国家标准</td> 
+                <td class="center">
+              		<div title="已审核" class="label label-success">已审核</div>
+             	</td>	
+            </tr>
+             <tr>
+                <td class="center"><input type="checkbox"  value="AAAA0001" name="ids" data-toggle="icheck"
+                > </td>
+                <td class="center">AAAG0002</td>
+                <td class="left">副主任医师门诊中医辨证论治</td>
+                <td class="center">次</td>
+                <td class="center">国家标准</td> 
+                <td class="center">
+              		<div title="已审核" class="label label-success">已审核</div>
+             	</td>	
+            </tr>
+             <tr>
+                <td class="center"><input type="checkbox"  value="AAAA0001" name="ids" data-toggle="icheck"
+                > </td>
+                <td class="center">AAAB0001</td>
+                <td class="left">急诊诊察费</td>
+                <td class="center">次</td>
+                <td class="center">国家标准</td> 
+                <td class="center">
+              		<div title="已审核" class="label label-success">已审核</div>
+             	</td>	
+            </tr>
+             <tr>
+                <td class="center"><input type="checkbox"  value="AAAA0001" name="ids" data-toggle="icheck"
+                > </td>
+                <td class="center">AAAG0003</td>
+                <td class="left">主任医师门诊中医辨证论治 </td>
+                <td class="center">次</td>
+                <td class="center">国家标准</td> 
+                <td class="center">
+              		<div title="已审核" class="label label-success">已审核</div>
+             	</td>	
+            </tr>
+             <tr>
+                <td class="center"><input type="checkbox"  value="AAAA0001" name="ids" data-toggle="icheck"
+                > </td>
+                <td class="center">AAAJ0001</td>
+                <td class="left">门/急诊留观中医辨证论治</td>
+                <td class="center">日</td>
+                <td class="center">国家标准</td> 
+                <td class="center">
+              		<div title="已审核" class="label label-success">已审核</div>
+             	</td>	
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<#include "../common/_page.html"/>

@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap
+        PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+        "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="MaintenanceRecord">
+    <typeAlias alias="MaintenanceRecord" type="net.jqsoft.base.elevatorfm.domain.MaintenanceRecord"/>
+
+    <resultMap id="MaintenanceRecordMap" class="MaintenanceRecord">
+        <result property="id" column="ID"/>
+        <result property="elevatorId" column="ELEVATOR_ID"/>
+        <result property="elevatorCode" column="ELEVATOR_CODE"/>
+        <result property="elevatorTroubleId" column="ELEVATOR_TROUBLE_ID"/>
+        <result property="maintenanceType" column="MAINTENANCE_TYPR"/>
+        <result property="maintenanceStatus" column="MAINTENANCE_STATUS"/>
+        <result property="technicianId" column="TECHNICIAN_ID"/>
+        <result property="technicianName" column="TECHNICIAN_NAME"/>
+        <result property="technicianTel" column="TECHNICIAN_TEL"/>
+        <result property="maintenanceorTime" column="MAINTENANCEOR_TIME"/>
+        <result property="maintenanceorOther" column="MAINTENANCEOR_OTHER"/>
+        <result property="maintenanceorContent" column="MAINTENANCEOR_CONTENT"/>
+        <result property="confirmor" column="CONFIRMOR"/>
+        <result property="confirmorName" column="CONFIRMOR_NAME"/>
+        <result property="confirmorTime" column="CONFIRMOR_TIME"/>
+        <result property="confirmorContent" column="CONFIRMOR_CONTENT"/>
+        <result property="creator" column="CREATOR"/>
+        <result property="creatorName" column="CREATOR_NAME"/>
+        <result property="creatorTime" column="CREATOR_TIME"/>
+        <result property="updator" column="UPDATOR"/>
+        <result property="updatorName" column="UPDATOR_NAME"/>
+        <result property="updatorTime" column="UPDATOR_TIME"/>
+        <result property="deleter" column="DELETER"/>
+        <result property="deleterName" column="DELETER_NAME"/>
+        <result property="deleterTime" column="DELETER_TIME"/>
+        <result property="isDel" column="IS_DEL"/>
+    </resultMap>
+
+    <!--编辑、查看时，数据列表显示-->
+    <select id="get" parameterClass="String" resultMap="MaintenanceRecordMap">
+        <![CDATA[
+        SELECT * FROM ELEVATOR_MAINTENANCE_FM WHERE ID = #id:String#
+        ]]>
+    </select>
+
+    <!--查询时，模糊查询-->
+    <sql id="selectByConditions">
+        <dynamic>
+            <isNotEmpty prepend="AND" property="maintenanceType">
+                ELEVATOR_MAINTENANCE_FM.MAINTENANCE_TYPR LIKE '%' || #maintenanceType# || '%'
+            </isNotEmpty>
+
+            <isNotEmpty prepend="AND" property="maintenanceStatus">
+                ELEVATOR_MAINTENANCE_FM.MAINTENANCE_STATUS LIKE '%' || #maintenanceStatus# || '%'
+            </isNotEmpty>
+            <isNotEmpty prepend="">
+                <![CDATA[
+              order by ELEVATOR_MAINTENANCE_FM.CREATOR_TIME  DESC
+            ]]>
+            </isNotEmpty>
+        </dynamic>
+    </sql>
+
+    <!--分页和数据列表显示-->
+    <select id="select" resultMap="MaintenanceRecordMap" parameterClass="java.util.HashMap">
+        SELECT * FROM ELEVATOR_MAINTENANCE_FM WHERE IS_DEL = '0' AND ELEVATOR_ID = #id:String#
+
+        <isNotEmpty property="">
+            <![CDATA[
+              AND (order by ELEVATOR_MAINTENANCE_FM.CREATOR_TIME DESC )
+            ]]>
+        </isNotEmpty>
+        <include refid="selectByConditions"/>
+
+    </select>
+    <select id="count" resultClass="int">
+        SELECT count(*) FROM ELEVATOR_MAINTENANCE_FM WHERE IS_DEL = '0' AND ELEVATOR_ID = #id:String#
+        <include refid="selectByConditions"/>
+    </select>
+
+    <!--电梯管理新增-->
+    <insert id="insert" parameterClass="MaintenanceRecord">
+        <![CDATA[
+        INSERT INTO ELEVATOR_MAINTENANCE_FM (
+         ID,
+         ELEVATOR_ID,
+         ELEVATOR_CODE,
+         ELEVATOR_TROUBLE_ID,
+         TECHNICIAN_ID,
+         TECHNICIAN_NAME,
+         TECHNICIAN_TEL,
+         MAINTENANCEOR_TIME,
+         MAINTENANCEOR_OTHER,
+         MAINTENANCE_TYPR,
+         MAINTENANCE_STATUS,
+         MAINTENANCEOR_CONTENT,
+         CONFIRMOR,
+         CONFIRMOR_NAME,
+         CONFIRMOR_TIME,
+         CONFIRMOR_CONTENT,
+         CREATOR,
+         CREATOR_NAME,
+         CREATOR_TIME,
+         IS_DEL
+        ) VALUES(
+                #id#,
+                #elevatorId#,
+                #elevatorCode#,
+                #elevatorTroubleId#,
+                #technicianId#,
+                #technicianName#,
+                #technicianTel#,
+                #maintenanceorTime#,
+                #maintenanceorOther#,
+                #maintenanceType#,
+                #maintenanceStatus#,
+                #maintenanceorContent#,
+                #confirmor#,
+                #confirmorName#,
+                #confirmorTime#,
+                #confirmorContent#,
+                #creator#,
+                #creatorName#,
+                #creatorTime#,
+                #isDel#
+        )
+        ]]>
+    </insert>
+
+    <!--电梯管理编辑-->
+    <update id="update" parameterClass="MaintenanceRecord">
+        <![CDATA[
+            UPDATE ELEVATOR_MAINTENANCE_FM
+        ]]>
+        <dynamic prepend="SET">
+            <isNotEmpty property="elevatorId" prepend=",">
+                <![CDATA[
+                    ELEVATOR_ID = #elevatorId:String#]]>
+            </isNotEmpty>
+            <isNotEmpty property="elevatorCode" prepend=",">
+                <![CDATA[
+                    ELEVATOR_CODE = #elevatorCode:String#]]>
+            </isNotEmpty>
+            <isNotEmpty property="elevatorTroubleId" prepend=",">
+                <![CDATA[
+                    ELEVATOR_TROUBLE_ID = #elevatorTroubleId:String#]]>
+            </isNotEmpty>
+            <isNotEmpty property="technicianId" prepend=",">
+                <![CDATA[
+                    TECHNICIAN_ID = #technicianId:String#]]>
+            </isNotEmpty>
+            <isNotEmpty property="technicianName" prepend=",">
+                <![CDATA[
+                    TECHNICIAN_NAME = #technicianName:String#]]>
+            </isNotEmpty>
+            <isNotEmpty property="technicianTel" prepend=",">
+                <![CDATA[
+                    TECHNICIAN_TEL = #technicianTel:String#]]>
+            </isNotEmpty>
+            <isNotEmpty property="maintenanceorTime" prepend=",">
+                <![CDATA[
+                    MAINTENANCEOR_TIME = #maintenanceorTime:Date#]]>
+            </isNotEmpty>
+            <isNotNull property="maintenanceorOther" prepend=",">
+                <![CDATA[
+                    MAINTENANCEOR_OTHER = #maintenanceorOther:String#]]>
+            </isNotNull>
+            <isNotEmpty property="maintenanceType" prepend=",">
+                <![CDATA[
+                    MAINTENANCE_TYPR = #maintenanceType:String#]]>
+            </isNotEmpty>
+            <isNotEmpty property="maintenanceStatus" prepend=",">
+                <![CDATA[
+                    MAINTENANCE_STATUS = #maintenanceStatus:String#]]>
+            </isNotEmpty>
+            <isNotEmpty property="maintenanceorContent" prepend=",">
+                <![CDATA[
+                    MAINTENANCEOR_CONTENT = #maintenanceorContent:String#]]>
+            </isNotEmpty>
+            <isNotEmpty property="confirmor" prepend=",">
+                <![CDATA[
+                    CONFIRMOR = #confirmor:String#]]>
+            </isNotEmpty>
+            <isNotEmpty property="confirmorName" prepend=",">
+                <![CDATA[
+                    CONFIRMOR_NAME = #confirmorName:String#]]>
+            </isNotEmpty><isNotEmpty property="confirmorTime" prepend=",">
+            <![CDATA[
+                    CONFIRMOR_TIME = #confirmorTime:Date#]]>
+        </isNotEmpty>
+            <isNotEmpty property="confirmorContent" prepend=",">
+                <![CDATA[
+                    CONFIRMOR_CONTENT = #confirmorContent:String#]]>
+            </isNotEmpty>
+
+            <isNotEmpty property="updator" prepend=",">
+                <![CDATA[
+                    UPDATOR = #updator:String#]]>
+            </isNotEmpty>
+            <isNotEmpty property="updatorName" prepend=",">
+                <![CDATA[
+                    UPDATOR_NAME = #updatorName:String#]]>
+            </isNotEmpty>
+            <isNotEmpty property="updatorTime" prepend=",">
+                <![CDATA[
+                    UPDATOR_TIME = #updatorTime:Date#]]>
+            </isNotEmpty>
+
+            <isNotEmpty property="deleter" prepend=",">
+                <![CDATA[
+                    DELETER  = #deleter:String#]]>
+            </isNotEmpty>
+
+            <isNotEmpty property="deleterName" prepend=",">
+                <![CDATA[
+                    DELETER_NAME = #deleterName:String#]]>
+            </isNotEmpty>
+            <isNotEmpty property="deleterTime" prepend=",">
+                <![CDATA[
+                    DELETER_TIME = #deleterTime:Date#]]>
+            </isNotEmpty>
+        </dynamic>
+        <dynamic prepend="WHERE">
+            <![CDATA[
+                ID = #id:String#
+            ]]>
+        </dynamic>
+    </update>
+
+    <!--逻辑删除电梯信息-->
+    <update id="logicalDelMaintenanceRecord" parameterClass="MaintenanceRecord">
+        <![CDATA[ UPDATE ELEVATOR_MAINTENANCE_FM]]>
+        <dynamic prepend="SET">
+            <isNotEmpty property="deleter" prepend=",">
+                <![CDATA[ DELETER = #deleter# ]]>
+            </isNotEmpty>
+            <isNotEmpty property="deleterName" prepend=",">
+                <![CDATA[ DELETER_NAME = #deleterName# ]]>
+            </isNotEmpty>
+            <isNotEmpty property="deleterTime" prepend=",">
+                <![CDATA[ DELETER_TIME = #deleterTime# ]]>
+            </isNotEmpty>
+            <isNotEmpty property="isDel" prepend=",">
+                <![CDATA[ IS_DEL = #isDel# ]]>
+            </isNotEmpty>
+        </dynamic>
+        <dynamic prepend="WHERE"><![CDATA[ ID = #id# ]]></dynamic>
+    </update>
+
+    <!--物业确认维保记录-->
+    <update id="confirmMaintenanceRecord" parameterClass="MaintenanceRecord">
+        <![CDATA[ UPDATE ELEVATOR_MAINTENANCE_FM]]>
+        <dynamic prepend="SET">
+            <isNotEmpty property="maintenanceStatus" prepend=",">
+                <![CDATA[ MAINTENANCE_STATUS = #maintenanceStatus# ]]>
+            </isNotEmpty>
+            <isNotEmpty property="confirmor" prepend=",">
+                <![CDATA[ CONFIRMOR = #confirmor# ]]>
+            </isNotEmpty>
+            <isNotEmpty property="confirmorName" prepend=",">
+                <![CDATA[ CONFIRMOR_NAME = #confirmorName# ]]>
+            </isNotEmpty>
+            <isNotEmpty property="confirmorTime" prepend=",">
+                <![CDATA[ CONFIRMOR_TIME = #confirmorTime# ]]>
+            </isNotEmpty>
+            <isNotEmpty property="confirmorContent" prepend=",">
+                <![CDATA[ CONFIRMOR_CONTENT = #confirmorContent# ]]>
+            </isNotEmpty>
+        </dynamic>
+        <dynamic prepend="WHERE">
+            <![CDATA[ ID = #id#]]>
+        </dynamic>
+    </update>
+
+    <!--根据elevatorTroubleId获得维保实体-->
+    <select id="getMaintenanceRecord" parameterClass="String" resultMap="MaintenanceRecordMap">
+        <![CDATA[
+            select * from ELEVATOR_MAINTENANCE_FM where IS_DEL = '0' AND ELEVATOR_TROUBLE_ID = #elevatorTroubleId:String#
+        ]]>
+    </select>
+
+
+</sqlMap>

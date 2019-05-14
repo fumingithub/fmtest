@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+        "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+    <package name="notice" namespace="/admin/notice" extends="ncms-default">
+        
+         <!-- 公告管理 -->
+        <action name="notice" class="net.jqsoft.base.system.action.NoticeAction">
+            <result name="success" type="freemarker">/WEB-INF/pages/admin/system/notice/notice_list.html</result>
+            <result name="edit" type="freemarker">/WEB-INF/pages/admin/system/notice/notice_edit.html</result>
+            <result name="view" type="freemarker">/WEB-INF/pages/admin/system/notice/notice_view.html</result>
+        </action>
+    </package>  
+</struts>

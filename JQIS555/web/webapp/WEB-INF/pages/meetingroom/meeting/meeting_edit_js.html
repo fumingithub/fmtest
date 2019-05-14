@@ -1,0 +1,21 @@
+<script type="text/javascript">
+    function saveInfo(obj, url, formId) {
+        var dataForms = $("#" + formId);
+            $.ajax({
+                type : "POST",
+                url : url,
+                data : $("#" + formId).serialize(),
+                success : function(data) {
+                    var dataJson = eval('(' + data + ')');
+                    if (dataJson.statusCode == 300) {
+                        $(this).alertmsg('warn', dataJson.message);
+                    } else if (dataJson.statusCode == 200) {
+                        $(this).alertmsg('correct', dataJson.message);
+                        $(this).dialog("close", $.CurrentDialog);
+//                        $('#refresh').click();
+                        $("#meetSearchBtn").submit();
+                    }
+                }
+            })
+    };
+</script>

@@ -1,0 +1,77 @@
+<#if view>
+    <script>
+        _d('form').find("input").attr("readonly",true);
+        _d('form').find("input").attr("disabled",true);
+        _d('form').find("select").attr("disabled",true);
+        _d('form').find("textarea").attr("readonly",true);
+    </script>
+</#if>
+<script language="javascript" type="text/javascript">
+
+    //查看
+    function toView(obj,url) {
+        var dialog_options = {
+            id:'leave_view',
+            url:url,
+            fresh: false,
+            width: 815,
+            height: 600,
+            mask: true,
+            title: "查看",
+            isrefshpar:false
+        }
+        $(obj).dialog(dialog_options)
+    }
+
+    //新增、编辑
+    function toEdit(obj,url){
+        var title = obj.title;
+        var id=obj.id;
+        var dialog_options = {
+        id : id,
+        url: url,
+        fresh: false,
+        width: 815,
+        height: 600,
+        mask: true,
+        title: title,
+        isrefshpar:true
+        }
+        $(obj).dialog(dialog_options);
+        }
+    //保存
+    function saveInfo(){
+
+        _n('form').submit();
+    }
+    //删除
+    function toDelete(url,obj){
+
+        var checkedList=new Array();
+        $("input[type='checkbox']:checked").each(function(){
+            //向数组中添加元素
+            checkedList.push($(this).val());
+        });
+        //用来选择判断
+        var $checkedNo=_n("#leaveTable").find("input[type='checkbox']:checked").val();
+        //ajax提交到后台
+        if(typeof($checkedNo)!="undefined")
+        {
+            $(obj).alertmsg('confirm', "确定要删除选中项吗？", {
+                okCall: function () {
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        data:{"delItems":checkedList.toString()},
+                        success: function (data) {
+                            $(obj).alertmsg('correct', "删除成功！");
+                            _n("#refresh").click();
+                        }
+                    });
+                }
+            });
+        } else {
+            $(this).alertmsg('warn',"请选择数据！");
+        }
+    }
+</script>

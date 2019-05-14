@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMapConfig      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map Config 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-config-2.dtd">
+<sqlMapConfig>
+	<settings cacheModelsEnabled="true" enhancementEnabled="true"
+		lazyLoadingEnabled="true" errorTracingEnabled="true" maxRequests="32"
+		maxSessions="10" maxTransactions="5" useStatementNamespaces="true" />
+	<!-- 系统管理 -->
+	<sqlMap resource="sqlmap/sqlmap-sys-resource.xml" />
+	<sqlMap resource="sqlmap/sqlmap-sys-user.xml" />
+	<sqlMap resource="sqlmap/sqlmap-sys-role.xml" />
+	<sqlMap resource="sqlmap/sqlmap-sys-news.xml" />
+	<sqlMap resource="sqlmap/sqlmap-ins.xml" />
+	<sqlMap resource="sqlmap/sqlmap-sysorg.xml" />
+	<sqlMap resource="sqlmap/sqlmap-loginlog.xml" />
+	<sqlMap resource="sqlmap/sqlmap-attachment.xml" />
+	<sqlMap resource="sqlmap/sqlmap-sys-repository-base.xml" />
+	<sqlMap resource="sqlmap/sqlmap-sys-repository-kind.xml" />
+	<sqlMap resource="sqlmap/sqlmap-sys-repository-hots.xml" />
+	<sqlMap resource="sqlmap/sqlmap-attance.xml" />
+	<sqlMap resource="sqlmap/sqlmap-meeting.xml" />
+	<sqlMap resource="sqlmap/sqlmap-leave.xml" />
+	<sqlMap resource="sqlmap/sqlmap-sys-notice.xml" />
+	<sqlMap resource="sqlmap/sqlmap-usemeetingroom.xml" />
+	<sqlMap resource="sqlmap/sqlmap-project.xml" />
+	<sqlMap resource="sqlmap/sqlmap-equipmentinfor.xml" />
+	<sqlMap resource="sqlmap/sqlmap-databaseinfomanagement.xml" />
+	<sqlMap resource="sqlmap/sqlmap-areamanagement.xml" />
+	<sqlMap resource="sqlmap/sqlmap-application.xml" />
+	<sqlMap resource="sqlmap/sqlmap-etlmanagement.xml" />
+	<sqlMap resource="sqlmap/sqlmap-syspropermission.xml" />
+	<sqlMap resource="sqlmap/sqlmap-travel.xml" />
+	<sqlMap resource="sqlmap/sqlmap-meetingFm.xml" />
+	<sqlMap resource="sqlmap/sqlmap-elevator.xml"/>
+	<sqlMap resource="sqlmap/sqlmap-elevatorTroubleDeclare.xml"/>
+	<sqlMap resource="sqlmap/sqlmap-elevatorMaintenanceRecord.xml"/>
+</sqlMapConfig>

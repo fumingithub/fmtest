@@ -1,0 +1,85 @@
+﻿<#include "../../common/_public.html"/>
+<div class="bjui-pageContent">
+	<form action="" id="AreaPageForm"  data-alertmsg="true" data-isrefsh="false">
+		<div style="margin:15px auto 0; width:600px;">
+			<fieldset>
+				<legend>
+					<h3 class="listtitle">域信息</h3>
+					<input type="hidden" name="id" value="${entity.id!}"/>
+					<input type="hidden" name="entity.equipmentId" value="${equipmentId!}" />		
+				</legend>
+				<table class="table table-condensed" width="100%">
+					<tbody>
+					<tr>
+						<td class="right" style="width: 130px">域名称</td>
+						<td class="left" colspan="3">
+							<input name="entity.areaName" type="text" data-rule="required;length[~50]" value="${entity.areaName!}" size="20" />
+						</td>
+					</tr>
+					<tr>
+						<td class="right" style="width: 130px">域编码</td>
+						<td class="left" colspan="3">
+							<input name="entity.areaCode" type="text" data-rule="required;length[~50]" value="${entity.areaCode!}" size="20" />
+						</td>
+					</tr>
+					<tr>
+						<td class="right" style="width: 130px">服务器名称</td>
+						<td class="left" colspan="3">
+							<input name="entity.serverName" type="text"  data-rule="length[~50]"value="${entity.serverName!}" size="20" />
+						</td>
+					</tr>
+					<tr>
+					<tr>
+                        <td class="right" style="width: 130px">备注</td>
+                        <td class="left" colspan="7">
+                            <textarea id="remarks" name="entity.remarks" data-rule="length[~100]" size="39">${entity.remarks!}</textarea>
+                        </td>
+                    </tr>
+                    
+                    
+				</table>
+			</fieldset>
+		</div>
+	</form>
+</div>
+<div class="bjui-pageFooter">
+    <ul>
+        <li>
+            <button type="button" class="btn-close closecutab" data-icon="close">关闭</button>
+        </li>
+        <li>
+            <button onclick="AreaSaveForm(this,'${ctx}/project/domain!save.do','AreaPageForm')" class="btn-default" data-icon="save">保存</button>
+        </li>
+    </ul>
+</div>
+<script type="text/javascript">  
+    function AreaSaveForm(obj, url, formId) {
+        var dataForms = $("#" + formId);
+        var $formFlag = dataForms.isValid();
+        if ($formFlag) {
+            $.ajax({
+                type : "post",
+                url : url,
+                data : $("#" + formId).serialize(),
+                success : function(data) {
+                    var dataJson = eval('(' + data + ')');
+                    if (dataJson.statusCode == 300) {
+                        $(this).alertmsg('warn', dataJson.message);
+                    } else if (dataJson.statusCode == 200) {
+                        $(this).alertmsg('correct', dataJson.message);
+                        $(this).dialog("close", $.CurrentDialog);
+                        $("#areaSearch").click();       
+                    }
+                }
+            })
+        }
+    };
+    function databasecloseDialogAndRefresh() {
+        //$(this).dialog("close", "combinationmembers_addMembers");
+        $("#databaseSearch").click();
+    }
+    function databaseUndoForm() {
+        _d("#databaseIp").val("");
+        _d("#databaseSearch").submit();  
+    }
+</script>

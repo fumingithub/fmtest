@@ -1,0 +1,161 @@
+<#include "../../../common/_public.html"/>
+<div class="bjui-pageContent" >
+    <form action="${ctx}/admin/system/elevatorMaintenanceRecordfm!maintenanceRecordSave.do" id="pageform" data-isrefsh="true">
+        <input class="hidden"  id="iId" name="id" value="${entity.id!}"/>
+        <input class="hidden"  id="myPermission" name="myPermission" value="${myPermission!}"/>
+        <input class="hidden"  id="types" name="types" value="${types!}"/>
+        <input class="hidden"  id="loginUserName"  value="${loginUserName!}"/>
+        <input class="hidden"  id="confirmMaintenanceStatus" name="confirmMaintenanceStatus" value="${confirmMaintenanceStatus!}"/>
+        <input class="hidden"  id="elevatorTroubleId" name="elevatorTroubleId" value="${entity.elevatorTroubleId!}"/>
+        <input class="hidden"  id="maintenanceStatus" name="maintenanceStatus" value="${entity.maintenanceStatus!}"/>
+        <input class="hidden"  id="isDelMaintenance"  value="${entity.isDel!}"/>
+
+        <div style="margin:15px auto 0;">
+            <fieldset>
+                <legend>
+                    <h3 class="listtitle">维保记录</h3>
+                </legend>
+                <table class="table table-condensed">
+                    <tbody>
+                    <tr colspan="4" class="confirm1">
+                        <td class="right" ><span style="color:red">*</span>技师姓名：</td>
+                        <td class="left" >
+                            <input id="entity_technicianName" name="entity.technicianName" type="text" data-rule="required;length[~50]"
+                                   value="${entity.technicianName!}" title="${entity.technicianName!}" size="18"  />
+                        </td>
+                        <td class="right" ><span style="color:red">*</span>手机号：</td>
+                        <td class="left" >
+                            <input id="entity_maintenanceorTel" name="entity.technicianTel" type="text" data-rule="required;phone"
+                                   value="${entity.technicianTel!}" title="${entity.technicianTel!}" size="18"  />
+                        </td>
+                    </tr>
+                    <tr  class="confirm1">
+                        <td class="right" ><span style="color:red">*</span>维保时间:</td>
+                        <td class="left" >
+                            <input id="entity_maintenanceorTime" name="entity.maintenanceorTime" type="text" data-rule="required;date"size="18"readonly
+                                   data-max-date="${.now?date}"
+                            <#if ((types!) == 'add')>data-toggle="datepicker"</#if>
+                                   value="${((entity.maintenanceorTime)?string('yyyy-MM-dd HH:mm:ss'))!}"
+                                   title="${((entity.maintenanceorTime)?string('yyyy-MM-dd HH:mm:ss'))!}"  />
+                        </td>
+                        <td class="right" ><span style="color:red">*</span>维保类型：</td>
+                        <td class="left" >
+                            <select data-clear="" name="entity.maintenanceType" id="entity_maintenanceType" data-toggle="selectpicker" data-width="180" data-rule="required">
+                                <option value="" >--请选择--</option>
+                                <option value= '1'  <#if (entity.maintenanceType)! == '1' >selected="selected"</#if>>维修 </option>
+                            <option value= '2'  <#if (entity.maintenanceType)! == '2' >selected="selected"</#if>>保养</option>
+                        </select>
+                        </td>
+                    </tr>
+                    <tr colspan="4"  class="confirm1">
+                        <td class="right" >其他维保人：</td>
+                        <td class="left" colspan="3">
+                            <input id="entity_maintenanceorOther" name="entity.maintenanceorOther" type="text" data-rule="length[~50]"
+                                   value="${entity.maintenanceorOther!}" title="${entity.maintenanceorOther!}" size="52"  />
+                        </td>
+
+                    </tr>
+                    <tr colspan="4"  class="confirm1">
+                        <td class="right" ><span style="color:red">*</span>维保内容：</td>
+                        <td class="left" colspan="3" >
+                                    <textarea  name="entity.maintenanceorContent" type="text"
+                                               data-rule="required;length[0~500]" style="width:520px; height:60px">${entity.maintenanceorContent!}</textarea>
+                        </td>
+                    </tr>
+
+                    <tr colspan="4" class="confirm2">
+                        <td class="right" ><span style="color:red">*</span>确认人：</td>
+                        <td class="left" >
+                            <input id="entity_confirmorName" name="entity.confirmorName" type="text"data-rule="required;length[~50]"size="18"readonly
+                            <#if ((types!) == 'view')> value="${entity.confirmorName!}"
+                            <#else>value="${loginUserName!}"
+                        </#if>  />
+                        </td>
+                        <td class="right" ><span style="color:red">*</span>确认时间：</td>
+                        <td class="left" >
+                            <input id="entity_confirmorTime" name="entity.confirmorTime" type="text"data-pattern="yyyy-MM-dd HH:mm:ss"  data-rule="required;length[~50]"size="18"readonly
+                            <#if ((confirmMaintenanceStatus!) == '1')>data-toggle="datepicker"</#if>
+                           value="${(entity.confirmorTime?string('yyyy-MM-dd HH:mm:ss'))!}"
+                           />
+                        </td>
+                    </tr>
+                    <tr colspan="4" class="confirm2">
+                        <td class="right" ><span style="color:red">*</span>确认内容：</td>
+                        <td class="left" colspan="3" >
+                            <textarea id="entity_confirmorContent" type="text" data-rule="required;length[0~500]" style="width:520px; height:60px"
+                                      name="confirmorContent" > ${entity.confirmorContent!}</textarea>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </fieldset>
+        </div>
+    </form>
+</div>
+<div class="bjui-pageFooter">
+    <ul>
+        <li>
+            <button type="button" class="btn-close closecutab" data-icon="close" id="closeClock">关闭</button>
+        </li>
+        <li
+        <#if types??>
+        <#if types == "view">
+        hidden="true"
+    </#if>
+</#if>>
+<button type="button" class="btn-default" data-icon="save" onclick="confirmMaintenanceRecordSave('pageform');">保存</button>
+</li>
+</ul>
+</div>
+
+<script>
+    /**
+     * 页面加载时初始化方法
+     */
+    $(document).ready(function () {
+
+        //-控制只读
+        $(".confirm1 input").attr("readonly","readonly");
+        $(".confirm1 input").attr("disabled","disabled");
+        $(".confirm1 textarea").attr("disabled","disabled");
+        $(".confirm1 select").attr("disabled","disabled");
+        if ("view" == $("#types").val()){
+            $(".confirm2 input").attr("readonly","readonly");
+            $(".confirm2 input").attr("disabled","disabled");
+            $(".confirm2 textarea").attr("disabled","disabled");
+            $(".confirm2 select").attr("disabled","disabled");
+            if ("1" == $("#confirmMaintenanceStatus").val()){
+                $(".confirm2").hide();
+            }
+        }
+        //判断当前数据是否被删除
+        if ($("#isDelMaintenance").val() == '1') {
+            $(this).alertmsg('warn', "当前数据已被删除，请刷新页面！");
+            $("#closeClock").click();
+        }
+    });
+
+    /**保存数据并刷新**/
+    function confirmMaintenanceRecordSave(formId ) {
+        var dataForms = $("#" + formId);
+        var $formFlag = dataForms.isValid();
+        if ($formFlag) {
+            $.ajax({
+                type: "post",
+                data: $("#" + formId).serialize(),
+                url: "${ctx}/admin/system/elevatorMaintenanceRecordfm!confirmMaintenanceRecordSave.do",
+                success: function(data){
+                    var dataJson = eval('(' + data + ')');
+                    if (dataJson.statusCode == 300) {
+                        $(this).alertmsg('warn', dataJson.message);
+                    } else if (dataJson.statusCode == 200) {
+                        $(this).alertmsg('correct', dataJson.message);
+                        $(this).dialog("close", $.CurrentDialog);
+                        $("#refresh_maintenanceRecord").click();
+                        $("#refresh_elevator").click();
+                    }
+                }
+            });
+        }
+    }
+</script>

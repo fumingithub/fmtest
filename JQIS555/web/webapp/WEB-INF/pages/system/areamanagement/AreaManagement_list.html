@@ -1,0 +1,70 @@
+﻿<#include "../../common/_public.html"/>
+<div class="bjui-pageHeader">
+    <form id="pagerForm" data-toggle="ajaxsearch" method="post" action="${ctx}/project/domain.do?id=${filter.parameters.id!}">
+        <div class="office">
+            <ul class="offbtn">
+                <li> <a  data-toggle="dialog" data-width="700" data-height="400"  data-id="areamanagement_add"  data-url="${ctx}/project/domain!edit.do?domain=${filter.parameters.id!}" data-xternal="true" data-title="域新增"> <span class="fa fa-file-text-o font24 iconbg01"></span>新增</a> </li>
+                <li> <a  data-toggle="dialog" data-width="700" data-height="400"  data-id="areamanagement_edit" data-url="${ctx}/project/domain!edit.do?id={#bjui-selected}" data-title="域编辑" data-xternal="true"> <span class="fa fa-edit  font24 iconbg02"></span>编辑</a> </li>
+                <li> <a  data-url="${ctx}/project/domain!delete.do?id={#bjui-selected}" data-toggle="doajax" data-xternal="true" data-isrefsh="true" data-confirm-msg="确定要删除选中项吗？"><span class="fa fa-trash font24 iconbg03"></span>删除</a> </li>
+                <li><span class="ttt"></span></li>
+                <li> <a id="refresh" data-toggle="reloadsearch" data-target="#bjui-pageContent"data-icon="search" ><span class="fa fa-refresh font24 iconbg02"></span>刷新</a> </li>
+            	<li> <a  class="a-close closecutab"><span class="iconbg03"><i class="fa fa-remove  font24"></i></span>关闭</a> </li>             	
+            </ul>
+        </div>
+        <div class="bjui-searchBar">
+            <input type="hidden" name="limit" value="${limit}">
+            <input type="hidden" name="start" value="${start}">
+            <input type="hidden" name="id" id="domainid" value="${filter.parameters.id!}">  
+            <label>域名称：</label>            <input id="areaId" name="areaName" class="form-control" size="15" type="text" value="${filter.parameters.areaName!}" />
+            <label>&nbsp;&nbsp;是否删除：</label>
+            <select id="isDel" name="isDel" data-toggle="selectpicker" data-width="150">
+                 <option selected="selected" value="">--请选择--</option>
+                 <option value="1"
+                 <#if (filter.parameters.isDel!)=='1'> selected="selected"</#if>
+                 >是</option>
+                 <option value="0"
+                 <#if (filter.parameters.isDel!)=='0'> selected="selected"</#if>
+                 >否</option>
+            </select>
+            <button id="areaSearch" type="submit" class="btn-default"  data-toggle="ajaxsearch" data-icon="search">查询</button>&nbsp;
+            <a id="area_reloadPersonChangeForm" class="btn btn-orange" href="javascript:;" onclick="areaseUndoForm();" data-icon="undo">重置</a></div>
+
+        </div>
+    </form>
+   </div>
+<div class="bjui-pageContent" style="top: 102px; bottom: 28px; margin-top: 0px;"  style="overflow:scroll;">
+	<table style="table-layout:fixed;min-width:1400px;" data-width="100%" data-nowrap="true" data-selected-multi="true"
+		class="table table-bordered table-hover table-striped table-top">
+        <thead>
+        <tr>
+            <th width="10"></th>
+            <th width="15">NO.</th>
+                 <th style="text-align:center" width="100">域名称</th>
+                 <th style="text-align:center" width="100">域代码</th>
+                 <th style="text-align:center" width="200">服务器名称</th>
+                 <th style="text-align:center" width="200">备注</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        <#list entitys as entity>
+            <tr >
+                <td><input type="checkbox"  value="${entity.id}" name="ids" data-toggle="icheck"> </td>
+                <td>${entity_index+1+(start-1)*limit}</td>
+                <td class="center" title="${entity.areaName!}">${entity.areaName!}</td>
+                <td class="center" title="${entity.areaCode!}">${entity.areaCode!}</td>
+                <td class="center" title="${entity.serverName!}">${entity.serverName!}</td>
+                <td class="center" title="${entity.remarks!}">${entity.remarks!}</td> 
+            </tr>
+        </#list>
+        </tbody>
+    </table>
+</div>
+<script type="text/javascript">  
+    function areaseUndoForm() {
+        _d("#areaId").val("");
+        _d("#isDel").val("");
+        _d("#areaSearch").submit();  
+    }
+    </script>
+<#include "../../common/_page.html"/>

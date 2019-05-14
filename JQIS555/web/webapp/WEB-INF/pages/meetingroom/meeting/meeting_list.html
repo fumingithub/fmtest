@@ -1,0 +1,137 @@
+<#include "../../common/_public.html"/>
+<div class="bjui-pageHeader">
+ <form id="pagerForm" data-toggle="ajaxsearch" action="${ctx}/meetingroom/meeting/meeting.do" method="post">
+ <div class="office">
+			<ul class="offbtn">
+ 			<@auth name="MEET_ADD">
+                <#if hasPermission>
+                <li> <a  data-toggle="dialog" data-width="900" data-height="550"  data-id="meeting_add" data-mask="true"  data-url="${ctx}/meetingroom/meeting/meeting!edit.do?types=add" data-xternal="true" data-title="会议室维护> 新增"> <span class="fa fa-file-text-o font24 iconbg01"></span>新增</a> </li>
+                </#if>
+                </@auth>
+
+			<@auth name="MEET_EDIT">
+                <#if hasPermission>
+                <li> <a  data-toggle="dialog" data-width="900" data-height="550"  data-id="meeting_edit" data-mask="true"  data-url="${ctx}/meetingroom/meeting/meeting!edit.do?id={#bjui-selected}&types=edit" data-title="会议室维护> 编辑" data-xternal="true"> <span class="fa fa-edit  font24 iconbg02"></span>编辑</a> </li>
+                </#if>
+            </@auth>
+            
+            <@auth name="MEET_LIST">
+                <#if hasPermission>
+                <li> <a  data-toggle="dialog" data-width="900" data-height="550"  data-id="healthcardinfo_edit" 
+                data-mask="true"  data-url="${ctx}/meetingroom/meeting/meeting!show.do?id={#bjui-selected}"
+                 data-title="会议室维护> 查看会议厅" data-xternal="true"><span class="iconbg04"><i class="fa fa-search font24"></i></span>查看会议厅</a> </li>
+                </#if>
+                </@auth>
+			
+			<@auth name="MEET_DELETE">
+                <#if hasPermission>
+                <li> <a  data-url="${ctx}/meetingroom/meeting/meeting!delete.do?id={#bjui-selected}" data-toggle="doajax" data-xternal="true" data-isrefsh="true" data-confirm-msg="确定要删除选中项吗？"><span class="fa fa-trash font24 iconbg03"></span>删除</a> </li>
+                </#if>
+            </@auth>
+                
+				<li><span class="ttt"></span></li>
+                <li> <a id="refresh" data-toggle="reloadsearch" data-target="#bjui-pageContent" data-icon="search" ><span class="fa fa-refresh font24 iconbg02"></span>刷新</a> </li>
+                <li> <a  class="closecutab"><span class="iconbg03"><i class="fa fa-remove  font24"></i></span>关闭</a> </li>
+			</ul>
+		</div>
+		 <div class="bjui-searchBar">
+      <input type="hidden" name="limit" value="${limit}">
+      <input type="hidden" name="start" value="${start}">
+      	 &nbsp;&nbsp;
+         <lable>会议室名称:</lable>
+         <input name="name" class="form-control" value="${filter.parameters.name!}" size="15" type="text"/>
+         &nbsp;&nbsp;
+         <label>是否启用:</label>
+			<td class="left"><select name="status" data-width="150px"
+				data-height="250px" data-toggle="selectpicker">
+					<option value="">--全部--</option>
+					<option value="0"<#if '${entity.status!}' ==
+						'0'>selected</#if>>禁用</option>
+					<option value="1"<#if '${entity.status!}' ==
+						'1'>selected</#if>>启用</option>
+			</select></td>
+			<button type="submit" class="btn-default"  data-toggle="ajaxsearch" data-icon="search" id="meetSearchBtn">查询</button>&nbsp;
+		 <a class="btn btn-orange" href="javascript:;" onclick="$(this).navtab('reloadForm', true);" data-icon="undo">清空</a>
+     </div>
+	</form>
+</div>
+<div class="bjui-pageContent">
+	<table data-width="100%" data-toggle="tablefixed" data-nowrap="true" data-selected-multi="false"
+		class="table table-bordered table-hover table-striped table-top min-width">
+		<thead>
+			<tr>
+				<th></th>
+				<th>NO.</th>
+				<th  style="text-align:center" title="会议室名称">会议室名称</th>
+				<th  style="text-align:center" title="会议室位置">会议室位置</th>
+				<th  style="text-align:center" title="会议室大小">会议室型号</th>
+				<th  style="text-align:center" title="麦克风">麦克风</th>
+				<th  style="text-align:center" title="投影仪">投影仪</th>
+				<th  style="text-align:center" title="WIFI">WIFI</th>
+				<th  style="text-align:center" title="电脑">电脑</th>
+				<th  style="text-align:center" title="类型">类型</th>
+				<th  style="text-align:center" title="状态">状态</th>
+			</tr>
+		</thead>
+		<tbody>
+			<#list entitys as entity>
+			<tr>
+				<td><input type="checkbox" value="${entity.id}" name="ids"
+					data-toggle="icheck">
+				</td>
+				<td style="text-align:center">${entity_index+1+(start-1)*limit}</td>
+				<td style="text-align:center" title="${entity.name!}">${entity.name!}</td>
+				<td style="text-align:center" title="${entity.location!}">${entity.location!}</td>
+				<td style="text-align:center">
+				   <#if entity.meetingSize??>
+                        <#if entity.meetingSize=="0"><div>大型会议厅(可容纳30人以上)</div></#if>
+                        <#if entity.meetingSize=="1"><div>中型会议厅(可容纳20-30人)</div></#if>
+                        <#if entity.meetingSize=="2"><div>小型会议厅(可容纳10人以内)</div></#if>
+                    </#if>
+				</td>
+				<td style="text-align:center">
+				    <#if entity.haveMicrophone??>
+                        <#if entity.haveMicrophone=="0"><div style="color: red;">无</div></#if>
+                        <#if entity.haveMicrophone=="1"><div>有</div></#if>
+                    </#if>
+				</td>
+				<td style="text-align:center">
+				    <#if entity.haveProjector??>
+                        <#if entity.haveProjector=="0"><div style="color: red;">无</div></#if>
+                        <#if entity.haveProjector=="1"><div>有</div></#if>
+                    </#if>
+				</td>
+				<td style="text-align:center">
+				    <#if entity.haveWifi??>
+                        <#if entity.haveWifi=="0"><div style="color: red;">无</div></#if>
+                        <#if entity.haveWifi=="1"><div>有</div></#if>
+                    </#if>
+				</td>
+				<td style="text-align:center">
+				<#if entity.haveComputer??>
+                        <#if entity.haveComputer=="0"><div style="color: red;">无</div></#if>
+                        <#if entity.haveComputer=="1"><div>有</div></#if>
+                    </#if>
+				</td>
+				<td style="text-align:center">
+				    <#if entity.type??>
+                        <#if entity.type=="0"><div>圆桌型</div></#if>
+                        <#if entity.type=="1"><div>课桌型</div></#if>
+                        <#if entity.type=="2"><div>U型</div></#if>
+                        <#if entity.type=="3"><div>椭圆型</div></#if>
+                        <#if entity.type=="4"><div>长方型</div></#if>
+                        <#if entity.type=="5"><div>其他</div></#if>
+                    </#if>
+				</td>
+				<td style="white-space:nowrap;" align="center">
+				    <#if entity.status??>
+                            <#if entity.status == '1' ><div title="启用" class="label label-success">启用</div></#if>
+                            <#if entity.status == '0'><div title="禁止" class="label label-danger">禁止</div></#if>
+                    </#if>
+                </td>
+			</tr>
+			</#list>
+		</tbody>
+	</table>
+</div>
+<#include "../../common/_page.html"/>

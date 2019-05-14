@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap
+        PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+        "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="EquipmentInfor">
+    <typeAlias alias="EquipmentInfor" type="net.jqsoft.base.system.domain.EquipmentInfor" />
+
+    <resultMap id="EquipmentInforMap" class="EquipmentInfor">
+
+          <result property="id" column="ID"/> 
+                <result property="type" column="TYPE"/>
+                <result property="projectId" column="PROJECT_ID"/>
+                <result property="serverName" column="SERVER_NAME"/>
+                <result property="serverUsername" column="SERVER_USERNAME"/>
+                <result property="serverPassword" column="SERVER_PASSWORD"/>
+                <result property="serverIp" column="SERVER_IP"/>
+                <result property="serverMac" column="SERVER_MAC"/>
+                <result property="serverInsideIp" column="SERVER_INSIDE_IP"/>
+                <result property="serverOutsideIp" column="SERVER_OUTSIDE_IP"/>
+                <result property="isDel" column="IS_DEL" />
+                <result property="creator" column="CREATOR"/>
+                <result property="createName" column="CREATE_NAME"/>
+                <result property="createTime" column="CREATE_TIME"/>
+                <result property="updator" column="UPDATOR"/>
+                <result property="updatorName" column="UPDATOR_NAME"/>
+                <result property="updateTime" column="UPDATE_TIME"/>
+                <result property="remark" column="REMARK"/>
+
+    </resultMap>
+
+    <select id="getAll" resultMap="EquipmentInforMap">
+        SELECT * FROM EQUIPMENT_INFOR
+    </select>
+    <select id="get" parameterClass="String" resultMap="EquipmentInforMap">
+        <![CDATA[ 
+           	   SELECT * FROM EQUIPMENT_INFOR WHERE ID=#id:String#
+         ]]>
+    </select>
+
+    <insert id="insert" parameterClass="EquipmentInfor">
+        <![CDATA[
+        INSERT INTO EQUIPMENT_INFOR(
+        ID,
+        TYPE,
+        PROJECT_ID,
+        SERVER_USERNAME,
+        SERVER_NAME,
+        SERVER_PASSWORD,
+        SERVER_IP,
+        SERVER_MAC,
+        SERVER_INSIDE_IP,
+        SERVER_OUTSIDE_IP,
+        IS_DEL,
+        CREATOR,
+        CREATE_NAME,
+        CREATE_TIME,
+        UPDATOR,
+        UPDATOR_NAME,
+        UPDATE_TIME,
+        REMARK
+        ) values(
+                #id#,
+                #type#,
+                #projectId#,
+                #serverUsername#,
+                #serverName#,
+                #serverPassword#,
+                #serverIp#,
+                #serverMac#,
+                #serverInsideIp#,
+                #serverOutsideIp#,
+                #isDel#,
+                #creator#,
+                #createName#,
+                #createTime#,
+                #updator#,
+                #updatorName#,
+                #updateTime#,
+                #remark#
+             )
+		]]>
+    </insert>
+    <update id="update" parameterClass="EquipmentInfor">
+        <![CDATA[
+			UPDATE EQUIPMENT_INFOR ]]>
+			<dynamic prepend="SET">
+
+            <isNotEmpty  property="type" prepend=",">
+                <![CDATA[
+					TYPE = #type:String#
+				]]>
+            </isNotEmpty >
+            
+            <isNotEmpty  property="isDel" prepend=",">
+                <![CDATA[
+					IS_DEL = #isDel:String#
+				]]>
+            </isNotEmpty >
+            
+
+            <isNotEmpty  property="projectId" prepend=",">
+                <![CDATA[
+					PROJECT_ID = #projectId:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="serverUsername" prepend=",">
+                <![CDATA[
+					SERVER_USERNAME = #serverUsername:String#
+				]]>
+            </isNotEmpty >
+             <isNotEmpty  property="serverName" prepend=",">
+                <![CDATA[
+					SERVER_NAME = #serverName:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="serverPassword" prepend=",">
+                <![CDATA[
+					SERVER_PASSWORD = #serverPassword:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="serverIp" prepend=",">
+                <![CDATA[
+					SERVER_IP = #serverIp:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="serverMac" prepend=",">
+                <![CDATA[
+					SERVER_MAC = #serverMac:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="serverInsideIp" prepend=",">
+                <![CDATA[
+					SERVER_INSIDE_IP = #serverInsideIp:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="serverOutsideIp" prepend=",">
+                <![CDATA[
+					SERVER_OUTSIDE_IP = #serverOutsideIp:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="creator" prepend=",">
+                <![CDATA[
+					CREATOR = #creator:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="createName" prepend=",">
+                <![CDATA[
+					CREATE_NAME = #createName:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="createTime" prepend=",">
+                <![CDATA[
+					CREATE_TIME = #createTime:DateTime#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="updator" prepend=",">
+                <![CDATA[
+					UPDATOR = #updator:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="updatorName" prepend=",">
+                <![CDATA[
+					UPDATOR_NAME = #updatorName:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="updateTime" prepend=",">
+                <![CDATA[
+					UPDATE_TIME = #updateTime:DateTime#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="remark" prepend=",">
+                <![CDATA[
+					REMARK = #remark:String#
+				]]>
+            </isNotEmpty >
+        </dynamic>
+        <dynamic prepend="WHERE">
+            <![CDATA[
+					id = #id:int#
+				]]>
+        </dynamic>
+    </update>
+    <!--删除服务器信息-->
+	<update id="delEquipmentInfo" parameterClass="java.util.HashMap">
+		UPDATE EQUIPMENT_INFOR SET IS_DEL = '1'
+		<dynamic prepend="WHERE">
+			<![CDATA[
+                ID = #id#
+            ]]>
+		</dynamic>
+	</update>
+	<!--删除服务器信息by项目ID-->
+	<update id="deleteEquipInfoByProjId" parameterClass="java.util.HashMap">
+		UPDATE EQUIPMENT_INFOR SET IS_DEL = '1'
+		<dynamic prepend="WHERE">
+			<![CDATA[
+                PROJECT_ID = #id#
+            ]]>
+		</dynamic>
+	</update>
+    <delete id="deleteById" parameterClass="String">
+        <![CDATA[
+        DELETE FROM  EQUIPMENT_INFOR where ID = #id:String#
+     ]]>
+    </delete>
+    <sql id="equiptmentSearch">
+		<dynamic>
+            <isNotEmpty prepend=" AND " property="loginId">aa.id=#loginId:String#
+            </isNotEmpty>
+
+            <isNotEmpty prepend=" AND " property="selectRealNameId">aa.id=#selectRealNameId:String#
+                </isNotEmpty>
+
+			<isNotEmpty prepend=" AND " property="EuipmentId">PROJECT_ID
+				like '%' || #EuipmentId# || '%' </isNotEmpty>
+			<isNotEmpty prepend=" AND " property="isDel">IS_DEL
+				like '%' || #isDel# || '%' </isNotEmpty>
+			<isEmpty prepend=" AND " property="isDel">IS_DEL
+				='0' </isEmpty>
+			<isNotEmpty prepend=" AND " property="serverName">SERVER_NAME
+				like '%' || #serverName# || '%' </isNotEmpty>
+			<isNotEmpty prepend=" AND " property="type">TYPE
+				like '%' || #type# || '%' </isNotEmpty>
+			<isNotEmpty prepend=" AND " property="serverIp">SERVER_IP
+				like '%' || #serverIp# || '%' </isNotEmpty>
+		</dynamic>
+	</sql>
+    <select id="count" resultClass="int">
+        SELECT COUNT(*) FROM EQUIPMENT_INFOR
+          where 1=1
+        <include refid="equiptmentSearch"/>
+    </select>
+    <select id="select" resultMap="EquipmentInforMap"  parameterClass="java.util.HashMap">
+        SELECT *FROM EQUIPMENT_INFOR
+          where 1=1
+        <include refid="equiptmentSearch"/>
+    </select>
+
+    <sql id="equiptmentSearch1">
+        <dynamic>
+            <isEmpty prepend=" AND " property="loginId">aa.id=#loginId:String#
+            </isEmpty>
+
+            <isNotEmpty prepend=" AND " property="selectRealNameId">aa.id=#selectRealNameId:String#
+            </isNotEmpty>
+
+            <isNotEmpty prepend=" AND " property="EuipmentId">PROJECT_ID
+                like '%' || #EuipmentId# || '%' </isNotEmpty>
+            <isNotEmpty prepend=" AND " property="isDel">IS_DEL
+                like '%' || #isDel# || '%' </isNotEmpty>
+            <isEmpty prepend=" AND " property="isDel">IS_DEL
+                ='0' </isEmpty>
+            <isNotEmpty prepend=" AND " property="serverName">SERVER_NAME
+                like '%' || #serverName# || '%' </isNotEmpty>
+            <isNotEmpty prepend=" AND " property="type">TYPE
+                like '%' || #type# || '%' </isNotEmpty>
+            <isNotEmpty prepend=" AND " property="serverIp">SERVER_IP
+                like '%' || #serverIp# || '%' </isNotEmpty>
+        </dynamic>
+    </sql>
+
+    <select id="count1" resultClass="int">
+        SELECT COUNT(*) FROM EQUIPMENT_INFOR EQ LEFT JOIN SYS_PRO_PERMISSION syo
+        on syo.server_id=eq.id
+        left join sys_user aa
+        on aa.id=syo.user_id
+        where 1=1
+        <include refid="equiptmentSearch1"/>
+    </select>
+    <select id="select1" resultMap="EquipmentInforMap"  parameterClass="java.util.HashMap">
+        SELECT EQ.* FROM EQUIPMENT_INFOR EQ LEFT JOIN SYS_PRO_PERMISSION syo
+        on syo.server_id=eq.id
+        left join sys_user aa
+        on aa.id=syo.user_id
+        where 1=1
+        <include refid="equiptmentSearch1"/>
+    </select>
+
+
+    <sql id="equiptmentSearch12">
+        <dynamic>
+            <isNotEmpty prepend=" AND " property="isDel">IS_DEL
+                like '%' || #isDel# || '%' </isNotEmpty>
+            <isNotEmpty prepend=" AND " property="serverName">SERVER_NAME
+                like '%' || #serverName# || '%' </isNotEmpty>
+            <isNotEmpty prepend=" AND " property="type">TYPE
+                like '%' || #type# || '%' </isNotEmpty>
+            <isNotEmpty prepend=" AND " property="serverIp">SERVER_IP
+                like '%' || #serverIp# || '%' </isNotEmpty>
+        </dynamic>
+    </sql>
+
+    <!--服务器选择-->
+    <select id="countEquipmentInforList" resultClass="int">
+        SELECT COUNT(*) FROM EQUIPMENT_INFOR EQ LEFT JOIN SYS_PRO_PERMISSION syo
+        on syo.server_id=eq.id
+        left join sys_user aa
+        on aa.id=syo.user_id
+        where PROJECT_ID=#serverImportSelected:String# AND aa.id=#currentUserId:String# AND IS_DEL='0'
+        <include refid="equiptmentSearch12"/>
+    </select>
+    <select id="qryEquipmentInforList" resultMap="EquipmentInforMap"  parameterClass="java.util.HashMap">
+        SELECT EQ.* FROM EQUIPMENT_INFOR EQ LEFT JOIN SYS_PRO_PERMISSION syo
+        on syo.server_id=eq.id
+        left join sys_user aa
+        on aa.id=syo.user_id
+        where PROJECT_ID=#serverImportSelected:String# AND aa.id=#currentUserId:String# AND IS_DEL='0'
+        <include refid="equiptmentSearch12"/>
+    </select>
+     <select id="getServerIp" resultMap="EquipmentInforMap"  parameterClass="java.util.HashMap">
+        SELECT * FROM EQUIPMENT_INFOR  WHERE SERVER_IP = #serverIp# AND IS_DEL='0'
+    </select>
+
+    <select id="getProjectId" resultMap="EquipmentInforMap"  parameterClass="java.util.HashMap">
+        SELECT * FROM EQUIPMENT_INFOR  WHERE PROJECT_ID = #projectId# AND IS_DEL='0'
+    </select>
+    <select id="getServerByServerName" resultMap="EquipmentInforMap"  parameterClass="java.util.HashMap">
+        SELECT * FROM EQUIPMENT_INFOR  WHERE SERVER_NAME = #serverName# AND IS_DEL='0'
+    </select>
+
+</sqlMap>

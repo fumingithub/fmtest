@@ -1,0 +1,401 @@
+﻿<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>net.jqsoft</groupId>
+	<artifactId>jqis-web</artifactId>
+	<packaging>war</packaging>
+	<version>1.0-SNAPSHOT</version>
+	<name>晶奇综合管理系统-WEB</name>
+	<url>http://maven.apache.org</url>
+	<parent>
+		<artifactId>zc-public</artifactId>
+		<groupId>org.zcframework</groupId>
+		<version>1.0-SNAPSHOT</version>
+	</parent>
+	<distributionManagement>
+		<repository>
+			<id>releases</id>
+			<name>public nexus server</name>
+			<url>http://192.168.44.155/nexus/content/repositories/releases</url>
+		</repository>
+		<snapshotRepository>
+			<id>snapshots</id>
+			<name>public snapshots nexus server</name>
+			<url>http://192.168.44.155/nexus/content/repositories/snapshots</url>
+		</snapshotRepository>
+	</distributionManagement>
+
+	<!-- 设定除中央仓库(repo1.maven.org/maven2/)外的其他仓库,按设定顺序进行查找. -->
+	<repositories>
+
+		<repository>
+			<id>nexus-snapshots</id>
+			<name>public nexus snapshots server</name>
+			<url>http://192.168.44.155/nexus/content/repositories/snapshots</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+		</repository>
+		<repository>
+			<id>nexus</id>
+			<name>public nexus server</name>
+			<url>http://192.168.44.155/nexus/content/groups/public</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+		</repository>
+	</repositories>
+	<dependencies>
+		<dependency>
+		  <groupId>net.jqsoft</groupId>
+		  <artifactId>phimp-util</artifactId>
+		  <version>1.0-SNAPSHOT</version>
+		</dependency>
+		<!--FineReport jar包 -->
+		<dependency>
+			<groupId>finereport</groupId>
+			<artifactId>fr-chart</artifactId>
+			<version>8.0</version>
+		</dependency>
+		<dependency>
+			<groupId>finereport</groupId>
+			<artifactId>fr-core</artifactId>
+			<version>8.0</version>
+		</dependency>
+		<dependency>
+			<groupId>finereport</groupId>
+			<artifactId>fr-performance</artifactId>
+			<version>8.0</version>
+		</dependency>
+		<dependency>
+			<groupId>finereport</groupId>
+			<artifactId>fr-platform</artifactId>
+			<version>8.0</version>
+		</dependency>
+		<dependency>
+			<groupId>finereport</groupId>
+			<artifactId>fr-report</artifactId>
+			<version>8.0</version>
+		</dependency>
+		<dependency>
+			<groupId>finereport</groupId>
+			<artifactId>fr-third</artifactId>
+			<version>8.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.zcframework</groupId>
+			<artifactId>zc-core</artifactId>
+			<version>1.2</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.hibernate</groupId>
+					<artifactId>hibernate-core</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.hibernate</groupId>
+					<artifactId>hibernate-ehcache</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.hibernate</groupId>
+					<artifactId>hibernate-entitymanager</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.hibernate</groupId>
+					<artifactId>hibernate-annotations</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.hibernate</groupId>
+					<artifactId>hibernate-jmx</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>hsqldb</groupId>
+					<artifactId>hsqldb</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>memcached</groupId>
+					<artifactId>memcached</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.mybatis</groupId>
+					<artifactId>mybatis</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.mybatis</groupId>
+					<artifactId>mybatis-spring</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.freemarker</groupId>
+					<artifactId>freemarker</artifactId>
+				</exclusion>
+
+				<exclusion>
+					<artifactId>poi-ooxml-schemas</artifactId>
+					<groupId>org.apache.poi</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>poi-ooxml</artifactId>
+					<groupId>org.apache.poi</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>poi</artifactId>
+					<groupId>org.apache.poi</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.freemarker</groupId>
+			<artifactId>freemarker</artifactId>
+			<version>2.3.17</version>
+		</dependency>
+		<dependency>
+			<groupId>org.zcframework</groupId>
+			<artifactId>zc-security</artifactId>
+			<version>1.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.zcframework</groupId>
+			<artifactId>zc-metrics-client</artifactId>
+			<version>0.0.5</version>
+		</dependency>
+		<dependency>
+			<groupId>org.zcframework</groupId>
+			<artifactId>zc-generator</artifactId>
+			<version>1.1</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>druid</artifactId>
+			<version>1.0.17</version>
+		</dependency>
+		<dependency>
+			<groupId>com.oracle</groupId>
+			<artifactId>ojdbc14</artifactId>
+			<version>10.2.0.1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<version>2.4</version>
+			<scope>provided</scope>
+		</dependency>
+
+
+		<dependency>
+			<groupId>commons-cli</groupId>
+			<artifactId>commons-cli</artifactId>
+			<version>1.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.artofsolving</groupId>
+			<artifactId>jodconverter</artifactId>
+			<version>2.2.2</version>
+		</dependency>
+
+
+		<dependency>
+			<groupId>com.artofsolving</groupId>
+			<artifactId>jodconverter-cli</artifactId>
+			<version>2.2.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.openoffice</groupId>
+			<artifactId>ridl</artifactId>
+			<version>3.0.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.thoughtworks.xstream</groupId>
+			<artifactId>xstream</artifactId>
+			<version>1.3.1</version>
+			<exclusions>
+				<exclusion>
+					<groupId>xpp3</groupId>
+					<artifactId>xpp3_min</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>jstl</groupId>
+			<artifactId>jstl</artifactId>
+			<version>1.2</version>
+		</dependency>
+
+
+		<dependency>
+			<groupId>com.google.code</groupId>
+			<artifactId>kaptcha</artifactId>
+			<version>2.3</version>
+		</dependency>
+		<!-- dubbo start -->
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>dubbo</artifactId>
+			<version>2.8.4</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.zookeeper</groupId>
+			<artifactId>zookeeper</artifactId>
+			<version>3.4.6</version>
+		</dependency>
+		<dependency>
+			<groupId>com.github.sgroschupf</groupId>
+			<artifactId>zkclient</artifactId>
+			<version>0.1</version>
+		</dependency>
+
+
+		<!-- dubbo end -->
+
+		<dependency>
+			<groupId>org.xerial</groupId>
+			<artifactId>sqlite-jdbc</artifactId>
+			<version>3.8.11.2</version>
+		</dependency>
+
+	
+		<!--引入4.4以上的junit版本 -->
+		<dependency>
+		  <groupId>junit</groupId>
+		  <artifactId>junit</artifactId>
+		  <version>4.8.2</version>
+		</dependency>
+		
+		<dependency>
+		  <groupId>org.apache.poi</groupId>
+		  <artifactId>poi</artifactId>
+		  <version>3.9</version>
+		</dependency>
+		<dependency>
+		  <groupId>org.apache.poi</groupId>
+		  <artifactId>poi-ooxml</artifactId>
+		  <version>3.9</version>
+		</dependency>
+		<dependency>
+		  <groupId>org.apache.poi</groupId>
+		  <artifactId>poi-ooxml-schemas</artifactId>
+		  <version>3.9</version>
+		</dependency>
+		<dependency>
+			<groupId>dom4j</groupId>
+			<artifactId>dom4j</artifactId>
+			<version>1.6.1</version>
+		</dependency>
+		<dependency>
+		  <groupId>org</groupId>
+		  <artifactId>json_simple</artifactId>
+		  <version>1.1</version>
+		</dependency>
+	</dependencies>
+	<!-- 插件配置 -->
+	<build>
+		<finalName>jqis-web</finalName>
+		<!-- 命令行输入mvn时，默认执行mvn package -->
+		<defaultGoal>jetty:run</defaultGoal>
+		<!-- 设定Web应用中编译结果输出到WEB-INF/classes �? 与使用IDE时相�? -->
+		<resources><!-- 存放资源文件。这里的文件不需要编译，在部署打包时，直接复制这里的文件 -->
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+				<excludes>
+					<exclude>**/*.java</exclude>
+					<exclude>test/*</exclude>
+					<exclude>production/*</exclude>
+					<exclude>development/*</exclude>
+					<!--例外的文件类型。如果这里存放有.java文件，则仍然需要编译�? -->
+				</excludes>
+				<!-- 资源根目录排除各环境的配置，使用单独的资源目录来指定 -->
+			</resource>
+			<resource>
+				<directory>src/main/resources/${profiles.active}</directory>
+			</resource>
+			<resource>
+				<directory>src/main/java</directory>
+				<!-- -->
+				<excludes>
+					<exclude>**/*.java</exclude>
+					<!--例外的文件类型。如果这里存放有.java文件，则仍然需要编译�? -->
+				</excludes>
+			</resource>
+		</resources>
+
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>1.2.1</version>
+
+				<configuration>
+					<executable>java</executable>
+					<arguments>
+						<!--<argument>-Djava.ext.dirs=D:\jinqi\hecv\trunk\target\hecv\WEB-INF\lib</argument> 
+							&lt;!&ndash; 这是一个系统属性参数 &ndash;&gt; -->
+						<argument>-XX:MaxPermSize=256m</argument>
+						<!-- 这是一个JVM参数 -->
+						<!--<argument> -Djava.ext.dirs=D:\jinqi\hecv\trunk\target\hecv\WEB-INF\lib</argument> -->
+						<argument>-classpath</argument>
+						<!-- 这是classpath属性，其值就是下面的<classpath/> -->
+						<classpath />
+						<!-- 这是exec插件最有价值的地方，关于工程的classpath并不需要手动指定，它将由exec自动计算得出 -->
+						<argument>org.zcframework.generator.Generator</argument>
+						<!-- 程序入口，主类名称 -->
+					</arguments>
+				</configuration>
+
+			</plugin>
+			<plugin>
+				<groupId>org.apache.tomcat.maven</groupId>
+				<artifactId>tomcat7-maven-plugin</artifactId>
+				<version>2.2</version>
+				<configuration>
+					<contextReloadable>false</contextReloadable>
+					<warSourceDirectory>${basedir}/webapp</warSourceDirectory>
+					<uriEncoding>UTF-8</uriEncoding>
+					<path>/${project.artifactId}</path>
+					<url>${deploy.url}</url>
+					<username>admin</username>
+					<password>1</password>
+					<port>8085</port>
+				</configuration>
+			</plugin>
+
+		</plugins>
+	</build>
+	<profiles>
+		<profile>
+			<id>develop</id>
+			<properties>
+				<profiles.active>development</profiles.active>
+				<dubbo.registry.address>zookeeper://192.168.44.168:2181</dubbo.registry.address>
+			</properties>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+		</profile>
+
+		<profile>
+			<id>product</id>
+			<properties>
+				<dubbo.registry.address>zookeeper://192.168.44.167:2181</dubbo.registry.address>
+				<profiles.active>production</profiles.active>
+				<deploy.url>http://192.168.44.226:8091/manager/html</deploy.url>
+			</properties>
+		</profile>
+		<profile>
+			<!-- 测试环境 -->
+			<id>test</id>
+			<properties>
+				<profiles.active>test</profiles.active>
+			</properties>
+		</profile>
+	</profiles>
+
+</project>

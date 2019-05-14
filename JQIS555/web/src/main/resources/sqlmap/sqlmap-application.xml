@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap
+        PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+        "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="Application">
+    <typeAlias alias="Application" type="net.jqsoft.base.system.domain.Application" />
+
+    <resultMap id="ApplicationMap" class="Application">
+
+          <result property="id" column="id"/>
+                <result property="equipmentId" column="EQUIPMENT_ID"/>
+                <result property="applicationUrl" column="APPLICATION_URL"/>
+                <result property="editionJdk" column="EDITION_JDK"/>
+                <result property="isDel" column="IS_DEL" />
+                <result property="creator" column="CREATOR"/>
+                <result property="createName" column="CREATE_NAME"/>
+                <result property="createTime" column="CREATE_TIME"/>
+                <result property="updator" column="UPDATOR"/>
+                <result property="updatorName" column="UPDATOR_NAME"/>
+                <result property="updateTime" column="UPDATE_TIME"/>
+                <result property="remark" column="REMARK"/>
+
+    </resultMap>
+
+    <select id="getAll" resultMap="ApplicationMap">
+        SELECT * FROM APPLICATION
+    </select>
+    <select id="get" parameterClass="String" resultMap="ApplicationMap">
+        <![CDATA[
+           	   SELECT * FROM APPLICATION WHERE  id=#id:String#
+         ]]>
+    </select>
+    <insert id="insert" parameterClass="Application">
+        <![CDATA[
+        INSERT INTO APPLICATION(
+        ID,
+        EQUIPMENT_ID,
+        APPLICATION_URL,
+        EDITION_JDK,
+        IS_DEL,
+        CREATOR,
+        CREATE_NAME,
+        CREATE_TIME,
+        UPDATOR,
+        UPDATOR_NAME,
+        UPDATE_TIME,
+        REMARK
+        ) values(
+                #id#,
+                #equipmentId#,
+                #applicationUrl#,
+                #editionJdk#,
+                #isDel#,
+                #creator#,
+                #createName#,
+                #createTime#,
+                #updator#,
+                #updatorName#,
+                #updateTime#,
+                #remark#
+             )
+		]]>
+    </insert>
+    <update id="update" parameterClass="Application">
+        <![CDATA[
+			UPDATE APPLICATION ]]>
+			<dynamic prepend="SET">
+
+            <isNotEmpty  property="equipmentId" prepend=",">
+                <![CDATA[
+					EQUIPMENT_ID = #equipmentId:String#
+				]]>
+            </isNotEmpty >
+            
+            <isNotEmpty  property="applicationUrl" prepend=",">
+                <![CDATA[
+					APPLICATION_URL = #applicationUrl:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="editionJdk" prepend=",">
+                <![CDATA[
+					EDITION_JDK = #editionJdk:String#
+				]]>
+            </isNotEmpty >
+            
+            <isNotEmpty  property="isDel" prepend=",">
+                <![CDATA[
+					IS_DEL = #isDel:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="creator" prepend=",">
+                <![CDATA[
+					CREATOR = #creator:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="createName" prepend=",">
+                <![CDATA[
+					CREATE_NAME = #createName:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="createTime" prepend=",">
+                <![CDATA[
+					CREATE_TIME = #createTime:DateTime#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="updator" prepend=",">
+                <![CDATA[
+					UPDATOR = #updator:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="updatorName" prepend=",">
+                <![CDATA[
+					UPDATOR_NAME = #updatorName:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="updateTime" prepend=",">
+                <![CDATA[
+					UPDATE_TIME = #updateTime:DateTime#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="remark" prepend=",">
+                <![CDATA[
+					REMARK = #remark:String#
+				]]>
+            </isNotEmpty >
+        </dynamic>
+        <dynamic prepend="WHERE">
+            <![CDATA[
+					id = #id:int#
+				]]>
+        </dynamic>
+    </update>
+    <!--删除应用信息-->
+	<update id="delapplicationInfo" parameterClass="java.util.HashMap">
+		UPDATE APPLICATION SET IS_DEL = '1'
+		<dynamic prepend="WHERE">
+			<![CDATA[
+                ID = #id#
+            ]]>
+		</dynamic>
+	</update>
+    <delete id="deleteById" parameterClass="String">
+        <![CDATA[
+        DELETE FROM APPLICATION where id = #id:String#
+     ]]>
+    </delete>
+     <sql id="applicationSearch">
+		<dynamic>
+		    <isNotEmpty prepend=" AND " property="isDel">IS_DEL
+				like '%' || #isDel# || '%' </isNotEmpty>
+			<isEmpty prepend=" AND " property="isDel">IS_DEL
+				='0' </isEmpty>
+		    <isNotEmpty prepend=" AND " property="id">EQUIPMENT_ID
+				like '%' || #id# || '%' </isNotEmpty>
+			<isNotEmpty prepend=" AND " property="editionJdk">EDITION_JDK
+				like '%' || #editionJdk# || '%' </isNotEmpty>
+		   <isNotEmpty prepend=" AND " property="applicationUrl">APPLICATION_URL
+				like '%' || #applicationUrl# || '%' </isNotEmpty>
+		</dynamic>
+	</sql>
+    <select id="count" resultClass="int">
+        SELECT COUNT(*) FROM APPLICATION WHERE 1=1
+        <include refid="applicationSearch"/>
+    </select>
+    <select id="select" resultMap="ApplicationMap"  parameterClass="java.util.HashMap">
+        SELECT * FROM APPLICATION WHERE 1=1
+        <include refid="applicationSearch"/>
+    </select>
+
+</sqlMap>

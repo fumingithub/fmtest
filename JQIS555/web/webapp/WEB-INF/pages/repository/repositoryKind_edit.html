@@ -1,0 +1,63 @@
+<#include "../common/_public.html"/>
+<div class="bjui-pageHeader" style="background:#FFF;">
+    <div class="row" style="height:70px">
+        <div class="col-md-6">
+            <div class="office">
+                <ul class="offbtn">
+                    <li><a id="lbtnSave" class="submit"><span class="iconbg04"><i class="fa fa-save font24"></i></span>保存</a>
+                    </li>
+                    <li><a class="closecutab"><span class="iconbg03"><i class="fa fa-remove  font24"></i></span>关闭</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="bjui-pageContent">
+    <form action="${ctx}/admin/repository/repositoryKind!save.do" name="pagerform" method="post"
+          data-toggle="validate" data-alertmsg="true" data-isrefsh="false" data-cclose="true">
+        <div style="margin:15px auto 0; width:900px;">
+            <fieldset>
+                <legend>
+                    <h3 class="listtitle">知识库</h3>
+                    <input type="hidden" name="id" value="${entity.id!}"/>
+                </legend>
+                <table class="table table-bordered" width="100%">
+                    <tbody>
+                    <tr>
+                        <td class="right width150"><span style="color: Red">*</span>编码：</td>
+                        <td><input size="30" type="text" value="${entity.code!}" maxlength="64" name="entity.code"
+                                   onblur="_n('#resDesc_1').val(this.value)"
+                                   data-rule="required"/></td>
+                    </tr>
+                    <tr>
+                        <td class="right width150"><span style="color: Red">*</span>名称：</td>
+                        <td><input size="30" type="text" value="${entity.name!}" maxlength="25" name="entity.name"
+                                   data-rule="required"/></td>
+                    </tr>
+                     <tr>
+                        <td class="right" style="width: 130px"><span style="color:red;">*</span>是否启用</td>
+                            <td class="left" colspan="3">
+                            <select data-clear="" name="entity.status" " data-rule="required"  data-toggle="selectpicker" data-width="200">
+                                    <option value="">-请选择-</option>
+                                    <option value="1" <#if (entity.status!)=='1'>selected="selected"</#if>>否</option>
+                                    <option value="0" <#if (entity.status!)=='0'>selected="selected"</#if>>是</option>
+                            </select>
+                            </td>
+                    </tr>
+
+                    <tr>
+                        <td class="right width150"><span style="color: Red">*</span>备注：</td>
+                        <td><input size="50" type="text" value="${entity.remark!}" name="entity.remark" maxlength="250"
+                                   data-rule="required"/></td>
+                    </tr>
+
+                    </tbody>
+                </table>
+            </fieldset>
+        </div>
+    </form>
+</div>
+<div class="bjui-pageFooter">
+
+</div>

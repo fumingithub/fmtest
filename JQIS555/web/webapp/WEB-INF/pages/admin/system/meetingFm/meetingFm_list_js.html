@@ -1,0 +1,282 @@
+﻿﻿﻿﻿﻿<script language="javascript" type="text/javascript">
+    /** 新增、编辑、查看 **/
+    function meetingEdit(types, title, id) {
+        var enable = $("#meetingFmListTbl input:checked").attr("enable");
+        var url = ""; // 请求地址
+        if ("edit" == types) { // 编辑
+            if ($("#meetingFmListTbl input:checked").length > 0 ) {
+                id = $("#meetingFmListTbl input:checked").val();
+            } else {
+                $(this).alertmsg('warn', "请选中一条数据！");
+                return;
+            }
+        }
+        if("edit" == types && "0" == enable){
+            $(this).alertmsg('warn', "仅允许修改已启用的会议室，禁用的会议室不允许修改！");
+            return;
+        }else{
+            url ="${ctx}/admin/system/meetingfm!editMeetingFm.do?id=" + id + "&types=" + types;
+        }
+        var dialog_options = {
+            id: 'meeting_addOrEdit',
+            title: title,
+            url: url,
+            width: 700,
+            height: 500,
+            fresh: true,
+            mask: true
+        };
+        $(this).dialog(dialog_options);
+    }
+
+    /**
+     * 保存数据并刷新列表
+     */
+    function meetingSave(formId ){
+        var dataForms = $("#" + formId);
+        var $formFlag = dataForms.isValid();
+        if ($formFlag) {
+            $.ajax({
+                type: "post",
+                data: $("#" + formId).serialize(),
+                url: "${ctx}/admin/system/meetingfm!meetingSave.do" ,
+                success: function(data){
+                    var dataJson = eval('(' + data + ')');
+                    if (dataJson.statusCode == 300) {
+                        $(this).alertmsg('warn', dataJson.message);
+                    } else if (dataJson.statusCode == 200) {
+                        $(this).alertmsg('correct', dataJson.message);
+                        $(this).dialog("close", $.CurrentDialog);
+                        drefresh();
+                    }
+                }
+            });
+        }
+    }
+
+    /** 会议室删除**/
+    function meetingDelete(obj) {
+        if ($("#meetingFmListTbl input:checked").length > 0) {
+            var id = $("#meetingFmListTbl input:checked").val();
+            $(obj).alertmsg("confirm", "确定要删除选中项吗？", {
+                okCall: function() {
+                    $.ajax({
+                        type: "POST",
+                        url: "${ctx}/admin/system/meetingfm!deleteMeetingFm.do?id=" + id,
+                        async: false,
+                        success: function (data) {
+
+                            var dataJson = eval('(' + data + ')');
+                            if (dataJson.statusCode == 300) {
+                                $(this).alertmsg('warn', dataJson.message);
+                            } else {
+                                $(this).alertmsg('correct', "删除成功！");
+                                $('#refresh').click();
+                            }
+                        }
+                    });
+                }
+            });
+        } else {
+            $(this).alertmsg('warn', "请选中一条数据！");
+            return;
+        }
+    }
+
+    /** 会议室申请 **/
+    function meetingApply(Obj){
+        if ($("#meetingFmListTbl input:checked").length > 0) {
+            var id = $("#meetingFmListTbl input:checked").val();
+            var enable = $("#meetingFmListTbl input:checked").attr("enable");
+            var status = $("#meetingFmListTbl input:checked").attr("status");
+            var floor = $("#meetingFmListTbl input:checked").attr("floor");
+            var name = $("#meetingFmListTbl input:checked").attr("roomName");
+            var applyMes = "您确认申请【"+floor+"楼】【"+name+"】?";
+
+            if("0" == enable){
+                $(this).alertmsg('warn', "仅允许申请【启用状态】为启用的会议室，请重新选择！");
+                return;
+            }else if("1" == status){
+                $(this).alertmsg('warn', "仅允许申请【使用状态】为空闲的会议室，请重新选择！");
+                return;
+            }else{
+                        $(Obj).alertmsg("confirm", applyMes, {
+                            okCall:function () {
+                                $.ajax({
+                                    type: "POST",
+                                    url: "${ctx}/admin/system/meetingfm!meetingApplyOrReturn.do?id=" + id,
+                                    async: false,
+                                    success: function (data) {
+                                        var dataJson = eval('(' + data + ')');
+                                        if (dataJson.statusCode == 300) {
+                                            $(this).alertmsg('warn', dataJson.message);
+                                        } else {
+                                            $(this).alertmsg('correct',"会议室申请成功!");
+                                            $('#refresh').click();
+                                            drefresh();
+                                        }
+                                    }
+                                });
+                            }
+                        });
+                    }
+        } else {
+            $(this).alertmsg('warn', "请选中一条数据！");
+            return;
+        }
+     }
+
+     /** 会议室归还 **/
+     function meetingReturn(Obj){
+         if($("#meetingFmListTbl input:checked").length > 0){
+             var id = $("#meetingFmListTbl input:checked").val();
+             var enable = $("#meetingFmListTbl input:checked").attr("enable");
+             var status = $("#meetingFmListTbl input:checked").attr("status");
+             var floor = $("#meetingFmListTbl input:checked").attr("floor");
+             var name = $("#meetingFmListTbl input:checked").attr("roomName");
+             var returnMes = "您确认归还【"+floor+"楼】【"+name+"】？";
+             if("0" == enable){
+                 $(this).alertmsg('warn', "仅允许归还【启用状态】为启用的会议室，请重新选择！");
+                 return;
+             }else if("2" == status){
+                 $(this).alertmsg('warn', "仅允许归还【使用状态】为使用中的会议室，请重新选择！");
+                 return;
+             }else{
+                 $(Obj).alertmsg("confirm", returnMes, {
+                     okCall:function() {
+                        /* if("1" == status){
+                             correctMes = "会议室归还成功!"
+                         }else{
+                             correctMes = "会议室申请成功!"
+                         }*/
+                         $.ajax({
+                             type: "POST",
+                             url: "${ctx}/admin/system/meetingfm!meetingApplyOrReturn.do?id=" + id,
+                             async: false,
+                             success: function (data) {
+                                 var dataJson = eval('(' + data + ')');
+                                 if (dataJson.statusCode == 300) {
+                                     $(this).alertmsg('warn', dataJson.message);
+                                 } else {
+                                     $(this).alertmsg('correct',"会议室归还成功!");
+                                     $('#refresh').click();
+                                     drefresh();
+                                 }
+                             }
+                         });
+                     }
+                 });
+             }
+         }else{
+             $(this).alertmsg('warn', "请选中一条数据！");
+         }
+     }
+
+     /**
+      * checkbox 选中改变启用禁用图标状态
+      * domId : 选中项的id
+      * enable ：需要改变的图标的value
+      **/
+     function changeCheckPositionStatus(domId,enableVal) {
+         var enabledhtml = "<i class='fa fa-check font24 iconbg02'></i>启用";
+         var disabledhtml = "<i class='fa fa-minus font24 iconbg01'></i>禁用";
+         if("1" == enableVal){
+             $("#"+domId).html(disabledhtml);
+         }else if("0" == enableVal){
+             $("#"+domId).html(enabledhtml);
+         }
+     }
+
+    /** 会议室启用、禁用 **/
+    function meetingChangeEnable(Obj) {
+        if($("#meetingFmListTbl input:checked").length>0){
+            var id=$("#meetingFmListTbl input:checked").val();
+            var enable = $("#meetingFmListTbl input:checked").attr("enable");
+            var status = $("#meetingFmListTbl input:checked").attr("status");
+            var floor = $("#meetingFmListTbl input:checked").attr("floor");
+            var name = $("#meetingFmListTbl input:checked").attr("roomName");
+            var disableReason = $("#meetingFmListTbl input:checked").attr("disableReason");
+
+            if ("0" == enable){//禁用改启用
+                var returnMes = "您确认启用【"+ floor +"楼】【"+ name +"】？"
+                var correctMes = "会议室启用成功！"
+                $(Obj).alertmsg("confirm", returnMes, {
+                    okCall:function() {
+                        $.ajax({
+                            type: "POST",
+                            url: "${ctx}/admin/system/meetingfm!enable0rDisable.do?id=" + id +"&enable=" + enable+"&disableReason="+disableReason,
+                            async: false,
+                            fresh: true,
+                            success: function (data) {
+                                var dataJson = eval('(' + data + ')'); //data字符串变成json对象,并执行其中json代码
+                                if (dataJson.statusCode == 300) {
+                                    $(this).alertmsg('warn', dataJson.message);
+                                } else {
+                                    $(this).alertmsg('correct',correctMes);
+                                    $('#refresh').click();
+                                    drefresh();
+                                }
+                            }
+                        });
+                    }
+                });
+            } else if ("1" == status){
+                $(this).alertmsg('warn', "仅允许禁用【使用状态】为空闲的会议室，请重新选择！");
+                return;
+            }
+            else {//启用改禁用
+                var dialog_reason = {
+                    id: 'meeting_disableReason',
+                    title: "禁用原因",
+                    url: "${ctx}/admin/system/meetingfm!enable0rDisable.do?id=" + id +"&enable=" + enable,
+                    width: 900,
+                    height: 500,
+                    fresh: true,
+                    mask: true
+                };
+                $(this).dialog(dialog_reason);
+            }
+        }else{
+            $(this).alertmsg('warn',"请选中一条数据！")
+        }
+    }
+    /**
+     * 保存禁用原因并刷新列表
+     */
+    function disableReasonSave(formId){
+        var dataForms = $("#" + formId);
+        var disableReason = $("#disableReason111").val();
+        if(!disableReason){
+            disableReason ="";
+        }
+        var $formFlag = dataForms.isValid();
+        if ($formFlag) {
+            $.ajax({
+                type: "post",
+                data: $("#" + formId).serialize(),
+                url: "${ctx}/admin/system/meetingfm!meetingDisableReasonSave.do?disableReason=" + disableReason,
+                success: function(data){
+                    var dataJson = eval('(' + data + ')');
+                    if (dataJson.statusCode == 300) {
+                        $(this).alertmsg('warn', dataJson.message);
+                    } else if (dataJson.statusCode == 200) {
+                        $(this).alertmsg('correct', dataJson.message);
+                        $(this).dialog("close", $.CurrentDialog);
+                        drefresh();
+                    }
+                }
+            });
+        }
+    }
+     /** 右侧列表刷新 **/
+     function drefresh(){
+         $("#meetingName").val("");
+         $("#meetingfloor").val("");
+         $("#projector").val("");
+         $("#people").val("");
+         $("#status").val("");
+         $("#enable").val("");
+         $("#meetingFmSubmit").submit();
+    }
+</script>
+

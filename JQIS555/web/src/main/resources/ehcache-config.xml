@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache>
+
+    <diskStore path="/cache/ehcache" />
+    
+    <!-- DefaultCache setting. -->
+    <defaultCache
+        maxElementsInMemory="10000"
+        memoryStoreEvictionPolicy="LRU"
+        eternal="false"
+        timeToIdleSeconds="300"
+        timeToLiveSeconds="300"
+        overflowToDisk="false"
+        diskPersistent="false" />
+
+    <!--<cache name="testCache"-->
+           <!--maxElementsInMemory="1000"-->
+           <!--overflowToDisk="false"-->
+           <!--eternal="false"-->
+           <!--timeToLiveSeconds="10"-->
+           <!--timeToIdleSeconds="20"-->
+           <!--diskPersistent="false" />-->
+    <cache
+        name="SysOrg.sysOrgCache"
+        maxElementsInMemory="10000"
+        eternal="false"
+        maxElementsOnDisk="1000"
+        overflowToDisk="true"
+        timeToIdleSeconds="300" />
+
+</ehcache>

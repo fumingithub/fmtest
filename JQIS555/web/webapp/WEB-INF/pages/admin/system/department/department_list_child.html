@@ -1,0 +1,27 @@
+<#include "../../../common/_public.html"/>
+        <#list entitys as entity>
+        <#if entity.parentId??>
+            <tr pp="${entity.id}" class="treegrid-${entity.id} treegrid-parent-${entity.parentId}">
+        <#else>
+            <tr class="treegrid-${entity.id} treegrid-collapsed">
+        </#if>
+            <td>
+            <input type="checkbox" name="ids" data-toggle="icheck" value="${entity.id}">
+            </td>
+            <td class="left" title='${entity.name!}'>
+            	<#if (entity.isHaveChild>0)>
+            	<span class="glyphicon glyphicon-plus res-treegrid-expander" style="padding-left: 16px;cursor: pointer;" onclick="showInsChild(this,'${entity.id}')"></span>
+                <font style="padding-left: 16px;">${entity.name!}</font>
+            	<#else>
+            	<font style="padding-left: 32px;">${entity.name!}</font>
+            	</#if>
+            </td>
+                <td class="left" title="${entity.code}">${entity.code}</td>
+                <td class="center" title="${entity.telephone!}">${entity.telephone!}</td>
+                <td class="left" title="${entity.email!}">${entity.email!}</td>
+                <td style="text-align:center">
+				<#if entity.status== 0><div title="启用" class="label label-success">启用</div></#if>
+				<#if entity.status== 1><div title="禁用" class="label label-danger">禁用</div></#if>
+				</td>
+            </tr>
+        </#list>

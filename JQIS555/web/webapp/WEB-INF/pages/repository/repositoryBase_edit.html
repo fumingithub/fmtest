@@ -1,0 +1,53 @@
+<#include "../common/_public.html"/>
+<#include "../common/_area.html"/>
+
+<div class="bjui-pageContent">
+	<form id="form"  name="pagerform">
+		<div style="margin:15px auto 0; width:900px;">
+			<fieldset>
+				<legend>
+					<h3 class="listtitle">知识库新增</h3>
+					<input id="cateId" type="hidden" name="id" value="${entity.id!}" />
+				</legend>
+				<table class="table table-bordered" width="100%">
+					<tbody>
+						<tr>
+							<td class="right width150"><span style="color: Red">*</span>文章标题</td>
+							<td><input size="40" type="text" value="${entity.title!}" maxlength="150" name="entity.title" data-rule="required"/></td>
+						</tr>						
+						
+						<tr>
+							<td class="right width150"><span style="color: Red">*</span>分类</td>
+							
+							
+								<td><input id="user_pName" class="form-control" name="entity.type"
+                                   type="text"
+                                   placeholder="请输入种类名称"
+                                   value="${(entity.type)!''}" size="20"
+                                   data-url="${ctx}/admin/quick/quickDict!RepoKind.do?t=t"
+                                   data-toggle="select2"/></td>
+						</tr>						
+					
+						<tr>
+							<td class="right width150">文章内容</td>
+							<td class="left" colspan="3"><textarea
+									name="entity.context" rows="6" cols="50" maxlength="2000"
+									data-toggle="kindeditor">${entity.context!}</textarea>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</fieldset>
+		</div>
+	</form>
+</div>
+<div class="bjui-pageFooter">
+    <ul>
+        <li>
+            <button type="button" class="btn-close closecutab" data-icon="close">关闭</button>
+        </li>
+        <li>
+            <button onclick="saveForm(this,'${ctx}/admin/repository/repositoryBase!save.do','form')" class="btn-default" data-icon="save">保存</button>
+        </li>
+    </ul>
+</div>

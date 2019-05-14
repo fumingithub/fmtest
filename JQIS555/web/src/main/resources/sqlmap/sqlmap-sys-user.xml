@@ -1,0 +1,381 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap
+		PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+		"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="User">
+	<typeAlias alias="User" type="net.jqsoft.base.system.domain.User" />
+	<typeAlias alias="Quick" type="net.jqsoft.base.system.domain.Quick" />
+	<resultMap id="SysUserMap" class="User">
+		<result property="id" column="id" />
+		<result property="userName" column="USER_NAME" />
+		<result property="passWord" column="PASS_WORD" />
+		<result property="realName" column="REAL_NAME" />
+		<result property="mobiePhone" column="MOBIE_PHONE" />
+		<result property="telePhone" column="TELE_PHONE" />
+		<result property="office" column="OFFICE" />
+		<result property="status" column="STATUS" />
+		<result property="insId" column="INS_ID" />
+		<result property="userType" column="USER_TYPE" />
+		<result property="isAreaAdmin" column="IS_AREA_ADMIN" />
+		<result property="defaultAreaCode" column="DEFAULT_AREA_CODE"/>
+	</resultMap>
+	<resultMap id="SysUserMap2" class="User">
+		<result property="id" column="id" />
+		<result property="userName" column="USER_NAME" />
+		<result property="passWord" column="PASS_WORD" />
+		<result property="realName" column="REAL_NAME" />
+		<result property="mobiePhone" column="MOBIE_PHONE" />
+		<result property="telePhone" column="TELE_PHONE" />
+		<result property="office" column="OFFICE" />
+		<result property="status" column="STATUS" />
+		<result property="insId" column="INS_ID" />
+		<result property="hospitalName" column="hospital_Name" />
+		<result property="userType" column="USER_TYPE" />
+		<result property="updateTime" column="UPDATE_TIME" />
+		<result property="createTime" column="CREATE_TIME" />
+		<result property="isAreaAdmin" column="IS_AREA_ADMIN" />
+		<result property="defaultAreaCode" column="DEFAULT_AREA_CODE"/>
+	</resultMap>
+	<resultMap id="SysUserMap3" class="User">
+		<result property="id" column="id" />
+		<result property="userName" column="USER_NAME" />
+		<result property="realName" column="REAL_NAME" />
+		<result property="ischeck" column="ISCHECK" />
+	</resultMap>
+	<resultMap id="QuickMapForSelect2" class="Quick">
+		<result property="text" column="TEXT"/>
+		<result property="name" column="NAME"/>
+		<!--<result property="type" column="TYPE"/>-->
+	</resultMap>
+
+	<select id="get" parameterClass="String" resultMap="SysUserMap2">
+		<![CDATA[
+        SELECT sysUser.*,
+        ins.name as hospital_Name
+        FROM SYS_USER sysUser
+		left join SYS_ORG ins on sysUser.ins_id = ins.id
+		where sysUser.id=#id:String#
+         ]]>
+	</select>
+	<insert id="insert" parameterClass="User">
+		<![CDATA[
+        INSERT INTO SYS_USER(ID,
+        USER_NAME,
+        PASS_WORD,
+        REAL_NAME,
+        MOBIE_PHONE,
+        TELE_PHONE,
+        OFFICE,
+        STATUS,
+        AREA_ID,
+        USER_TYPE,
+        INS_ID,
+        CREATOR,
+        CREATOR_NAME,
+        CREATE_TIME,
+        IS_AREA_ADMIN,
+        DEFAULT_AREA_CODE
+        ) values(#id#,
+                #userName#,
+                #passWord#,
+                #realName#,
+                #mobiePhone#,
+                #telePhone#,
+                #office#,
+                #status#,
+                #areaId#,
+                #userType#,
+                #insId#,
+                #creator#,
+                #creatorName#,
+                #createTime#,
+                #isAreaAdmin#,
+                #defaultAreaCode#
+             )
+		]]>
+	</insert>
+
+	<update id="update" parameterClass="User">
+		<![CDATA[
+			UPDATE SYS_USER ]]>
+		<dynamic prepend="SET">
+
+			<isNotEmpty property="userName" prepend=",">
+				<![CDATA[
+					user_name = #userName:String#
+				]]>
+			</isNotEmpty>
+
+			<isNotEmpty property="passWord" prepend=",">
+				<![CDATA[
+					pass_word = #passWord:String#
+				]]>
+			</isNotEmpty>
+
+			<isNotEmpty property="realName" prepend=",">
+				<![CDATA[
+					real_Name = #realName:String#
+				]]>
+			</isNotEmpty>
+
+			<isNotEmpty property="mobiePhone" prepend=",">
+				<![CDATA[
+					mobie_Phone = #mobiePhone:String#
+				]]>
+			</isNotEmpty>
+
+			<isNotEmpty property="telePhone" prepend=",">
+				<![CDATA[
+					tele_phone = #telePhone:String#
+				]]>
+			</isNotEmpty>
+
+			<isNotEmpty property="office" prepend=",">
+				<![CDATA[
+					office = #office:String#
+				]]>
+			</isNotEmpty>
+
+			<isNotEmpty property="status" prepend=",">
+				<![CDATA[
+					status = #status:String#
+				]]>
+			</isNotEmpty>
+
+			<isNotEmpty property="updator" prepend=",">
+				<![CDATA[
+					updator = #updator:String#
+				]]>
+			</isNotEmpty>
+
+			<isNotEmpty property="updateTime" prepend=",">
+				<![CDATA[
+					update_time = #updateTime#
+				]]>
+			</isNotEmpty>
+
+			<isNotEmpty property="areaId" prepend=",">
+				<![CDATA[
+					area_id = #areaId:String#
+				]]>
+			</isNotEmpty>
+
+			<isNotEmpty property="userType" prepend=",">
+				<![CDATA[
+					USER_TYPE = #userType:String#
+				]]>
+			</isNotEmpty>
+
+			<isNotEmpty property="insId" prepend=",">
+				<![CDATA[
+					INS_ID = #insId:String#
+				]]>
+			</isNotEmpty>
+			<isNotEmpty property="isAreaAdmin" prepend=",">
+				<![CDATA[
+					IS_AREA_ADMIN = #isAreaAdmin:String#
+				]]>
+			</isNotEmpty>
+			<isNotEmpty property="defaultAreaCode" prepend=",">
+				<![CDATA[
+					DEFAULT_AREA_CODE = #defaultAreaCode:String#
+				]]>
+			</isNotEmpty>
+
+		</dynamic>
+		<dynamic prepend="WHERE">
+			<![CDATA[
+					id = #id:String#
+				]]>
+		</dynamic>
+	</update>
+
+	<delete id="deleteById" parameterClass="String">
+        <![CDATA[
+        UPDATE SYS_USER SET FLAG = '1' where id = #id:String#
+     ]]>
+	</delete>
+
+	<sql id="sel-tj-common">
+		<dynamic>
+			<isNotEmpty prepend=" AND " property="userName">sysUser.user_name
+				like '%' || #userName# || '%' </isNotEmpty>
+			<isNotEmpty prepend=" AND " property="realName">sysUser.REAL_NAME
+				like '%' || #realName# || '%' </isNotEmpty>
+			<isNotEmpty prepend=" AND " property="mobiePhone">sysUser.MOBIE_PHONE
+				like '%' || #mobiePhone# || '%' </isNotEmpty>
+			<isNotEmpty prepend=" and " property="ztSysOrgId">
+				SYSUSER.INS_ID IN (SELECT T.ID FROM SYS_ORG T
+				START WITH T.ID = #ztSysOrgId# CONNECT BY PRIOR T.ID=T.PARENT_ID)
+			</isNotEmpty>
+			AND  FLAG = '0' ORDER BY INS_ID ASC, CREATE_TIME DESC,USER_NAME ASC
+		</dynamic>
+	</sql>
+	<sql id="sel-user-common">
+		<dynamic>
+			<isNotEmpty prepend=" AND " property="userName">USER_NAME
+				like '%' || #userName# || '%' </isNotEmpty>
+		</dynamic>
+	</sql>
+
+	<sql id="SelectqueryAuthrityUser">
+		<dynamic>
+			<isNotEmpty prepend=" AND " property="userName">USER_NAME
+				like '%' || #userName# || '%' </isNotEmpty>
+			<isNotEmpty prepend=" AND " property="realName">REAL_NAME
+				like '%' || #realName# || '%' </isNotEmpty>
+		</dynamic>
+	</sql>
+
+	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM SYS_USER sysUser where 1=1
+		<include refid="sel-tj-common" />
+	</select>
+	<select id="select" resultMap="SysUserMap2" parameterClass="java.util.HashMap">
+		SELECT SYSUSER.*,
+		INS.NAME AS HOSPITAL_NAME
+		FROM SYS_USER SYSUSER
+		LEFT JOIN SYS_ORG INS
+		ON SYSUSER.INS_ID = INS.ID
+		WHERE 1=1
+		<include refid="sel-tj-common" />
+	</select>
+    
+    <select id="selectSpecialUserCount" resultClass="int">
+		SELECT COUNT(*) FROM SYS_USER  where STATUS='0'
+	</select>
+	
+    <select id="selectSpecialUser" resultMap="SysUserMap" parameterClass="java.util.HashMap">
+		SELECT *FROM SYS_USER WHERE STATUS='0'
+		<include refid="sel-user-common" />
+	</select>
+	
+	<select id="queryUserByUserName" resultClass="User"
+			parameterClass="java.util.HashMap">
+		SELECT id,
+		user_name userName,
+		pass_word passWord,
+		real_name realName,
+		mobie_phone mobiePhone,
+		tele_phone telePhone,
+		office,
+		status,
+		USER_TYPE userType,
+		INS_ID insId FROM SYS_USER
+		WHERE USER_NAME = #userName#
+	</select>
+
+	<select id="getUserIdByRealName" resultClass="User"
+			parameterClass="java.util.HashMap">
+		SELECT id FROM SYS_USER
+		WHERE REAL_NAME like '%' || #selectRealName# || '%'
+	</select>
+
+	<!-- 根据角色ID查询用户 -->
+	<select id="queryUserByRoleId" parameterClass="String"
+			resultClass="User">
+		SELECT ID as id, USER_NAME as userName, REAL_NAME as realName FROM SYS_USER
+		WHERE ID IN (SELECT USER_ID FROM SYS_AUTH WHERE ROLE_ID = #id#)
+	</select>
+
+	<!-- 删除用户与角色的对应关系 -->
+	<delete id="deleteUserRole" parameterClass="String">
+		DELETE FROM SYS_AUTH
+		WHERE USER_ID = #id:String#
+	</delete>
+
+	<!--添加用户与角色的对应关系 -->
+	<insert id="insertUserRole" parameterClass="java.util.HashMap">
+		INSERT INTO SYS_AUTH
+		(USER_ID,ROLE_ID) VALUES
+		(#USER_ID#,#ROLE_ID#)
+	</insert>
+	<!-- 根据用户名查询用户 -->
+	<select id="getUserByUserName" resultMap="SysUserMap2"
+			parameterClass="String">
+		SELECT sysUser.*,ins.name as hospital_Name
+		from SYS_USER sysUser
+		left join SYS_ORG ins on sysUser.ins_id = ins.id
+		where sysUser.user_name = #userName#
+	</select>
+
+	<!-- 根据机构查询用户 -->
+	<select id="queryUserByInsId" resultMap="SysUserMap"
+			parameterClass="java.util.HashMap">
+		SELECT * from SYS_USER where ins_id = #insId#
+	</select>
+
+	<!-- 根据id获得用户信息 -->
+	<select id="getUserById" resultMap="SysUserMap" parameterClass="java.util.HashMap">
+		select *  from  SYS_USER t WHERE t.id = #id#
+	</select>
+	<!--获取已经授权的用户(查询数量)-->
+	<select id="queryAuthrityUserCount" resultClass="int">
+		select count(*) from(
+		select distinct sa.id,sa.user_name,sa.real_name,(CASE
+		WHEN USER_ID IS NULL THEN
+		0
+		ELSE
+		1
+		END) ISCHECK from sys_user sa left join (select user_id,server_id from SYS_PRO_PERMISSION ) sb on sa.id=Sb.USER_ID
+		where 1=1
+		<include refid="SelectqueryAuthrityUser" />
+		)
+	</select>
+
+    <!--获取已经授权的用户-->
+    <select id="queryAuthrityUser" parameterClass="java.util.HashMap" resultMap="SysUserMap3">
+		<![CDATA[
+    		select distinct sa.id,sa.user_name,sa.real_name,(CASE
+         WHEN USER_ID IS NULL THEN
+          0
+         ELSE
+          1
+       END) ISCHECK from sys_user sa left join (select user_id,server_id from SYS_PRO_PERMISSION where server_id<>'1' AND server_id=#projectId:String#) sb on sa.id=Sb.USER_ID
+        where 1=1
+        ]]>
+        <include refid="SelectqueryAuthrityUser" />
+    </select>
+
+	<!--获取已经授权的用户根据姓名查询-->
+	<select id="queryAuthrityUserByUserName" parameterClass="String" resultMap="SysUserMap3">
+		<![CDATA[
+    		select distinct sa.id,sa.user_name,sa.real_name,(CASE
+         WHEN USER_ID IS NULL THEN
+          0
+         ELSE
+          1
+       END) ISCHECK from sys_user sa left join (select user_id,server_id from SYS_PRO_PERMISSION where server_id<>'1') sb on sa.id=Sb.USER_ID
+       where USER_NAME=#userName:String#
+    	]]>
+	</select>
+	<!--维护人搜索下拉框使用-->
+	<select id="querygetUserByUserNameAll"  resultMap="SysUserMap">
+		<![CDATA[
+    		select *from sys_user
+    	]]>
+	</select>
+	<!--前端select2查询专用-->
+	<select id="querygetUserInformationByInput" resultMap="QuickMapForSelect2" parameterClass="java.util.HashMap">
+	SELECT
+	USER_NAME  NAME ,
+	REAL_NAME  TEXT
+	from  SYS_USER
+	where 1=1
+		<isEmpty property="selectedUserName">
+			AND (USER_NAME LIKE '%' || #input# || '%')
+		</isEmpty>
+		<isNotEmpty property="selectedUserName">
+			AND USER_NAME = #selectedUserName#
+		</isNotEmpty>
+	</select>
+	<!--重置密码 -->
+	<update id="resetPassword" parameterClass="java.util.HashMap">
+		UPDATE SYS_USER SET PASS_WORD = #passWord#
+		<dynamic prepend="WHERE">
+			<![CDATA[
+                ID = #id#
+            ]]>
+		</dynamic>
+	</update>
+</sqlMap>

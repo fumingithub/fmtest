@@ -1,0 +1,81 @@
+@charset "utf-8";
+/* CSS Document */
+
+*{margin:0;padding:0;}
+body{color:#666; font-size:12px;font-family:"微软雅黑";}
+a{ color:#666; text-decoration:none; border:0;}
+a:hover{text-decoration:none; border:0;}
+a {outline: none;}
+a:active {star:expression(this.onFocus=this.blur());}
+:focus { outline:0;}
+img{border:0}
+li{list-style:none}
+.clear{ clear:both;}
+
+.header{ width:100%; height:55px;}
+.logo{ float:left; width:auto; height:55px; line-height:55px;}
+.logo a{ float:left; width:auto; height:55px; color:#fff; background:url(./img/xtlogo1.png) 0 -2px no-repeat ; margin-left:16px; display:inline; padding-left:50px;padding-top:5px; font-size:2.4em;margin-top: 10px;font-family: "黑体";}
+
+/*头部导航样式*/
+.hnav{ float:right; width:auto; height:55px;margin-right: 220px}
+.hnav ul{ float:left; width:auto; height:55px;}
+.hnav ul li{ float:left; width:80px; height:55px; cursor:pointer;}
+.hnav ul li:hover{ background:#000; filter:alpha(opacity=50); -moz-opacity:0.5; opacity:0.5;}
+.hnav ul li.current{ background:#000; filter:alpha(opacity=50); -moz-opacity:0.5; opacity:0.5;}
+.hnav ul li span{ float:left; width:80px; height:32px; position:relative; margin-top:5px;}
+.hnav ul li span.s1{ background:url(./img/xticon01.png) center no-repeat;}
+.hnav ul li span.s2{ background:url(./img/xticon02.png) center no-repeat;}
+.hnav ul li span.s3{ background:url(./img/xticon03.png) center no-repeat;}
+.hnav ul li span.s4{ background:url(./img/xticon04.png) center no-repeat;}
+.hnav ul li span.n-t{ float:left; width:80px; height:28px; text-align:center; color:#fff; font-size:1.2em; margin-top:0px;}
+
+/*头部右边欢迎您和我的账户样式*/
+.wel{ float:right; width:auto; height:55px;}
+
+/*我的工作台样式*/
+.content{ width:99%; height:100%; margin:0% auto; overflow:auto;}
+.desk{ width:99%; height:auto; border:1px solid #ddd; -moz-border-radius:10px; -webkit-border-radius:10px; border-radius:10px; background:#fff; overflow:hidden; min-width:916px; margin:0 auto; padding-bottom:15px;margin-top:5px}
+.desk-title{ width:99%; height:42px; border-bottom:1px solid #ddd; line-height:42px; font-size:1.3em; margin:0 auto; text-indent:10px;}
+.desk-title i{color:#49A2DC; height:14px; width:auto; float:left; margin-top:14px; display:inline;}
+/*.desk-title span{ border-left:4px solid #49A2DC; height:14px; width:auto; float:left; margin-top:14px; margin-left:10px; display:inline;}*/
+.desk-con{ width:99%; height:auto; margin:0 auto;}
+
+.deskCLeft{ float:left; width:160px; height:auto; font-size:1.3em; margin-top:20px; margin-left:6px; display:inline;}
+.deskCLeft img{ width:140px; height:170px; -moz-border-radius:10px; -webkit-border-radius:10px; border-radius:10px; float:left;}
+.deskCLeft div{ float:left; width:300px; height:auto; text-align:left; margin-left:20px; display:inline;}
+.deskCenWZ{ float:left;width:100px; height:auto; font-size:1.3em; margin-top:20px; margin-left:6px; display:inline;}
+.deskCLeft div.d-t2{ margin-left:26px; display:inline;margin-top:10px;}
+.deskCLeft span.s-t1{ float:left; width:48px;font-size:1.3em;}
+.deskCLeft span.s-t2{ float:left; width:250px;font-size:1.3em;}
+.deskCRight{ float:right; width:53%; height:auto;  display:inline; margin-top:26px;margin-right: 0px}
+.deskCRight ul{ float:right;  height:auto;}
+.deskCRight ul li{ float:left; width:160px; height:160px; margin:0 15px; cursor:pointer;}
+.deskCRight ul li:hover{ background:#fff; -moz-border-radius:80px; -webkit-border-radius:80px; border-radius:80px; filter:alpha(opacity=50); -moz-opacity:0.5; opacity:0.5;}
+.deskCRight ul li div{ width:160px; height:160px; background:red; -moz-border-radius:80px; -webkit-border-radius:80px; border-radius:80px;}
+.deskCRight ul li div.dcr-1{ background:#F0A262;}
+.deskCRight ul li div.dcr-2{ background:#49A2DC;}
+.deskCRight ul li div.dcr-3{ background:#EB5C58;}
+.deskCRight ul li div.dcr-4{ background:#6ABE0E;}
+.deskCRight ul li div.dcr-5{ background:#8180e6;}
+.deskCRight ul li span{ float:left; width:160px; height:64px; margin-top:30px;}
+.deskCRight ul li span.dcr-s1{ background:url(./img/pticon01.png) center no-repeat;}
+.deskCRight ul li span.dcr-s2{ background:url(./img/pticon02.png) center no-repeat;}
+.deskCRight ul li span.dcr-s3{ background:url(./img/pticon03.png) center no-repeat;}
+.deskCRight ul li span.dcr-s4{ background:url(./img/pticon04.png) center no-repeat;}
+.deskCRight ul li span.dcr-s5{ background:url(./img/pticon05.png) center no-repeat;}
+.deskCRight ul li span.dcr-t{ width:100px; height:24px; background:#fff; float:left; margin:15px 30px; text-align:center; line-height:24px; -moz-border-radius:15px; -webkit-border-radius:15px; border-radius:15px; font-size:1.3em;}
+
+.con{ width:99%; height:auto; margin:13px auto 0 auto; overflow:hidden; min-width:947px;}
+.procl{ float:left; width:48%; height:280px; border:1px solid #ddd; -moz-border-radius:10px; -webkit-border-radius:10px; border-radius:10px;  overflow:hidden;} 
+.procl-title{ width:97%; height:35px; border-bottom:1px solid #ddd; line-height:35px; font-size:1.3em; margin:0 auto; text-indent:10px;}
+/*.procl-title span{ border-left:4px solid #49A2DC; height:14px; width:auto; float:left; margin-top:12px; margin-left:5px; display:inline;}*/
+.procl-title i{color:#49A2DC;height:14px; width:auto; float:left; margin-top:12px; display:inline;}
+.procl-title span.s-t{ border-left:none; margin-top:8px; font-size:1.1em;margin-left: 0px}
+.procl-title span.more{ float:right; border-left:none; margin-top:12px; font-family:"宋体"; font-size:0.8em;}
+.procl-title span.more a:hover{ text-decoration:underline; color:#C00;}
+.procl ul{ width:97%; height:auto; margin:0 auto; margin-top:5px;}
+.procl ul li{ float:left; width:100%; height:auto; font-family:"宋体"; font-size:1.2em; margin-top:12px;}
+.procl ul li span.s1{ width:85%; height:auto; float:left; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+.procl ul li span.s1 a:hover{ text-decoration:underline; color:#C00;}
+.procl ul li span.s2{ width:15%; height:auto; float:right; text-align:right; color:#ccc;}
+.stat{ float:right; width:48%; height:280px; margin-right:5px; display:inline;}

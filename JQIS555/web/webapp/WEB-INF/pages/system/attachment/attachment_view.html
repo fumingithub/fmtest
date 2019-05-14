@@ -1,0 +1,123 @@
+﻿<#include "../../common/_public.html"/>
+
+<div class="bjui-pageContent">
+	<form action="" id="pageform"  data-alertmsg="true" data-isrefsh="false">
+		<div style="margin:15px auto 0; width:800px;">
+			<fieldset>
+				<legend>
+					<h3 class="listtitle">Attachment信息</h3>
+					<input type="hidden" name="id" value="${entity.id!}"/>
+				</legend>
+				<table class="table table-condensed" width="100%">
+					<tbody>
+					<tr>
+						<td class="right" style="width: 130px">附件名称,加密前的原文件名</td>
+						<td class="left" colspan="3">
+							<input name="entity.name" type="text" data-rule="required" value="${entity.name!}" size="20" />
+						</td>
+					</tr>
+					<tr>
+						<td class="right" style="width: 130px">文件类型</td>
+						<td class="left" colspan="3">
+							<input name="entity.type" type="text" data-rule="required" value="${entity.type!}" size="20" />
+						</td>
+					</tr>
+					<tr>
+						<td class="right" style="width: 130px">文件大小</td>
+						<td class="left" colspan="3">
+							<input name="entity.fileSize" type="text" data-rule="required" value="${entity.fileSize!}" size="20" />
+						</td>
+					</tr>
+					<tr>
+						<td class="right" style="width: 130px">描述</td>
+						<td class="left" colspan="3">
+							<input name="entity.description" type="text" data-rule="required" value="${entity.description!}" size="20" />
+						</td>
+					</tr>
+					<tr>
+						<td class="right" style="width: 130px">文件路径</td>
+						<td class="left" colspan="3">
+							<input name="entity.path" type="text" data-rule="required" value="${entity.path!}" size="20" />
+						</td>
+					</tr>
+					<tr>
+						<td class="right" style="width: 130px">加密后的密码</td>
+						<td class="left" colspan="3">
+							<input name="entity.encodeName" type="text" data-rule="required" value="${entity.encodeName!}" size="20" />
+						</td>
+					</tr>
+					<tr>
+						<td class="right" style="width: 130px">关连业务代码：HEALTH_CARD-健康卡信息；</td>
+						<td class="left" colspan="3">
+							<input name="entity.relateBizCode" type="text" data-rule="required" value="${entity.relateBizCode!}" size="20" />
+						</td>
+					</tr>
+					<tr>
+						<td class="right" style="width: 130px">相关业务表单ID</td>
+						<td class="left" colspan="3">
+							<input name="entity.relateBizId" type="text" data-rule="required" value="${entity.relateBizId!}" size="20" />
+						</td>
+					</tr>
+					<tr>
+						<td class="right" style="width: 130px">状态</td>
+						<td class="left" colspan="3">
+							<input name="entity.status" type="text" data-rule="required" value="${entity.status!}" size="20" />
+						</td>
+					</tr>
+					<tr>
+						<td class="right" style="width: 130px">备注</td>
+						<td class="left" colspan="3">
+							<input name="entity.remark" type="text" data-rule="required" value="${entity.remark!}" size="20" />
+						</td>
+					</tr>
+					<tr>
+						<td class="right" style="width: 130px">更新人ID</td>
+						<td class="left" colspan="3">
+							<input name="entity.updator" type="text" data-rule="required" value="${entity.updator!}" size="20" />
+						</td>
+					</tr>
+					<tr>
+						<td class="right" style="width: 130px">更新人name</td>
+						<td class="left" colspan="3">
+							<input name="entity.updatorName" type="text" data-rule="required" value="${entity.updatorName!}" size="20" />
+						</td>
+					</tr>
+					<tr>
+						<td class="right" style="width: 130px">更新时间</td>
+						<td class="left" colspan="3">
+							<input name="entity.updateTime" type="text" data-rule="required" value="${entity.updateTime!}" size="20" />
+						</td>
+					</tr>
+					<tr>
+						<td class="right" style="width: 130px">创建人ID</td>
+						<td class="left" colspan="3">
+							<input name="entity.creator" type="text" data-rule="required" value="${entity.creator!}" size="20" />
+						</td>
+					</tr>
+					<tr>
+						<td class="right" style="width: 130px">创建人name</td>
+						<td class="left" colspan="3">
+							<input name="entity.creatorName" type="text" data-rule="required" value="${entity.creatorName!}" size="20" />
+						</td>
+					</tr>
+					<tr>
+						<td class="right" style="width: 130px">创建时间</td>
+						<td class="left" colspan="3">
+							<input name="entity.createTime" type="text" data-rule="required" value="${entity.createTime!}" size="20" />
+						</td>
+					</tr>
+				</table>
+			</fieldset>
+		</div>
+	</form>
+</div>
+<div class="bjui-pageFooter">
+    <ul>
+        <li>
+            <button type="button" class="btn-close closecutab" data-icon="close">关闭</button>
+        </li>
+        <li>
+            <button onclick="saveForm(this,'${ctx}/system/attachment!save.do','pageform')" class="btn-default" data-icon="save">保存</button>
+        </li>
+    </ul>
+</div>

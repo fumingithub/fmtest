@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd     "
+       default-lazy-init="false" default-autowire="byName">
+    <description>TAG</description>
+    <!-- 配置freeMarker的自定义标签 -->
+    <bean id="menu" class="net.jqsoft.base.system.tag.MenuTag" />
+    <bean id="token" class="net.jqsoft.base.system.tag.TokenTag"/>
+    <bean id="pcorg" class="net.jqsoft.base.system.tag.PCOrgTag"/>
+    <bean id="jsonTag" class="net.jqsoft.base.system.tag.JsonTag"/>
+	<bean id="auth" class="net.jqsoft.base.system.tag.AuthTag" />
+
+    <bean id="freemarkerConfig" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+        <property name="freemarkerVariables">
+            <map>
+                <entry key="menu" value-ref="menu"/>
+                <entry key="pcorg" value-ref="pcorg"/>
+                <entry key="token" value-ref="token"/>
+                <entry key="auth" value-ref="auth"/>
+            </map>
+        </property>
+    </bean>
+</beans>

@@ -1,0 +1,64 @@
+<#include "../common/_public.html"/>
+<#include "../common/_area.html"/>
+<div class="bjui-pageHeader">
+    <form id="pagerForm" data-toggle="ajaxsearch" method="post"
+        action="${ctx}/admin/repository/repositoryBase!repoBaseSonList.do">
+        <div class="bjui-searchBar">
+            <input type="hidden" name="limit" value="${limit}">
+            <input type="hidden" name="start" value="${start}">
+            <input type="hidden" id="ztSysOrgId" name="ztSysOrgId" value="${filter.parameters.ztSysOrgId!}" />
+            &nbsp;&nbsp;
+            <lable>所属分类：</lable>
+            <input id="user_pName" class="form-control" size="15" type="text" value="" readonly="readonly" title="" />
+            &nbsp;&nbsp;
+  			<lable>标题：</lable>
+            <input id="title" name="title" class="form-control" size="15" type="text" value="${filter.parameters.title!}" />
+            &nbsp;&nbsp;
+             
+            <button type="submit" class="btn-default" data-toggle="ajaxsearch"
+                data-icon="search" id="userSearch">查询</button>
+            &nbsp; 
+             <a class="btn btn-orange" href="javascript:;" onclick="undoForm();"
+                      data-icon="undo">清空</a> 
+                      
+                     <!--   <a class="btn btn-orange" href="javascript:;"
+               onclick="$(this).navtab('reloadForm', true);" data-icon="undo">清空</a> -->
+                        <!--onclick="$(this).navtab('reloadForm', true);"-->
+
+        </div>
+        
+    </form>
+</div>
+<div class="bjui-pageContent">
+    <table data-width="100%" data-toggle="tablefixed" data-nowrap="true" data-selected-multi="false"
+           class="table table-bordered table-hover table-striped table-top">
+        <thead>
+            <tr>
+                <th></th>
+                <th>NO.</th>
+                <th  style="text-align:center" title="用户名">标题</th>
+                <th  style="text-align:center" title="真实姓名">内容</th>
+                <th  style="text-align:center" title="所属机构">创建人</th>
+                <th  style="text-align:center" title="手机号码">访问量</th>
+
+            </tr>
+        </thead>
+        <tbody id="userListTbl">
+            <#list entitys as entity>
+            <tr>
+                <td class="center"><input type="checkbox" value="${entity.id}" name="ids"
+                    data-toggle="icheck">
+                </td>
+                <td class="center">${entity_index+1+(start-1)*limit}</td>
+                <td style="text-align:center" title="${entity.title!}">${entity.title!}</td>
+                <td  style="text-align:center" title="${entity.context!}">${entity.context!}</td>
+                <td  style="text-align:center" title="${entity.createName!}">${entity.createName!}</td>
+                <td  style="text-align:center" title="${entity.pv!}">${entity.pv!}</td>
+                </td>
+            </tr>
+            </#list>
+        </tbody>
+    </table>
+</div>
+<#include "repositoryBase_sonList_js.html"/>
+<#include "../common/_page.html"/>

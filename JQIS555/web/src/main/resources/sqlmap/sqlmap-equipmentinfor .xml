@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap
+        PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+        "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="EquipmentInfor ">
+    <typeAlias alias="EquipmentInfor " type="net.jqsoft.base.system.domain.EquipmentInfor " />
+
+    <resultMap id="EquipmentInforMap" class="EquipmentInfor ">
+
+          <result property="id" column="id"/>
+
+    </resultMap>
+
+    <select id="getAll" resultMap="EquipmentInfor Map">
+        SELECT * FROM equipment_infor 
+    </select>
+    <select id="get" parameterClass="String" resultMap="EquipmentInforMap">
+        <![CDATA[
+           	   SELECT * FROM equipment_infor  WHERE  id=#id:String#
+         ]]>
+    </select>
+    <insert id="insert" parameterClass="EquipmentInfor ">
+        <![CDATA[
+        INSERT INTO equipment_infor (
+        ) values(
+             )
+		]]>
+    </insert>
+    <update id="update" parameterClass="EquipmentInfor ">
+        <![CDATA[
+			UPDATE equipment_infor  ]]>
+			<dynamic prepend="SET">
+        </dynamic>
+        <dynamic prepend="WHERE">
+            <![CDATA[
+					id = #id:int#
+				]]>
+        </dynamic>
+    </update>
+    <delete id="deleteById" parameterClass="String">
+        <![CDATA[
+        DELETE FROM demo where id = #id:String#
+     ]]>
+    </delete>
+    <select id="count" resultClass="int">
+        SELECT COUNT(*) FROM equipment_infor 
+    </select>
+    <select id="select" resultMap="EquipmentInforMap"  parameterClass="java.util.HashMap">
+        SELECT * FROM equipment_infor 
+    </select>
+
+</sqlMap>

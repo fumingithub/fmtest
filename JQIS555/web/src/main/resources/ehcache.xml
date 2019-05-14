@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache>
+    
+    <diskStore path="/bcp/cache/ios" />
+    
+    <!-- DefaultCache setting. -->
+    
+    <defaultCache maxElementsInMemory="10000" memoryStoreEvictionPolicy="LRU" eternal="false" timeToIdleSeconds="300" timeToLiveSeconds="300" overflowToDisk="false" diskPersistent="false" />
+    
+
+    <cache name="security.user" maxElementsInMemory="10000" eternal="false" memoryStoreEvictionPolicy="LRU" timeToIdleSeconds="360000" timeToLiveSeconds="360000" overflowToDisk="false" diskPersistent="false" />
+    
+    <cache name="security.url" maxElementsInMemory="10000" eternal="true" memoryStoreEvictionPolicy="LRU" overflowToDisk="false" diskPersistent="false" />
+
+    <cache name="snaker.process.entity"
+           maxElementsInMemory="10000"
+           overflowToDisk="false"
+           eternal="true"
+           timeToLiveSeconds="0"
+           timeToIdleSeconds="0"
+           diskPersistent="false"/>
+
+    <cache name="snaker.process.name"
+           maxElementsInMemory="1000"
+           eternal="true"
+           overflowToDisk="true"/>
+
+    <cache name="ehcache"
+           maxElementsInMemory="10000"
+           eternal="true"
+           memoryStoreEvictionPolicy="LRU"
+           overflowToDisk="false"
+           diskPersistent="false" />
+
+</ehcache>

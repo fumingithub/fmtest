@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="Notice" >
+	<typeAlias alias="Notice" type="net.jqsoft.base.system.domain.Notice" />
+	<!-- 数据库中所有列 -->
+	<resultMap  id="NoticeMap" class="Notice">
+	    <result property="id" column="ID" />
+	    <result property="title" column="TITLE" />
+	    <result property="subTitle" column="SUB_TITLE" />
+	    <result property="author" column="AUTHOR" />
+	    <result property="status" column="STATUS" />
+	    <result property="context" column="CONTEXT" /> 
+	    <result property="isTop" column="IS_TOP" />
+	    <result property="creator" column="CREATOR" />
+	    <result property="creatorName" column="CREATOR_NAME" />
+	    <result property="createTime" column="CREATE_TIME" />
+	    <result property="updator" column="UPDATOR" />
+	    <result property="updatorName" column="UPDATOR_NAME" />
+	    <result property="updateTime" column="UPDATE_TIME" />
+	    <result property="releaseTime" column="RELEASE_TIME" />  
+	    <result property="remark" column="REMARK" />  
+	     <result property="releasePerson" column="RELEASE_PERSON" />   
+	</resultMap>
+	
+    <resultMap  id="NoticeMapList" class="Notice">
+	    <result property="id" column="ID" />
+	    <result property="title" column="TITLE" />
+	    <result property="author" column="AUTHOR" />
+	    <result property="status" column="STATUS" />
+	    <result property="releaseTime" column="RELEASE_TIME" />  
+	    <result property="creatorName" column="CREATOR_NAME" />
+	    <result property="isTop" column="IS_TOP" />
+	    <result property="updateTime" column="UPDATE_TIME" />
+	</resultMap>
+  
+  
+    <sql id="noticeSelectCount">
+        <dynamic>
+            <isNotEmpty prepend=" AND " property="title">
+                TITLE LIKE '%' || #title# || '%'
+            </isNotEmpty>
+            <isNotEmpty prepend=" AND " property="author">
+                AUTHOR LIKE '%' || #author# || '%'
+            </isNotEmpty>
+            <isNotEmpty prepend=" AND " property="status">
+                STATUS = #status#
+            </isNotEmpty>
+                ORDER BY IS_TOP DESC,UPDATE_TIME DESC,RELEASE_TIME DESC
+        </dynamic>
+    </sql>
+    
+    <!-- COUNT查询sys_notice表 -->
+    <select id="count" resultClass="int">
+        SELECT COUNT(*) FROM SYS_NOTICE WHERE 1=1 
+        <include refid="noticeSelectCount"/>
+    </select>
+    
+    <select id="select" resultMap="NoticeMapList">
+        SELECT ID,TITLE,AUTHOR,STATUS,CREATOR_NAME,RELEASE_TIME,IS_TOP,UPDATE_TIME FROM SYS_NOTICE WHERE 1=1 
+        <include refid="noticeSelectCount"/>
+    </select>
+  
+    <!-- 根据传入id获取一条数据 -->
+    <select id="get" parameterClass="String" resultMap="NoticeMap">
+        SELECT * FROM SYS_NOTICE WHERE ID = #id:String#
+    </select>
+  
+    <delete id="deleteById" parameterClass="String">
+        DELETE FROM SYS_NOTICE WHERE ID = #id:String#
+    </delete>
+    
+    <insert id="insert" parameterClass="Notice">
+         <![CDATA[
+        INSERT INTO SYS_NOTICE(
+		    ID,
+	        TITLE,
+	        SUB_TITLE,
+	        AUTHOR,
+	        STATUS,
+	        CONTEXT,
+	        IS_TOP,
+	        CREATOR,
+	        CREATOR_NAME,
+	        CREATE_TIME,
+	        RELEASE_TIME,
+	        REMARK,
+	        RELEASE_PERSON
+	        ) values(
+	            #id#,
+                #title#,
+                #subTitle#,
+                #author#,
+                #status#,
+                #context#,
+                #isTop#,
+                #creator#,
+                #creatorName#,
+                #createTime#,
+                #releaseTime#,
+                #remark#,
+                #releasePerson#
+             )
+		]]>
+    </insert>
+    
+    <update id="update" parameterClass="Notice">
+        <![CDATA[
+            UPDATE SYS_NOTICE
+        ]]>
+        <dynamic prepend="SET">
+            <isNotEmpty property="title" prepend=",">
+                 <![CDATA[
+					TITLE = #title:String#
+				]]>
+            </isNotEmpty>
+             <isNotEmpty  property="subTitle" prepend=",">
+                <![CDATA[
+					SUB_TITLE = #subTitle:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="author" prepend=",">
+                <![CDATA[
+					AUTHOR = #author:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="status" prepend=",">
+                <![CDATA[
+					STATUS = #status:String#
+				]]>
+            </isNotEmpty >
+            
+            <isNotEmpty  property="context" prepend=",">
+                <![CDATA[
+					CONTEXT = #context:String#
+				]]>
+            </isNotEmpty >
+            
+            <isNotEmpty  property="isTop" prepend=",">
+                <![CDATA[
+					IS_TOP = #isTop:String#
+				]]>
+            </isNotEmpty >
+              
+             <isNotEmpty  property="updator" prepend=",">
+                <![CDATA[
+					UPDATOR = #updator:String#
+				]]>
+            </isNotEmpty >
+            
+            <isNotEmpty  property="updatorName" prepend=",">
+                <![CDATA[
+					UPDATOR_NAME = #updatorName:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="updateTime" prepend=",">
+                <![CDATA[
+					UPDATE_TIME = #updateTime#
+				]]>
+            </isNotEmpty >
+            
+            <isNotEmpty  property="releaseTime" prepend=",">
+                <![CDATA[
+					RELEASE_TIME = #releaseTime#
+				]]>
+            </isNotEmpty >
+            
+            <isNotEmpty  property="remark" prepend=",">
+                <![CDATA[
+					REMARK = #remark:String#
+				]]>
+            </isNotEmpty >
+            
+            <isNotEmpty  property="releasePerson" prepend=",">
+                <![CDATA[
+					RELEASE_PERSON = #releasePerson:String#
+				]]>
+            </isNotEmpty >
+        </dynamic>
+        <dynamic prepend="WHERE">
+            <![CDATA[
+					ID = #id:String#
+				]]>
+        </dynamic>
+    </update>
+       
+     <!-- 查询最新的5篇已发布公告 -->
+  	<select id="getNoticeListTop5" resultClass="News">
+  	   <![CDATA[
+  		SELECT * FROM
+			  ( SELECT ID,TITLE,ROWNUM FROM SYS_NOTICE
+				  WHERE STATUS=1
+				  ORDER BY 
+				     IS_TOP DESC,UPDATE_TIME DESC,RELEASE_TIME DESC
+			   )
+			WHERE ROWNUM <= 5
+  		]]>
+  	</select>
+</sqlMap>

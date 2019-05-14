@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap
+        PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+        "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="MeetingFm">
+    <typeAlias alias="MeetingFm" type="net.jqsoft.base.meetingFm.domain.MeetingFm" />
+
+    <resultMap id="MeetingFmMap" class="MeetingFm">
+        <result property="id" column="ID"/>
+        <result property="name" column="NAME"/>
+        <result property="people" column="PEOPLE"/>
+        <result property="floor" column="FLOOR"/>
+        <result property="projector" column="PROJECTOR"/>
+        <result property="status" column="STATUS"/>
+        <result property="enable" column="ENABLE"/>
+        <result property="disableReason" column="REASON"/>
+        <result property="reference" column="REFERENCE"/>
+        <result property="creator" column="CREATOR"/>
+        <result property="creatorId" column="CREATOR_ID"/>
+        <result property="creatorTime" column="CREATOR_TIME"/>
+        <result property="updator" column="UPDATOR"/>
+        <result property="updatorId" column="UPDATOR_ID"/>
+        <result property="updatorTime" column="UPDATOR_TIME"/>
+
+    </resultMap>
+
+    <select id="getAllMeetingFm" resultMap="MeetingFmMap">
+        SELECT * FROM MEETING_FM
+
+    </select>
+
+     <!--获取所有机构集合，用于zTree加载-->
+    <select id="getAll" resultMap="MeetingFmMap">
+        SELECT * FROM MEETING_FM MEETINGFM WHERE MEETINGFM.STATUS IS NOT NULL
+        ORDER BY MEETINGFM.FLOOR ASC
+    </select>
+
+    <select id="get" parameterClass="String" resultMap="MeetingFmMap">
+        <![CDATA[
+                 SELECT * FROM MEETING_FM WHERE ID = #id:String#
+         ]]>
+    </select>
+
+    <!--根据name查询一条数据-->
+    <select id="getInfoByMeetingName" parameterClass="java.util.HashMap" resultMap="MeetingFmMap">
+        <![CDATA[
+                 SELECT * FROM MEETING_FM WHERE NAME = #name#
+         ]]>
+    </select>
+
+    <!--查询时，模糊查询-->
+    <sql id="selectByConditions">
+        <dynamic>
+            <isNotEmpty prepend=" AND " property="name">
+                MEETINGFM.NAME LIKE '%' || #name# || '%'
+            </isNotEmpty>
+            <isNotEmpty prepend=" AND " property="floor">
+                MEETINGFM.FLOOR LIKE '%' || #floor# || '%'
+            </isNotEmpty>
+            <isNotEmpty prepend=" AND " property="people">
+                MEETINGFM.PEOPLE LIKE '%' || #people# || '%'
+            </isNotEmpty>
+            <isNotEmpty prepend=" AND " property="projector">
+                MEETINGFM.PROJECTOR = #projector#
+            </isNotEmpty>
+            <isNotEmpty prepend=" AND " property="status">
+                MEETINGFM.STATUS = #status#
+            </isNotEmpty>
+            <isNotEmpty prepend=" AND " property="enable">
+                MEETINGFM.ENABLE = #enable#
+            </isNotEmpty>
+            <isNotEmpty prepend=" AND " property="reference">
+                MEETINGFM.REFERENCE = #reference#
+            </isNotEmpty>
+            <isNotEmpty prepend="">
+                <![CDATA[
+              order by to_number(FLOOR) ASC
+            ]]>
+            </isNotEmpty>
+        </dynamic>
+    </sql>
+
+    <select id="select" resultMap="MeetingFmMap" parameterClass="java.util.HashMap">
+        SELECT * FROM MEETING_FM MEETINGFM WHERE MEETINGFM.STATUS IS NOT NULL
+        <isNotEmpty property="">
+        <![CDATA[
+              AND (order by to_number(FLOOR) ASC)
+            ]]>
+        </isNotEmpty>
+        <include refid="selectByConditions"/>
+    </select>
+
+    <select id="count" resultClass="int">
+        SELECT COUNT(*) FROM MEETING_FM MEETINGFM WHERE MEETINGFM.STATUS IS NOT NULL
+        <include refid="selectByConditions"/>
+    </select>
+
+    <insert id="insert" parameterClass="MeetingFm">
+        <![CDATA[
+    INSERT INTO MEETING_FM(
+    ID,
+    NAME,
+    PEOPLE,
+    FLOOR,
+    PROJECTOR,
+    STATUS,
+    REASON,
+    ENABLE,
+    REFERENCE,
+    CREATOR,
+    CREATOR_ID,
+    CREATOR_TIME,
+    UPDATOR,
+    UPDATOR_ID,
+    UPDATOR_TIME
+    ) VALUES (
+            #id#,
+            #name#,
+            #people#,
+            #floor#,
+            #projector#,
+            #status#,
+            #disableReason#,
+            #enable#,
+            #reference#,
+            #creator#,
+            #creatorId#,
+            #creatorTime#,
+            #updator#,
+            #updatorId#,
+            #updatorTime#
+         )
+    ]]>
+    </insert>
+
+    <!--会议室更新-->
+    <update id="update" parameterClass="MeetingFm">
+        <![CDATA[
+            UPDATE MEETING_FM ]]>
+        <dynamic prepend="SET">
+
+            <isNotEmpty  property="name" prepend=",">
+                <![CDATA[
+                    NAME = #name:String#
+                ]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="floor" prepend=",">
+                <![CDATA[
+                    FLOOR = #floor:String#
+                ]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="people" prepend=",">
+                <![CDATA[
+                    PEOPLE = #people:String#
+                ]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="projector" prepend=",">
+                <![CDATA[
+                    PROJECTOR = #projector:String#
+                ]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="enable" prepend=",">
+                <![CDATA[
+                    ENABLE = #enable:String#
+                ]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="disableReason" prepend=",">
+                <![CDATA[
+                    REASON = #disableReason:String#
+                ]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="status" prepend=",">
+                <![CDATA[
+                    STATUS = #status:String#
+                ]]>
+            </isNotEmpty >
+            <isNotEmpty property="reference" prepend=",">
+                <![CDATA[
+                      REFERENCE = #reference:String#
+                ]]>
+            </isNotEmpty>
+
+        </dynamic>
+
+        <dynamic prepend="WHERE">
+            <![CDATA[
+                ID = #id:String#
+            ]]>
+        </dynamic>
+    </update>
+
+    <!--会议室删除-->
+    <delete id="deleteById" parameterClass="String">
+        <![CDATA[
+        DELETE FROM MEETING_FM WHERE ID = #id:String#
+     ]]>
+    </delete>
+
+    <!-- 会议室使用状态 -->
+    <update id="updateMeetingStatusById" parameterClass="java.util.HashMap">
+        <![CDATA[ UPDATE MEETING_FM ]]>
+        <dynamic prepend="SET">
+            <isNotEmpty  property="status" prepend=","><![CDATA[ STATUS = #status# ]]></isNotEmpty >
+        </dynamic>
+        <dynamic prepend="WHERE"><![CDATA[ ID = #id# ]]></dynamic>
+    </update>
+
+    <!-- 会议室启用禁用 -->
+    <update id="updateMeetingEnableById" parameterClass="java.util.HashMap">
+        <![CDATA[ UPDATE MEETING_FM]]>
+        <dynamic prepend="SET">
+            <isNotEmpty property="enable" prepend=",">
+                <![CDATA[ ENABLE = #enable# ]]>
+            </isNotEmpty>
+            <isNotEmpty property="disableReason" prepend=","><![CDATA[ REASON = #disableReason# ]]></isNotEmpty>
+        </dynamic>
+        <dynamic prepend="WHERE"><![CDATA[ ID = #id# ]]></dynamic>
+    </update>
+</sqlMap>

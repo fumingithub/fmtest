@@ -1,0 +1,11 @@
+<#include "../../../common/_public.html"/>
+	<td class="right" style="width: 130px"><span style="color:red;">*</span>所属机构</td>
+	<td class="left" colspan="3">
+		<input name="entity.insId" type="text" data-rule="required"
+			placeholder="请输入名称或者编码"
+			value="${entity.insId!}" size="20"
+			data-url="${ctx}/admin/quick/quickDict!queryOrg.do?insId=${entity.insId!}"
+			data-toggle="select2"/>
+<!-- 			data-url="${ctx}/admin/quick/quick!hospitaltype.do?area=<#if !(entity.areaId)??>${areaId}<#else>${(entity.areaId!)}</#if>&type=${(entity.userType!)}" -->
+			
+	</td>

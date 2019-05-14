@@ -1,0 +1,42 @@
+<#include "../../../common/_public.html"/>
+<#include "../../../common/_area.html"/>
+
+<div class="bjui-pageContent">
+	<form id="form" action="" name="pagerform">
+		<div style="margin:15px auto 0;">
+			<fieldset>
+				<legend>
+					<h3 class="listtitle">角色管理</h3>
+					<input type="hidden" name="id" value="${entity.id!}" />
+				</legend>
+				<table class="table table-bordered" width="100%">
+					<tbody>
+						<tr>
+							<td class="right width150"><span style="color: Red">*</span>角色名称</td>
+							<td><input size="20" type="text" value="${entity.name!}" maxlength="25" name="entity.name" data-rule="required"/></td>
+						</tr>						
+						<tr>
+							<td class="right width150"><span style="color: Red">*</span>角色编码</td>
+							<td><input size="20" type="text" value="${entity.code!}" maxlength="25"
+								name="entity.code" data-rule="required"/></td>
+						</tr>
+						<tr>
+							<td class="right width150">角色描述</td>
+							<td><input size="20" type="text" value="${entity.remark!}" maxlength="100" name="entity.remark"/></td>
+						</tr>
+					</tbody>
+				</table>
+			</fieldset>
+		</div>
+	</form>
+</div>
+<div class="bjui-pageFooter">
+	<ul>
+		<li>
+			<button type="button" class="btn-close closecutab" data-icon="close">关闭</button>
+		</li>
+		<li>
+			<button onclick="saveForm(this,'${ctx}/admin/system/role!save.do','form')" class="btn-default" data-icon="save">保存</button>
+		</li>
+	</ul>
+</div>

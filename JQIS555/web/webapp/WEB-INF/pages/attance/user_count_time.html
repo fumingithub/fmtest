@@ -1,0 +1,30 @@
+<#include "../common/_public.html"/>
+<div class="bjui-pageContent">
+    <table data-width="100%" data-nowrap="true"
+           class="table table-bordered table-hover table-striped table-top"
+           data-toggle="tablefixed">
+        <thead>
+        <tr>
+            <th style="text-align:center">姓名</th>
+            <#if flag??> <th style="text-align:center">日期</th></#if>
+            <th style="text-align:center">加班时长(单位：小时)</th>
+            <th style="text-align:center">实际加班时长(单位：分钟)</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        <#list entitys as entity>
+            <tr>
+                <td class="center">${entity.realName!}</td>
+                <#if flag??> <td class="center">${(entity.currentTime?string('yyyy-MM-dd'))!}</td></#if>
+                <td class="center">${(entity.overTime?string.number)!}</td>
+                <td class="center">${entity.realOverTime!}</td>
+            </tr>
+        </#list>
+        </tbody>
+    </table>
+</div>
+<div class="bjui-pageFooter" style="padding:5px 5px;">
+    <button type="button" class="btn-close closecutab" style="float: right" data-icon="close" data-toggle="reloadsearch"
+            data-target="#bjui-pageContent">关闭</button>
+</div>

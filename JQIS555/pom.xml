@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>net.jqsoft</groupId>
+    <artifactId>jqis</artifactId>
+    <name>晶奇综合管理系统</name>
+    <version>1.0</version>
+    <packaging>pom</packaging>
+    <modules>
+	
+		<!--web管理-->
+		 <module>web</module>
+		 <!--接口平台
+		 <module>api</module> -->
+        <!-- 报表-->
+<!-- 		 <module>report</module> -->
+		 <!--运维相关
+		 <module>ops</module>-->
+  </modules>
+    <build>
+        <outputDirectory>target/class</outputDirectory>
+    </build>
+</project>

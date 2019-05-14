@@ -1,0 +1,68 @@
+<#include "../../../common/_public.html"/>
+<div class="bjui-pageHeader">
+    <form id="pagerForm" data-toggle="ajaxsearch" action="${ctx}/admin/system/resource!lookup.do" method="post">
+
+        <input type="hidden" name="limit" value="${limit}">
+        <input type="hidden" name="start" value="${start}">
+
+        <div class="bjui-searchBar">
+
+            <lable>资源名称：</lable>
+            <input name="displayName" class="form-control" size="15" type="text" value="${filter.parameters.displayName!}"/>
+            <lable>资源类型: </lable>
+            <select name="menu" data-toggle="selectpicker">
+                <option selected="selected" value="">--请选择--</option>
+                <option value="1"
+                <#if (((filter.parameters.menu)!'') == '1')>selected="selected"</#if>
+                ">菜单</option>
+            </select>
+            <button type="submit" class="btn-default"  data-toggle="ajaxsearch" data-icon="search">查询</button>&nbsp;
+            <a class="btn btn-orange" href="javascript:;" onclick="$(this).navtab('reloadForm', true);" data-icon="undo">清空</a>
+        </div>
+    </form>
+</div>
+<div class="bjui-pageContent">
+    <table data-width="100%" data-nowrap="true" data-selected-multi="false"
+           class="table table-bordered table-hover table-striped table-top">
+        <thead>
+        <tr>
+            <th width="20"></th>
+            <th width="30">NO.</th>
+            <th class="list-col-VerifyNo" style="text-align:center">
+                <div class="list-col-VerifyNo">资源名称</div>
+            </th>
+            <th class="list-col-HouseholdAddress" style="text-align:center">
+                <div class="list-col-HouseholdAddress">资源代码</div>
+            </th>
+            <th class="list-col-Applicants" style="text-align:center">
+                <div class="list-col-Applicants">资源描述</div>
+            </th>
+
+        </tr>
+        </thead>
+        <tbody id="applyListTable">
+        <#list entitys as resource>
+            <tr>
+                <td>
+                    <input type="checkbox" name="ids" data-toggle="icheck" value="${resource.id}">
+                </td>
+                <td class="center">${resource_index+1+(start-1)*limit}</td>
+                <td class="left">
+                    <div title='${resource.display!}'>${resource.display!}</div>
+                </td>
+                <td class="left">
+                    <div title="${resource.code!}"> ${resource.code!}</div>
+                </td>
+                <td class="left">
+                    <div title='${resource.description!}'> ${resource.description!}</div>
+                </td>
+
+                <td><a href="javascript:;" data-toggle="lookupback"
+                       data-args="{parentId:'${resource.id}', parentDisplay:'${resource.display}'}"
+                       class="btn btn-blue" title="选择本项" data-icon="check">选择</a></td>
+            </tr>
+        </#list>
+        </tbody>
+    </table>
+</div>
+<#include "../../../common/_page.html"/>

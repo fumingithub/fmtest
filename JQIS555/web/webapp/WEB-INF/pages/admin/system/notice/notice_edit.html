@@ -1,0 +1,77 @@
+<#include "../../../common/_public.html"/>
+<#include "../../../common/_area.html"/>
+
+<div class="bjui-pageContent">
+	<form id="form"  name="pagerform">
+		<div style="margin:15px auto 0; width:900px;">
+			<fieldset>
+				<legend>
+					<h3 class="listtitle">公告管理</h3>
+					<input id="cateId" type="hidden" name="id" value="${entity.id!}" />
+				</legend>
+				<table class="table table-bordered" width="100%">
+					<tbody>
+						<tr>
+							<td class="right width150"><span style="color: Red">*</span>标题</td>
+							<td><input size="40" type="text" value="${entity.title!}" maxlength="150" name="entity.title" data-rule="required"/></td>
+						</tr>						
+						<tr>
+							<td class="right width150">副标题</td>
+							<td><input size="40" type="text" value="${entity.subTitle!}" maxlength="150" name="entity.subTitle"/></td>
+						</tr>
+						<tr>
+							<td class="right width150"><span style="color: Red">*</span>作者</td>
+							<td><input size="40" type="text" value="${entity.author!}" name="entity.author" maxlength="25" data-rule="required"/></td>
+						</tr>						
+						<tr>
+							<td class="right width150"><span style="color: Red">*</span>是否立即发布</td>
+							<td> 
+								<div data-toggle="switch" data-on-label="立即发布" data-off-label="暂不发布" data-onchange="setNewStatus" data-onparam="newStatus">
+									<input type="hidden" id="newStatus" name="entity.status" value="${entity.status?default('0')}">
+                                	<input type="checkbox" <#if "${(entity.status)!}"=="1"> checked="checked"</#if>/>
+								</div>	
+							</td>
+						</tr>
+						<tr>
+							<td class="right width150">公告内容</td>
+							<td class="left" colspan="3">
+							    <textarea name="entity.context" rows="6" cols="50" maxlength="2000"
+									data-toggle="kindeditor" data-items="source,|,undo,redo,preview,template,code,table,cut,copy,paste,|,
+									 justifyleft,justifycenter,justifyright,justifyfull,insertorderedlist,subscript,superscript,fullscreen,
+									 fontname,fontsize,forecolor,hilitecolor,bold,italic,underline,removeformat,hr,|,image,multiimage,insertfile,flash,media,about,|,">
+									    ${entity.context!}</textarea>
+							</td>
+						</tr>
+						<tr>
+							<td class="right width150">备注</td>
+							<td><input size="40" type="text" value="${entity.remark!}" name="entity.remark" maxlength="25" /></td>
+						</tr>	
+					</tbody>
+				</table>
+			</fieldset>
+		</div>
+	</form>
+</div>
+<div class="bjui-pageFooter">
+    <ul>
+        <li>
+            <button type="button" class="btn-close closecutab" data-icon="close">关闭</button>
+        </li>
+        <li>
+            <button onclick="saveForm(this,'${ctx}/admin/notice/notice!save.do','form')" class="btn-default" data-icon="save">保存</button>
+        </li>
+    </ul>
+</div>
+<script type="text/javascript">
+
+
+
+function setNewStatus(flag,param){
+    if(flag){
+        $("#"+param).val("1");//立即发布
+    }else{
+        $("#"+param).val("0");//暂不发布
+    }
+}
+ 
+</script>

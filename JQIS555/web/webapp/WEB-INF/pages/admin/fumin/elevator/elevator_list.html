@@ -1,0 +1,281 @@
+<#include "../../../common/_public.html"/>
+
+
+<div class="bjui-pageContent" id="elevatorfmDiv">
+    <div class="clearfix">
+        <div style="overflow:hidden; border-left: 0px #c3ced5 solid;">
+            <form id="pagerForm" data-toggle="ajaxsearch" method="post"
+                  action="${ctx}/admin/system/elevatorfm.do">
+                <!-- 功能按钮 -->
+                <div class="office">
+                    <ul class="offbtn">
+                        <@auth name="ELEVATORFM_VIEW">
+                        <#if hasPermission>
+                        <li>
+                            <a  onclick="elevatorEdit('view','电梯信息查看','${entity.id!}')"
+                                    title="查看" id="elevator_view" data-xternal="true">
+                                <span class="iconbg01"><i class="fa fa-search font24 iconbg02"></i></span>查看</a>
+                        </li>
+                        </#if>
+                        </@auth>
+
+                        <@auth name="ELEVATORFM_ADD">
+                        <#if hasPermission>
+                        <li>
+                            <a  title="新增" id="elevator_add" data-xternal="true" onclick="elevatorEdit('add','电梯信息新增','')">
+                                <span><i class="fa fa-plus font24 iconbg01"></i></span>新增</a>
+                        </li>
+                        </#if>
+                        </@auth>
+
+                        <@auth name="ELEVATORFM_EDIT">
+                        <#if hasPermission>
+                        <li>
+                            <a onclick="elevatorEdit('edit','电梯信息修改','$(entity.id!)')"
+                               id="" title="修改" data-xternal="true">
+                                <span class="fa fa-edit font24 iconbg03"></span>修改</a>
+                        </li>
+                        </#if>
+                        </@auth>
+
+                        <@auth name="ELEVATORFM_DELETE">
+                        <#if hasPermission>
+                        <li>
+                            <a onclick="logicalDelete(this)"  title="删除" data-xternal="true">
+                                <span class="fa fa-trash font24 iconbg01"></span>删除
+                            </a>
+                        </li>
+                        </#if>
+                        </@auth>
+
+                        <@auth name="ELEVATORFM_MAINTENANCE">
+                        <#if hasPermission>
+                        <li>
+                            <a  onclick="maintenanceRecord(this)" title="维保记录" data-xternal="true">
+                                <span class="fa fa-file-text-o font24 iconbg02"></span>维保记录
+                            </a>
+                        </li>
+                        </#if>
+                        </@auth>
+
+                        <@auth name="ELEVATORFM_TROUBLE">
+                        <#if hasPermission>
+                        <li>
+                            <a  onclick="troubleDeclare(this)" title="故障申报" data-xternal="true">
+                                <span class="fa fa-exclamation-triangle font24 iconbg04"></span>故障申报
+                            </a>
+                        </li>
+                        </#if>
+                        </@auth>
+
+                        <li><span class="ttt"></span></li>
+                        <li>
+                            <a id="refresh_elevator" data-toggle="reloadsearch"
+                               data-target="#bjui-pageContent" data-icon="search">
+                                <span class="iconbg02"><i class="fa fa-refresh font24"></i></span>刷新</a>
+                        </li>
+                        <li>
+                            <a class="closecutab">
+                                <span class="iconbg03"><i class="fa fa-remove font24"></i></span>关闭
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <!-- 查询区域 -->
+                <div class="bjui-pageHeader">
+                    <form data-toggle="ajaxsearch" method="post" >
+                        <div class="bjui-searchBar">
+                            &nbsp;&nbsp;  &nbsp;&nbsp;
+                            <lable>小区名：</lable>
+                            <input id="villageName" name="villageName" class="form-control" size="15" type="text" value="${filter.parameters.villageName!}" />
+                            &nbsp;&nbsp;
+                            <lable>楼号：</lable>
+                            <input id="floor" name="floor" class="form-control" size="15" type="text" value="${filter.parameters.floor!}"/>
+                            &nbsp;&nbsp;
+                            <lable>负责人姓名：</lable>
+                            <input id="principalorName" name="principalorName" class="form-control" size="15" type="text" value="${filter.parameters.principalorName!}" />
+                            &nbsp;&nbsp;
+                            <button type="submit" class="btn-default" data-toggle="ajaxsearch" data-icon="search" id="elevatorSubmit">查询</button>&nbsp;
+                            <a class="btn btn-orange" href="javascript:;" onclick="dreFreshElevatorList();" data-icon="undo">重置</a>
+                            <br>
+                            &nbsp;&nbsp;
+                            <lable style="margin-top:10px;">电梯状态：</lable>
+                            <select id="status" name="status" data-toggle="selectpicker"  data-width="150" size="15" type="text" value="${filter.parameters.status!}">
+                                <option value="">全部</option>
+                                <option value="0" <#if (filter.parameters.status!)== '0' >selected=select</#if>>故障中</option>
+                                <option value="1" <#if (filter.parameters.status!)== '1' >selected=select</#if>>正常</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <!-- 列表数据 -->
+                <div>
+                    <div class="bjui-pageContent" style="top: 100px; bottom: 0px; margin-top:25px;">
+                        <table data-width="100%" data-toggle="tablefixed" data-nowrap="true" data-selected-multi="false"
+                               class="table table-bordered table-hover table-striped table-top">
+                            <thead>
+                            <tr >
+                                <th style="white-space:nowrap;" width="50"></th>
+                                <th style="white-space:nowrap;" width="50">NO.</th>
+                                <th style="text-align:center; white-space:nowrap;" width="100">电梯编号</th>
+                                <th style="text-align:center; white-space:nowrap;" width="150">小区名</th>
+                                <th style="text-align:center; white-space:nowrap;" width="50">楼号</th>
+                                <th style="text-align:center; white-space:nowrap;" width="50">电梯号</th>
+                                <th style="text-align:center; white-space:nowrap;" width="100">品牌</th>
+                                <th style="text-align:center; white-space:nowrap;">负责人姓名</th>
+                                <th style="text-align:center; white-space:nowrap;">负责人电话</th>
+                                <th style="text-align:center; white-space:nowrap;">状态</th>
+                            </tr>
+                            </thead>
+                            <tbody id="elevatorListTbl">
+                            <#list entitys as entity>
+                            <tr >
+                                <td style="white-space:nowrap;" align="center">
+                                    <input type="checkbox" class="testChk" value="${entity.id!}"
+                                           name="ids" data-toggle="icheck"
+                                           status = "${entity.status!}"
+                                           floor = "${entity.floor!}"
+                                           elevatorCode = "${entity.elevatorCode!}"
+                                           villageName="${entity.villageName!}"
+                                           elevatorNumber="${entity.elevatorNumber!}"/>
+                                </td>
+                                <td class="center">${entity_index+1+(start-1)*limit}</td>
+                                <td style="white-space:nowrap;" align="left" title='${entity.elevatorCode!}'>
+                                    <a class="list-a" onclick="elevatorEdit('view1','电梯信息查看','${entity.id!}')">${entity.elevatorCode!}</a>
+                                </td>
+                                <td style="white-space:nowrap;" align="left" title="${entity.villageName!}">${entity.villageName!}</td>
+                                <td style="white-space:nowrap;" align="center" title="${entity.floor!}楼">${entity.floor!}楼</td>
+                                <td style="white-space:nowrap;" align="center" title="${entity.elevatorNumber!}号">${entity.elevatorNumber!}号</td>
+                                <td style="white-space:nowrap;" align="left" title="${entity.brand!}">${entity.brand!}</td>
+                                <td style="white-space:nowrap;" align="center" title="${entity.principalorName!}">${entity.principalorName!}</td>
+                                <td style="white-space:nowrap;" align="center" title="${entity.principalorTel!}">${entity.principalorTel!}</td>
+                                <td style="white-space:nowrap;" align="center">
+                                    <#if entity.status??>
+                                    <#if entity.status == "1" ><div title="正常" class="label label-success">正常</div></#if>
+                                    <#if entity.status == "0" ><div title="故障中" class="label label-danger">故障中</div></#if>
+                                    </#if>
+                                </td>
+                            </tr>
+                            </#list>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script language="javascript" type="text/javascript">
+    /** 重置 **/
+    function dreFreshElevatorList(){
+        $("#villageName").val("");
+        $("#floor").val("");
+        $("#principalorName").val("");
+        $("#status").val("");
+        $("#elevatorSubmit").submit();
+    }
+
+    /** 新增 修改**/
+    function elevatorEdit(types,title,id) {
+        var url = "";//请求地址
+        if("edit" == types || "view" == types){//电梯信息修改或查看
+            if($("#elevatorListTbl input:checked").length > 0){
+                id = $("#elevatorListTbl input:checked").val();
+            }else{
+                $(this).alertmsg('warn',"请选择一条数据！");
+                return;
+            }
+        }
+        url ="${ctx}/admin/system/elevatorfm!updateElevator.do?id=" + id + "&types=" + types;
+        var dialog_options = {
+            id:"elevator_addOrEdit",
+            title:title,
+            url:url,
+            width: 700,
+            height: 500,
+            fresh: true,
+            mask: true
+        };
+        $(this).dialog(dialog_options);
+    }
+
+    /**逻辑删除**/
+    function logicalDelete(Obj) {
+
+        if ($("#elevatorListTbl input:checked").length > 0) {
+            var id = $("#elevatorListTbl input:checked").val();
+            var status = $("#elevatorListTbl input:checked").attr("status");
+            $(Obj).alertmsg("confirm", "确定要删除选当前电梯信息吗？", {
+                okCall:function () {
+                    $.ajax({
+                        type: "POST",
+                        url: "${ctx}/admin/system/elevatorfm!logicalDelete.do?id=" + id +"&status="+status,
+                        async: false,
+                        success: function (data) {
+                            var dataJson = eval('(' + data + ')');
+                            if (dataJson.statusCode == 300) {
+                                $(this).alertmsg('warn', dataJson.message);
+                            } else {
+                                $(this).alertmsg('correct',"电梯信息删除成功!");
+                                $('#refresh').click();
+                                dreFreshElevatorList();
+                            }
+                        }
+                    });
+                }
+            });
+        }else{
+            $(this).alertmsg('warn', "请选中一条数据！");
+            return;
+        }
+    }
+    /**维保记录**/
+    function maintenanceRecord(id) {
+        var url = "";
+        var id="";
+        if ($("#elevatorListTbl input:checked").length > 0) {
+            var id = $("#elevatorListTbl input:checked").val();
+            url="${ctx}/admin/system/elevatorMaintenanceRecordfm.do?id="+ id ;
+            var dialog_options = {
+                id:"elevator_maintenanceRecord",
+                title:"维保记录",
+                url:url,
+                width: 1024,
+                height: 600,
+                fresh: true,
+                mask: true
+            };
+            $(this).dialog(dialog_options);
+        }else{
+            $(this).alertmsg('warn', "请选中一条数据！");
+            return;
+        }
+
+    }
+
+    /**故障申报**/
+    function troubleDeclare(obj) {
+        var url = "";
+        var id="";
+        if ($("#elevatorListTbl input:checked").length > 0) {
+            var id = $("#elevatorListTbl input:checked").val();
+            url="${ctx}/admin/system/elevatorTroubleDeclarefm.do?id="+ id ;
+            var dialog_options = {
+                id:"elevator_troubleDeclare",
+                title:'故障申报',
+                url:url,
+                width: 1024,
+                height: 600,
+                fresh: true,
+                mask: true
+            };
+            $(this).dialog(dialog_options);
+        }else{
+            $(this).alertmsg('warn', "请选中一条数据！");
+            return;
+        }
+    }
+</script>
+
+<#include "../../../common/_page.html"/>

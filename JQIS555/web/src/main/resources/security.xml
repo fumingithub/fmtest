@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+             xmlns:beans="http://www.springframework.org/schema/beans"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns:p="http://www.springframework.org/schema/p"
+             xsi:schemaLocation="http://www.springframework.org/schema/beans
+						http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+                        http://www.springframework.org/schema/security
+                        http://www.springframework.org/schema/security/spring-security-2.0.4.xsd"
+             default-autowire="byName" default-lazy-init="false">
+    <!-- spring security config xml-->
+
+    <!--DAO设置-->
+    <beans:bean id="securityUserDao" class="org.zcframework.security.dao.SecurityUserDao"/>
+    <beans:bean id="securityResourceDao" class="org.zcframework.security.dao.SecurityResourceDao"/>
+    <beans:bean id="securityRoleDao" class="org.zcframework.security.dao.SecurityRoleDao"/>
+    <beans:bean id="securityAuthorityDao" class="org.zcframework.security.dao.SecurityAuthorityDao"/>
+    <beans:bean id="departmentDao" class="org.zcframework.security.dao.SecurityDepartmentDao"/>
+    <!-- 国际化信息 -->
+    <beans:bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <beans:property name="basename" value="classpath:lang"/>
+    </beans:bean>
+    <beans:bean id="localeResolver" class="org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver"/>
+
+    <http entry-point-ref="authenticationProcessingFilterEntryPoint">
+        <intercept-url pattern="/" filters="none"/>
+        <intercept-url pattern="/bjui/**" filters="none"/>
+        <intercept-url pattern="/druid/**" filters="none"/>
+        <intercept-url pattern="/upload/**" filters="none"/>
+        <intercept-url pattern="/portal/login.do" filters="none"/>
+        <intercept-url pattern="/status!R*.do" filters="none"/>
+        <form-login login-page="/portal/login.do"/>
+        <remember-me key="e37f4b31-0c45-11dd-bd0b-0800200c9a66" services-ref="rememberMeServices"/>
+        <logout logout-success-url="/admin/index.do" invalidate-session="true"/>
+    </http>
+
+
+    <beans:bean id="authenticationProcessingFilterEntryPoint"
+                class="org.zcframework.security.filter.AjaxAuthenticationProcessingFilterEntryPoint">
+        <beans:property name="loginFormUrl" value="/portal/login.do"/>
+    </beans:bean>
+
+    <beans:bean id="userDetailsService" class=" org.zcframework.security.service.impl.UsernameUserDetailsService">
+        <beans:property name="sqlGetRolesByUserId">
+            <beans:value>${sql.roleByUser}</beans:value>
+        </beans:property>
+        <beans:property name="sqlGetUserById">
+            <beans:value>${sql.userById}</beans:value>
+        </beans:property>
+        <beans:property name="sqlGetDepartmentsByUserId">
+            <beans:value>${sql.departmentsByUserId}</beans:value>
+        </beans:property>
+
+    </beans:bean>
+
+    <!-- 项目实现的URL-授权查询服务 -->
+    <beans:bean id="resourceDetailService" class="org.zcframework.security.service.impl.ResourceDetailService">
+        <beans:property name="sqlGetAllResources">
+            <beans:value>${sql.resourceAll}</beans:value>
+        </beans:property>
+        <beans:property name="sqlGetRolesByResourceId">
+            <beans:value>${sql.rolesByResourceId}</beans:value>
+        </beans:property>
+    </beans:bean>
+    <!-- cookie认证过滤器 -->
+    <beans:bean id="rememberMeProcessingFilter"
+                class="org.springframework.security.ui.rememberme.RememberMeProcessingFilter">
+        <beans:property name="authenticationManager" ref="authenticationManager"/>
+        <beans:property name="rememberMeServices" ref="rememberMeServices"/>
+    </beans:bean>
+
+    <!-- cookie认证过滤器 -->
+    <beans:bean id="kissoProcessingFilter"
+                class="org.zcframework.security.filter.KissoProcessingFilter">
+        <!--<beans:property name="authenticationManager" ref="authenticationManager"/>-->
+        <!--<beans:property name="rememberMeServices" ref="rememberMeServices"/>-->
+    </beans:bean>
+    <beans:bean id="rememberMeServices"
+                class="org.springframework.security.ui.rememberme.TokenBasedRememberMeServices">
+        <beans:property name="userDetailsService" ref="userDetailsService"/>
+        <!-- cookie中的键值, 防止保存到客户端的cookie中的加密串被恶意篡改 -->
+        <beans:property name="key" value="e37f4b31-0c45-11dd-bd0b-0800200c9a66"/>
+        <!-- cookie有效时间, 单位为秒, 这里设定为7天内不用再登陆 -->
+        <beans:property name="tokenValiditySeconds" value="604800"/>
+    </beans:bean>
+    <!--负责认证处理的filter -->
+    <beans:bean id="authenticationProcessingFilter"
+                class="net.jqsoft.common.filter.LogAjaxAuthenticationProcessingFilter">
+        <!--此行说明此filter会覆盖ss2默认配置的filter，before 被覆盖filter的别名-->
+        <custom-filter before="AUTHENTICATION_PROCESSING_FILTER"/>
+        <!--认证管理器-->
+        <beans:property name="authenticationManager" ref="authenticationManager"/>
+        <beans:property name="messageSource" ref="messageSource"/>
+        <!--认证失败后跳转到的页面，/spring_security_login是ss2默认的登录入口-->
+        <beans:property name="authenticationFailureUrl"
+                        value="/portal/login.do?error=true"/>
+        <!--认证成功后跳转到的页面-->
+        <beans:property name="defaultTargetUrl" value="/admin/index.do"/>
+        <beans:property name="validateRandom" value="false"/>
+<!--        <beans:property name="validateRandom" value="true"/>-->
+        <beans:property name="ajaxTargetUrl" value="/status!R200.do"/>
+        <beans:property name="ajaxFailureUrl" value="/status!R301.do"/>
+    </beans:bean>
+
+    <!--cache manager-->
+    <beans:bean id="cacheManager"
+                class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean"
+                p:configLocation="classpath:ehcache.xml">
+    </beans:bean>
+
+    <!--USER CACHE-->
+    <beans:bean id="userCache"
+                class="org.springframework.security.providers.dao.cache.EhCacheBasedUserCache">
+        <beans:property name="cache">
+            <beans:bean class="org.springframework.cache.ehcache.EhCacheFactoryBean"
+                        p:cacheManager-ref="cacheManager"
+                        p:cacheName="security.user"/>
+        </beans:property>
+    </beans:bean>
+
+    <beans:bean id="urlCache"
+                class="org.zcframework.security.cache.impl.UrlResourceCacheManager" init-method="init"
+                destroy-method="destroy">
+        <beans:property name="cache">
+            <beans:bean class="org.springframework.cache.ehcache.EhCacheFactoryBean"
+                        p:cacheManager-ref="cacheManager"
+                        p:cacheName="security.url"/>
+        </beans:property>
+        <beans:property name="resourceDetailService" ref="resourceDetailService"/>
+    </beans:bean>
+
+
+    <!-- 缓存组织机构、行政区划 -->
+    <beans:bean id="ehCacheManager"
+                class="net.jqsoft.common.cache.EhCacheManager" init-method="init" destroy-method="destroy">
+        <beans:property name="cache">
+            <beans:bean class="org.springframework.cache.ehcache.EhCacheFactoryBean"
+                        p:cacheManager-ref="cacheManager"
+                        p:cacheName="ehcache" />
+        </beans:property>
+        <beans:property name="sysOrgService" ref="sysOrgService"/>
+    </beans:bean>
+    <beans:bean id="sysOrgService" class="net.jqsoft.base.system.service.impl.SysOrgService"></beans:bean>
+
+    <beans:bean id="travelService" class="net.jqsoft.base.system.service.impl.TravelService"></beans:bean>
+
+    <beans:bean id="MeetingFmService" class="net.jqsoft.base.meetingFm.service.impl.MeetingFmService"></beans:bean>
+
+    <beans:bean id="ElevatorService" class="net.jqsoft.base.elevatorfm.service.impl.ElevatorService"></beans:bean>
+
+    <beans:bean id="TroubleDeclareService" class="net.jqsoft.base.elevatorfm.service.impl.TroubleDeclareService"></beans:bean>
+
+    <beans:bean id="MaintenanceRecordService" class="net.jqsoft.base.elevatorfm.service.impl.MaintenanceRecordService"></beans:bean>
+
+
+    <beans:bean id="cacheRefreshService" class="org.zcframework.security.cache.impl.CacheRefreshService">
+        <beans:property name="userCache" ref="userCache"/>
+        <beans:property name="urlCache" ref="urlCache"/>
+    </beans:bean>
+
+    <!--ProviderManager的用途是使你能够根据多个身份管理源来认证用户。它不是依靠自己实现身份验证，而是逐一认证提供者的集合，直到某一个认证提供者能够成功地验证该用户的身份-->
+    <beans:bean id="authenticationManager"
+                class="org.springframework.security.providers.ProviderManager">
+        <beans:property name="providers">
+            <beans:list>
+                <!--可以定义不同的provider列表-->
+                <beans:ref local="daoAuthenticationProvider"/>
+            </beans:list>
+        </beans:property>
+    </beans:bean>
+
+    <beans:bean id="md5" class="org.springframework.security.providers.encoding.Md5PasswordEncoder"/>
+
+    <beans:bean id="daoAuthenticationProvider"
+                class="org.springframework.security.providers.dao.DaoAuthenticationProvider">
+        <beans:property name="userDetailsService" ref="userDetailsService"/>
+        <beans:property name="userCache" ref="userCache"/>
+        <beans:property name="passwordEncoder" ref="md5"/>
+    </beans:bean>
+
+    <beans:bean id="accessDecisionManager"
+                class="org.springframework.security.vote.AffirmativeBased">
+        <beans:property name="decisionVoters">
+            <beans:list>
+                <beans:bean class="org.springframework.security.vote.RoleVoter">
+                    <beans:property name="rolePrefix" value=""/>
+                </beans:bean>
+            </beans:list>
+        </beans:property>
+    </beans:bean>
+
+
+    <beans:bean id="objectDefinitionSource"
+                class="org.zcframework.security.intercept.web.CacheFilterInvocationDefinitionSource">
+        <beans:property name="urlResourceCacheManager" ref="urlCache"/>
+        <beans:property name="useAntPath" value="true"/>
+        <beans:property name="convertUrlToLowercaseBeforeComprison" value="false"/>
+    </beans:bean>
+
+    <beans:bean id="filterSecurityInterceptor"
+                class="org.springframework.security.intercept.web.FilterSecurityInterceptor">
+        <custom-filter  before="FILTER_SECURITY_INTERCEPTOR"/>
+
+        <beans:property name="authenticationManager" ref="authenticationManager"/>
+        <beans:property name="accessDecisionManager" ref="accessDecisionManager"/>
+        <beans:property name="objectDefinitionSource" ref="objectDefinitionSource"/>
+    </beans:bean>
+    <!--logging-->
+    <beans:bean id="loggerListener" class="org.springframework.security.event.authentication.LoggerListener"/>
+
+</beans:beans>

@@ -1,0 +1,182 @@
+﻿<script language="javascript" type="text/javascript">
+
+    // 树初始化配置：属地区划
+    var setting = {
+        async: {
+            autoParam: ["id"],
+            enable: true,
+            dataType: "text",
+            url: "${ctx}/admin/system/sysorg!ajaxQueryOrgForZTree.do",
+            dataFilter: filter,
+            type: "post",
+            otherParam: { "currentId": $("#iId").val()}
+        },
+        callback: {
+            beforeClick: beforeClick,
+            onAsyncError: onAsyncError,
+            onAsyncSuccess: onAsyncSuccess,
+            onClick: onClick,
+            onCheck: onCheck
+        },
+        check: {
+            enable: true,
+            chkStyle: "radio",
+            radioType: "all"
+        },
+        data: {
+            simpleData: {
+                enable: true,
+                idKey: "id",
+                pIdKey: "pid",
+                rootPId: null
+            }
+        },
+        view: {
+            showIcon: false
+        }
+    }
+
+    /**
+     * 对返回数据进行预格式化处理
+     * @param treeId
+     * @param parentNode
+     * @param responseData
+     * @returns {Array}
+     */
+    function filter(treeId, parentNode, responseData){
+        var arr = [];
+        if (responseData) {
+            for(var i = 0; i < responseData.length; i++) {
+                arr[i] = {
+                    id: responseData[i].id,
+                    pid: responseData[i].parentId,
+                    name: responseData[i].name,
+                    isParent: true
+                }
+            }
+        }
+        return arr;
+    }
+
+    /**
+     * 点击前预处理函数
+     * @param treeId
+     * @param treeNode
+     * @param clickFlag
+     * @returns {boolean}
+     */
+    function beforeClick(treeId, treeNode, clickFlag){
+        var zTree = $.fn.zTree.getZTreeObj(treeId);
+        zTree.checkNode(treeNode, !treeNode.checked, true);
+        return true;
+    }
+
+    /**
+     * 节点点击时的回调函数
+     * @param event
+     * @param treeId
+     * @param treeNode
+     * @param clickFlag
+     */
+    function onClick(event, treeId, treeNode, clickFlag){
+        setSysOrgInputVal(treeId, treeNode);
+    }
+
+    /**
+     * 节点选中时的回调函数
+     * @param event
+     * @param treeId
+     * @param treeNode
+     * @param clickFlag
+     */
+    function onCheck(event, treeId, treeNode, clickFlag){
+        setSysOrgInputVal(treeId, treeNode);
+    }
+
+    /**
+     * 异步失败时的回调函数
+     * @param event
+     * @param treeId
+     * @param treeNode
+     * @param XMLHttpRequest
+     * @param textStatus
+     * @param errorThrown
+     */
+    function onAsyncError(event, treeId, treeNode, XMLHttpRequest, textStatus, errorThrown){
+
+    }
+
+    /**
+     * 异步成功时的回调函数
+     * @param event
+     * @param treeId
+     * @param treeNode
+     * @param msg
+     */
+    function onAsyncSuccess(event, treeId, treeNode, msg){
+
+    }
+
+    /**
+     * 给“属地区划”文本框赋值
+     * @param treeNode 当前选中节点
+     */
+    function setSysOrgInputVal(treeId, treeNode) {
+        var _id = "", _name = "";
+        if ("org_p_tree" == treeId) {
+            _id = "iParentId";
+            _name = "iParentName";
+        }
+        if (treeNode.checked) {
+            $("#" + _id).val(treeNode.id);
+            $("#" + _name).val(treeNode.name);
+        } else {
+            $("#" + _id).val("");
+            $("#" + _name).val("");
+        }
+        $("#" + treeId).parent().parent().find("input[data-tree='#" + treeId + "']").trigger('validate');
+    }
+
+    /**
+     * 启用/禁用按钮切换
+     * @param flag
+     * @param param
+     */
+    function setSysOrgStatus(flag, param) {
+        if (flag) {
+            $("#" + param).val("0"); // 正常
+        } else {
+            $("#" + param).val("1"); // 锁定
+        }
+    }
+
+    /**
+     * 页面加载时的初始化方法
+     */
+    $(document).ready(function(){
+
+        /* 加载组织机构树 */
+//        $.fn.zTree.init($("#org_p_tree"), setting);
+
+        /* 编辑和查看时，各类input控件展示不同效果 */
+        var _id = $("#types").val(); // 状态码：edit-编辑，view-查看
+        if (_id != null && _id != "" && _id != "undefined") {
+            if (_id == "view") {
+                $("table").find("input").each(function(){
+                    $(this).attr("readonly", "readonly");
+                });
+                $("table").find("select").each(function(){
+                    $(this).attr("disabled", "disabled");
+                });
+                $("#iParentName").attr("data-tree", "");
+            }
+            if(_id == "edit"){
+                $("#entity_name").attr("readonly", "readonly");
+                $("#entity_code").attr("readonly", "readonly");
+                $(".view").html("");
+            }
+        } else {
+            $(".view").html("");
+        }
+    });
+</script>

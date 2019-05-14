@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="RepositoryBase" >
+	<typeAlias alias="RepositoryBase" type="net.jqsoft.repository.domain.RepositoryBase" />
+	
+   <resultMap class="RepositoryBase" id="RepositoryBaseMap">
+   <result property="id" column="ID"/>
+   <result property="title" column="TITLE"/>
+   <result property="context" column="CONTEXT"/>
+   <result property="type" column="TYPE"/>
+   <result property="pv" column="PV"/>
+   <result property="code" column="CODE"/>
+   <result property="remark" column="REMARK"/>
+   <result property="updator" column="UPDATOR"/>
+   <result property="updateName" column="UPDATE_NAME"/>
+   <result property="updateTime" column="UPDATE_TIME"/>
+   <result property="creator" column="CREATOR"/>
+   <result property="createName" column="CREATE_NAME"/>
+   <result property="createTime" column="CREATE_TIME"/>
+  
+   </resultMap>
+    <insert id="insert" parameterClass="RepositoryBase">
+        <![CDATA[
+        INSERT INTO SYS_REPOSITORY_BASE(
+        ID,
+        TITLE,
+        CONTEXT,
+        TYPE,
+        PV,
+        CODE,
+        REMARK,
+        UPDATOR,
+        UPDATE_NAME,
+        UPDATE_TIME,
+        CREATOR,
+        CREATE_NAME,
+        CREATE_TIME
+        ) values(
+                #id#,
+                #title#,
+                #context#,
+                #type#,
+                0,
+                #code#,
+                #remark#,
+                #updator#,
+                #updateName#,
+                #updateTime#,
+                #creator#,
+                #createName#,
+                #createTime#
+             )
+		]]>
+    </insert>
+    
+    <update id="update" parameterClass="RepositoryBase">
+        <![CDATA[
+			UPDATE SYS_REPOSITORY_BASE ]]>
+			<dynamic prepend="SET">
+            <isNotEmpty  property="title" prepend=",">
+                <![CDATA[
+					TITLE = #title:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="context" prepend=",">
+                <![CDATA[
+					CONTEXT = #context:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="type" prepend=",">
+                <![CDATA[
+					TYPE = #type:Integer#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="code" prepend=",">
+                <![CDATA[
+					CODE = #code:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="remark" prepend=",">
+                <![CDATA[
+					REMARK = #remark:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="updator" prepend=",">
+                <![CDATA[
+					UPDATOR = #updator:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="updateName" prepend=",">
+                <![CDATA[
+					UPDATE_NAME = #updateName:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="updateTime" prepend=",">
+                <![CDATA[
+					UPDATE_TIME = #updateTime:DateTime#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="creator" prepend=",">
+                <![CDATA[
+					CREATOR = #creator:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="createName" prepend=",">
+                <![CDATA[
+					CREATE_NAME = #createName:String#
+				]]>
+            </isNotEmpty >
+
+            <isNotEmpty  property="createTime" prepend=",">
+                <![CDATA[
+					CREATE_TIME = #createTime:DateTime#
+				]]>
+            </isNotEmpty >
+        </dynamic>
+        <dynamic prepend="WHERE">
+            <![CDATA[
+					id = #id:String#
+				]]>
+        </dynamic>
+    </update>
+   
+    
+    <select id="get" parameterClass="String" resultMap="RepositoryBaseMap">
+    	select * from SYS_REPOSITORY_BASE WHERE id = #id:String#
+    </select>
+    <select id="queryHotsByType" parameterClass="String" resultMap="RepositoryBaseMap">
+    select * from SYS_REPOSITORY_BASE WHERE type = #type:String#
+    </select>
+    
+    <sql id="sel-tj-common">
+		<dynamic>
+			<isNotEmpty prepend=" AND " property="title">SRB.TITLE
+				like '%' || #title# || '%' </isNotEmpty>
+			<isNotEmpty prepend=" AND " property="type">SRB.TYPE
+				like '%' || #type# || '%' </isNotEmpty>
+			<isNotEmpty prepend=" AND " property="remark">SRB.REMARK
+				like '%' || #remark# || '%' </isNotEmpty>
+				
+			<isNotEmpty prepend=" and " property="ztSysOrgId">
+				SRB.TYPE IN (SELECT T.ID FROM SYS_REPOSITORY_KIND T
+				WHERE T.ID = #ztSysOrgId#)
+			</isNotEmpty>
+			
+		</dynamic>
+	</sql>
+	
+     <select id="count" resultClass="int">
+        SELECT COUNT(*) FROM SYS_REPOSITORY_BASE SRB where 1=1
+        <include refid="sel-tj-common" />
+    </select>
+    <select id="select" resultMap="RepositoryBaseMap"  parameterClass="java.util.HashMap">
+       select SRB.* 
+       from SYS_REPOSITORY_BASE SRB 
+       LEFT JOIN SYS_REPOSITORY_KIND SRK 
+       ON SRB.CODE=SRK.CODE 
+       where 1=1
+       <include refid="sel-tj-common" />
+    </select>
+    
+     <select id="getAll" resultMap="RepositoryBaseMap">
+    select * from SYS_REPOSITORY_BASE 
+    </select>
+    
+    <delete id="deleteById" parameterClass="String">
+        <![CDATA[
+        DELETE FROM SYS_REPOSITORY_BASE where id = #id:String#
+     ]]>
+    </delete>
+    
+    <update id="updatePvById" parameterClass="java.util.HashMap">
+    	 <![CDATA[
+			UPDATE SYS_REPOSITORY_BASE ]]>
+			<dynamic prepend="SET">
+            <isNotEmpty  property="pv" prepend=",">
+                <![CDATA[
+					PV = #pv:Integer#
+				]]>
+            </isNotEmpty >
+        </dynamic>
+        <dynamic prepend="WHERE">
+            <![CDATA[
+					ID = #id:String#
+				]]>
+        </dynamic>
+    </update>
+   
+</sqlMap>

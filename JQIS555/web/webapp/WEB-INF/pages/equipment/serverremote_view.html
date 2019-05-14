@@ -1,0 +1,61 @@
+
+<#include "../common/_public.html"/>
+<div id="connectArea" style="display: none;">
+    <object id="MsRdpClient"
+            classid="CLSID:7584c670-2274-4efb-b00b-d6aaba6d3850"
+            codebase="msrdp.cab#version=5,2,3790,0">
+    </object>
+</div>
+<script language="javascript" type="text/javascript">
+    $(function () {
+        var userName, Pwd, server, domain, port;
+        userName = "administrator"; //用户名
+        server = "61.159.147.190"; //IP
+        port = 8840; //端口
+        Pwd="jqkj123$%^trs";
+        domain = "myDomain";  //域
+        if (!MsRdpClient.Connected) {
+            try {
+                document.getElementById("connectArea").style.display = "block"; //显示远程桌面div
+                MsRdpClient.Server = server; //设置远程桌面IP地址
+//                try {
+//                    MsRdpClient.AdvancedSettings2.RedirectDrives = false;
+//                    MsRdpClient.AdvancedSettings2.RedirectPrinters = false;
+//                    MsRdpClient.AdvancedSettings2.RedirectPrinters = false;
+//                    MsRdpClient.AdvancedSettings2.RedirectClipboard = true;
+//                    MsRdpClient.AdvancedSettings2.RedirectSmartCards = false;
+//                } catch (ex) {
+//                    alert(11111);
+//                };
+                MsRdpClient.Domain = domain;//域
+                MsRdpClient.UserName = userName;
+                MsRdpClient.AdvancedSettings2.ClearTextpassword = Pwd; //密码
+                MsRdpClient.AdvancedSettings2.RDPPort = port; //端口
+//                if (document.getElementById("ColorDepth").value == 1) {
+//                    ColorDepth16();
+//                } else {
+//                    ColorDepthDefault();
+//                };
+//                MsRdpClient.FullScreen = 1;  //是否全屏 0否 1是
+//                if (document.getElementById("Screen").value == 1) {
+//                    Screen1();
+//                } else {
+//                    ScreenDefault();
+//                };
+                try {
+                    //如果不支持，继续下面操作
+                    MsRdpClient.AdvancedSettings7.EnableCredSspSupport = true;
+                    MsRdpClient.AdvancedSettings5.AuthenticationLevel = 2;
+                } catch (ex) {
+                } finally {
+                    MsRdpClient.Connect();  //连接远程桌面
+                }
+            } catch (ex) {
+                alert("发生错误：" + ex.message + "请尝试刷新页面重新连接。");
+            };
+        } else {
+            alert("已连接！");
+        };
+    })
+</script>
+<#include "../common/_page.html"/>

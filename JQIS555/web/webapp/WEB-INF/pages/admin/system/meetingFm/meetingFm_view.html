@@ -1,0 +1,99 @@
+<#include "../../../common/_public.html"/>
+<div class="bjui-pageContent">
+    <form action="${ctx}/admin/system/meetingfm!save.do" id="pageform" data-isrefsh="true">
+        <input type="hidden" id="edit" name="types" value="${types!}">
+        <div style="margin:15px auto 0;">
+            <fieldset>
+                <legend>
+                    <h3 class="listtitle">会议室信息</h3>
+                    <input type="hidden" id="iId" name="id" value="${entity.id!}"/>
+                    <input type="hidden" id="types" value="${types!}">
+                </legend>
+                <table class="table table-condensed"  >
+                    <tbody>
+                    <tr  >
+                        <td class="right" ><span style="color:red">*</span>会议室名称：</td>
+                        <td class="left" >
+                            <input id="entity_name" name="entity.name" type="text" data-rule="required;length[~50]"
+                                   value="${entity.name!}" title="${entity.name!}" size="15"  />
+                        </td>
+                        <td class="right" ><span style="color:red">*</span>所在楼层：</td>
+                        <td class="left"  >
+                            <input id="entity_floor" name="entity.floor" type="text" data-rule="required;integer"
+                                   value="${entity.floor!}" title="${entity.floor!}" size="15" />
+                        </td>
+                    <tr>
+                        <td class="right" ><span style="color:red">*</span>可容纳人数:</td>
+                        <td class="left" >
+                            <select data-clear=""  name="entity.people" id="people" data-rule="required" data-toggle="selectpicker" data-width="150">
+                                <option value="" selected>--请选择--</option>
+                                <option value= "1" <#if entity.people! == "1"  > selected="selected" </#if>>10人以下</option>
+                                <option value= "2" <#if entity.people! == "2"  > selected="selected" </#if>>10~30人</option>
+                                <option value= "3" <#if entity.people! == "3"  > selected="selected" </#if>>30~50人</option>
+                             </select>
+                        </td>
+                        <td class="right" ><span style="color:red">*</span>投影仪:</td>
+                        <td class="left"  >
+                        <select data-clear="" name="entity.projector" id="projector" data-rule="required" data-toggle="selectpicker" data-width="150">
+                            <option value="">--请选择--</option>
+                            <option value= "0" <#if entity.projector! == "0" >selected="selected"</#if>>无</option>
+                            <option value= "1" <#if entity.projector! == "1">selected="selected"</#if>>有</option>
+                        </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="right" ><span style="color:red">*</span>使用状态:</td>
+                        <td class="left"  >
+                            <select data-clear="" name="entity.status" id="status" data-rule="required" data-toggle="selectpicker" data-width="150">
+                                <option value="" >--请选择--</option>
+                                <option value= "1"  <#if entity.status! == "1" >selected="selected"</#if>>使用中</option>
+                                <option value= "2"  <#if entity.status! == "2" >selected="selected"</#if>
+                                                    <#if types ="add">selected</#if>>空闲</option>
+                            </select>
+                        </td>
+                        <td class="right"><span style="color:red">*</span>是否启用:</td>
+                        <td class="left">
+                            <select id="select_enable" data-clear="" name="entity.enable" id="enable"
+                                data-rule="required" data-toggle="selectpicker" data-width="150" onchange = "enableChoose()">
+                                <option value="" >--请选择--</option>
+                                <option value= "0" <#if entity.enable! == "0" >selected="selected"</#if>>禁用</option>
+                                <option value= "1" <#if entity.enable! == "1" >selected="selected"</#if>
+                                                   <#if types ="add">selected</#if>>启用</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr id="disableReason">
+                        <td class="right" >禁用原因：</td>
+                        <td class="left" colspan="3" >
+                            <textarea  name="entity.disableReason" style="width:490px; height:50px" wrap="soft">${entity.disableReason!}</textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="right" >备注：</td>
+                        <td class="left" colspan="3">
+                            <textarea name="entity.reference" type="text" data-rule="length[0~200]" style="width:490px; height:100px">${entity.reference!}</textarea>
+                        </td>
+                    </tr>
+                    </tr>
+                </table>
+            </fieldset>
+        </div>
+    </form>
+</div>
+<div class="bjui-pageFooter">
+    <ul>
+        <li>
+            <button type="button" class="btn-close closecutab" data-icon="close">关闭</button>
+        </li>
+        <li
+        <#if types??>
+            <#if types == "view">
+                hidden="true"
+            </#if>
+        </#if>>
+        <button type="button" class="btn-default" data-icon="save" onclick="meetingSave('pageform' );">保存</button>
+        </li>
+    </ul>
+</div>
+
+<#include "meetingFm_view_js.html" />

@@ -1,0 +1,31 @@
+<link rel="stylesheet" type="text/css" href="${ctx}/BJUI/themes/css/style_welcome.css"/>
+<header id="bjui-header">
+   <div class="header">
+    	<div class="logo" ><a href="#" target="_blank">${title}</a></div>
+        <div class="hnav">
+        </div>
+    </div>
+    <nav id="bjui-navbar-collapse">
+       	    <ul class="bjui-navbar-right">
+            <li><a href="#">欢迎您</a></li>
+            <!-- <li><a href="#">我的代办 <span class="badge">1</span></a></li> -->
+            <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">我的账户 <span class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu">
+                    <li><a style="cursor:pointer" data-url="${ctx}/admin/system/user!passwordui.do" data-title="密码-修改" data-toggle="dialog" data-id="changepwd_page" data-mask="true" data-width="450" data-height="260">&nbsp;<span class="glyphicon glyphicon-lock"></span> 修改密码&nbsp;</a></li>
+                    <li><a style="cursor:pointer" data-toggle="dialog" data-width="500" data-height="400" data-mask="true" data-url="${ctx}/admin/system/user!editloginuser.do" data-id="user-edit" data-title="个人信息修改">&nbsp;<span class="glyphicon glyphicon-user"></span> 我的资料</a></li>
+                    <li class="divider"></li>
+                    <li><a href="${ctx}/j_spring_security_logout" class="red">&nbsp;<span class="glyphicon glyphicon-off"></span> 注销登陆</a></li>
+                </ul>
+            </li>
+            <li class="dropdown"><a href="#" class="dropdown-toggle theme purple" data-toggle="dropdown"><i class="fa fa-tree"></i></a>
+                <ul class="dropdown-menu" role="menu" id="bjui-themes">
+                    <li class="active"><a href="javascript:;" class="theme_blue" data-toggle="theme" data-theme="blue">&nbsp;<i class="fa fa-tree"></i> 青出于蓝</a></li>
+                    <li><a href="javascript:;" class="theme_default" data-toggle="theme" data-theme="default">&nbsp;<i class="fa fa-tree"></i> 黑白分明</a></li>
+                    <li><a href="javascript:;" class="theme_orange" data-toggle="theme" data-theme="orange">&nbsp;<i class="fa fa-tree"></i> 橘子红了</a></li>
+                    <li><a href="javascript:;" class="theme_purple" data-toggle="theme" data-theme="purple">&nbsp;<i class="fa fa-tree"></i> 紫罗兰</a></li>
+                    <li><a href="javascript:;" class="theme_green" data-toggle="theme" data-theme="green">&nbsp;<i class="fa fa-tree"></i> 绿草如茵</a></li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+</header>
